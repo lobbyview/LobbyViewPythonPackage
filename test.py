@@ -17,7 +17,7 @@ def get_legislator(first_name, last_name):
     >>> output['data'][0]['legislator_id']
     'M000303'
     >>> get_legislator("", "")
-    'Invalid input'
+    'Invalid input fail'
     
     '''
     if not first_name or not last_name:
