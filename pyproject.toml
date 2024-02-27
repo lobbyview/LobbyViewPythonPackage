@@ -1,0 +1,21 @@
+[build-system]
+requires      = ["setuptools>=61.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "lobbyview"
+version = "0.0.1"
+description = "LobbyView Rest API Wrapper"
+readme = "README.md"
+authors = [{ name = "lobbyview", email = "lobbydata@gmail.com" }]
+license = { file = "LICENSE" }
+classifiers = [
+]
+keywords = ["politics", "lobbying"]
+dependencies = [
+    "python-dotenv==1.0.1"
+]
+requires-python = ">=3.5"
+
+[project.urls]
+LobbyViewRestAPI = "https://rest-api.lobbyview.org/"

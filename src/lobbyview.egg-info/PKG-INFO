@@ -1,0 +1,29 @@
+Metadata-Version: 2.1
+Name: lobbyview
+Version: 0.0.1
+Summary: LobbyView Rest API Wrapper
+Author-email: lobbyview <lobbydata@gmail.com>
+Project-URL: LobbyViewRestAPI, https://rest-api.lobbyview.org/
+Keywords: politics,lobbying
+Requires-Python: >=3.5
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: python-dotenv==1.0.1
+
+## Functionality
+Python wrapper for Lobbyview Rest API; uses same endpoints and parameter names as outlined in the
+[LobbyView Rest API Documentation](https://rest-api.lobbyview.org/)
+
+## Sample Code
+    
+    import os
+    from dotenv import load_dotenv
+
+    from lobbyview import LobbyView
+
+    load_dotenv()
+    LOBBYVIEW_TOKEN = os.environ.get('LOBBYVIEW_TOKEN')
+
+    lobbyview = LobbyView.LobbyView(LOBBYVIEW_TOKEN)
+    print(lobbyview.legislators(legislator_first_name="John", legislator_last_name="McCain"))
+    print(lobbyview.legislators(legislator_id="M000303"))
