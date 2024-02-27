@@ -33,10 +33,10 @@ class LobbyView():
         '''
         Gets legislator information from the LobbyView API based on params
 
-        >>> output = LobbyView.legislators(legislator_first_name="John", legislator_last_name="McCain")
+        >>> output = lobbyview.legislators(legislator_first_name="John", legislator_last_name="McCain")
         >>> output['data'][0]['legislator_id']
         'M000303'
-        >>> output = LobbyView.legislators(legislator_id="M000303")
+        >>> output = lobbyview.legislators(legislator_id="M000303")
         >>> output['data'][0]['legislator_full_name']
         'John McCain'
         '''
@@ -288,12 +288,12 @@ class LobbyView():
         return data
 
 if __name__ == "__main__":
-    load_dotenv("../../tests/.env")
-    hard_code_token = "eyJhbGciOiJSUzI1NiIsImtpZCI6ImExODE4ZjQ0ODk0MjI1ZjQ2MWQyMmI1NjA4NDcyMDM3MTc2MGY1OWIiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vZ2l0aHViLTczNTA0IiwiYXVkIjoiZ2l0aHViLTczNTA0IiwiYXV0aF90aW1lIjoxNzA5MDEwNDE5LCJ1c2VyX2lkIjoiVVdldVNQQ2ZuM1JZUGV3SFg1Mk9mZ0xuZGRFMiIsInN1YiI6IlVXZXVTUENmbjNSWVBld0hYNTJPZmdMbmRkRTIiLCJpYXQiOjE3MDkwMTA0MzAsImV4cCI6MTcwOTAxNDAzMCwiZW1haWwiOiJhYmNAbWl0LmVkdSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwiZmlyZWJhc2UiOnsiaWRlbnRpdGllcyI6eyJlbWFpbCI6WyJhYmNAbWl0LmVkdSJdfSwic2lnbl9pbl9wcm92aWRlciI6InBhc3N3b3JkIn19.DNgGZJYKvok1F8o5kyR-5N-_eYDpZt4mbyFMPtqscxJ-95fJLT1TcgRcvOTN0QkSEceDCBm9TZPF_KPrEo7ORU-m7JLm6RKJ3gkUQrfpmu_nRg4KMjBn-opkyg_B7YhjNSPgnhA5G5inzfWnfVOZn8cAo6aGUoI64qUNRd1HWn4VNbwzAIfxRE3pkb5cRueO0kb6__fB5-OKV5CuaLXKqLe6Q25kDrhikoqi7XokRY3i9q1Zl1MVVqfwS7o2CNUtGwq8r9iWJHQZ0WZoE2APn3hFgQWj9jSlbOQFe2Kc3KNztNBAcuSDyddhRvDkeCuN0YBIAnHVbVW-MTZeot6gDQ:UWeuSPCfn3RYPewHX52OfgLnddE2"
+    load_dotenv("tests/.env")
+    hard_code_token = "eyJhbGciOiJSUzI1NiIsImtpZCI6IjNiYjg3ZGNhM2JjYjY5ZDcyYjZjYmExYjU5YjMzY2M1MjI5N2NhOGQiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vZ2l0aHViLTczNTA0IiwiYXVkIjoiZ2l0aHViLTczNTA0IiwiYXV0aF90aW1lIjoxNzA5MDU4MjgwLCJ1c2VyX2lkIjoiZ0I3SzV2eU5MbFJLUXlzTTdjVHNObDZuRmc3MiIsInN1YiI6ImdCN0s1dnlOTGxSS1F5c003Y1RzTmw2bkZnNzIiLCJpYXQiOjE3MDkwNTgyODYsImV4cCI6MTcwOTA2MTg4NiwiZW1haWwiOiJueGxpdUBtaXQuZWR1IiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJmaXJlYmFzZSI6eyJpZGVudGl0aWVzIjp7ImVtYWlsIjpbIm54bGl1QG1pdC5lZHUiXX0sInNpZ25faW5fcHJvdmlkZXIiOiJwYXNzd29yZCJ9fQ.qImvUKuT-o2BlNMyf6pOrzdSstVQ3ICqzlWMGXJqTCyH2vz1SFFSyPYvEsv4dGkwQLUd3wm1O8RVS-MttMbVwmDgGA4jzRm5zDP15oKRsnUGAumVIYiems4g4xmcPeOGsCOA_r7sNPO24J81CitbOQZXpAUICAOQWVXogQWb5H0gN6-p-Q-rjRlrSQm2ZwN9CvbzhLuLzsvH6EeD02fAngt6uMq13aekGrdLV9aMWBmJUexCBwknbH2W3OLeP1lPMi2DkVFWA48IOx15L6CRCo0paCa1qDg5Z_Av5Rg5b3DFUhKIoxKtczdTbs94MokmzOB7-1-Xr3oxK6euzlTCfQ:gB7K5vyNLlRKQysM7cTsNl6nFg72"
     LOBBYVIEW_TOKEN = os.environ.get('LOBBYVIEW_TOKEN', hard_code_token)
 
     import doctest
-    results = doctest.testmod(extraglobs={'LobbyView': LobbyView(LOBBYVIEW_TOKEN)})
+    results = doctest.testmod(extraglobs={'lobbyview': LobbyView(LOBBYVIEW_TOKEN)})
     results_string = f"{results.attempted-results.failed}/{results.attempted} TESTS PASSED"
     if results.failed == 0:
         print(results_string)
