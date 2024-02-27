@@ -1,6 +1,9 @@
-from LobbyView import LobbyView
 import os
 from dotenv import load_dotenv
+
+import sys
+sys.path.append('../src/lobbyview/')
+from LobbyView import LobbyView
 
 load_dotenv()
 LOBBYVIEW_TOKEN = os.environ.get('LOBBYVIEW_TOKEN')
