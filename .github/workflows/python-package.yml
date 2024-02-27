@@ -40,3 +40,4 @@ jobs:
     - name: Test Functions
       run: |
         python src/lobbyview/LobbyView.py
+        pytest
