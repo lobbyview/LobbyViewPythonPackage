@@ -3,17 +3,19 @@ from dotenv import load_dotenv
 
 import sys
 sys.path.append('./src/lobbyview/')
+sys.path.append('../src/lobbyview/')
 from LobbyView import LobbyView
 
-load_dotenv()
-hard_code_token = "eyJhbGciOiJSUzI1NiIsImtpZCI6ImExODE4ZjQ0ODk0MjI1ZjQ2MWQyMmI1NjA4NDcyMDM3MTc2MGY1OWIiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vZ2l0aHViLTczNTA0IiwiYXVkIjoiZ2l0aHViLTczNTA0IiwiYXV0aF90aW1lIjoxNzA5MDEwNDE5LCJ1c2VyX2lkIjoiVVdldVNQQ2ZuM1JZUGV3SFg1Mk9mZ0xuZGRFMiIsInN1YiI6IlVXZXVTUENmbjNSWVBld0hYNTJPZmdMbmRkRTIiLCJpYXQiOjE3MDkwMTA0MzAsImV4cCI6MTcwOTAxNDAzMCwiZW1haWwiOiJhYmNAbWl0LmVkdSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwiZmlyZWJhc2UiOnsiaWRlbnRpdGllcyI6eyJlbWFpbCI6WyJhYmNAbWl0LmVkdSJdfSwic2lnbl9pbl9wcm92aWRlciI6InBhc3N3b3JkIn19.DNgGZJYKvok1F8o5kyR-5N-_eYDpZt4mbyFMPtqscxJ-95fJLT1TcgRcvOTN0QkSEceDCBm9TZPF_KPrEo7ORU-m7JLm6RKJ3gkUQrfpmu_nRg4KMjBn-opkyg_B7YhjNSPgnhA5G5inzfWnfVOZn8cAo6aGUoI64qUNRd1HWn4VNbwzAIfxRE3pkb5cRueO0kb6__fB5-OKV5CuaLXKqLe6Q25kDrhikoqi7XokRY3i9q1Zl1MVVqfwS7o2CNUtGwq8r9iWJHQZ0WZoE2APn3hFgQWj9jSlbOQFe2Kc3KNztNBAcuSDyddhRvDkeCuN0YBIAnHVbVW-MTZeot6gDQ:UWeuSPCfn3RYPewHX52OfgLnddE2"
+load_dotenv("./")
+load_dotenv("tests/.env")
+hard_code_token = ""
 LOBBYVIEW_TOKEN = os.environ.get('LOBBYVIEW_TOKEN', hard_code_token)
 
 lobbyview = LobbyView(LOBBYVIEW_TOKEN)
 
 def test_legislators():
-    print(lobbyview.legislators(legislator_first_name="John", legislator_last_name="McCain"))
-    print(lobbyview.legislators(legislator_id="M000303"))
+    assert lobbyview.legislators(legislator_first_name="John", legislator_last_name="McCain")['data'][0]['legislator_id'] == 'M000303'
+    assert lobbyview.legislators(legislator_id="M000303")['data'][0]['legislator_full_name'] == 'John McCain'
 
 if __name__ == "__main__":
     test_legislators()
