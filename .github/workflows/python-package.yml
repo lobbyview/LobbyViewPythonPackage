@@ -31,6 +31,7 @@ jobs:
         python -m pip install --upgrade pip
         python -m pip install flake8 pytest
         python3 -m pip install coverage
+        pip install pytest-cov
         pip install -r requirements.txt
     # - name: Lint with flake8
     #   run: |
@@ -42,5 +43,4 @@ jobs:
       run: |
         coverage run src/lobbyview/LobbyView.py
         coverage report -m
-        coverage run -m pytest
-        coverage report -m
+        pytest --cov
