@@ -17,8 +17,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.9", "3.10", "3.11"]
-        os: [ubuntu-latest, windows-latest, macOS-latest]
+        # Decreasing testing matrix until testing keys are created
+        # python-version: ["3.9", "3.10", "3.11"]
+        # os: [ubuntu-latest, windows-latest, macOS-latest]
+        python-version: ["3.11"]
+        os: [macOS-latest]
 
     steps:
     - uses: actions/checkout@v3
@@ -31,6 +34,7 @@ jobs:
         python -m pip install --upgrade pip
         python -m pip install flake8 pytest
         python3 -m pip install coverage
+        pip install pytest-cov
         pip install -r requirements.txt
     # - name: Lint with flake8
     #   run: |
