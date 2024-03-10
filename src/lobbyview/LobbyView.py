@@ -154,6 +154,7 @@ class LobbyView:
         :param max_birthday: Maximum birthday of the legislator (YYYY-MM-DD)
         :return: LegislatorResponse object containing the legislator data
 
+        >>> lobbyview = LobbyView("eyJhbGciOiJSUzI1NiIsImtpZCI6IjYwOWY4ZTMzN2ZjNzg1NTE0ZTExMGM2ZDg0N2Y0M2M3NDM1M2U0YWYiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vZ2l0aHViLTczNTA0IiwiYXVkIjoiZ2l0aHViLTczNTA0IiwiYXV0aF90aW1lIjoxNzEwMTAxMDI0LCJ1c2VyX2lkIjoiZ1M5Uk1VaEJpdVRrcDBsT0tVMzlEWXZ0dFFCMyIsInN1YiI6ImdTOVJNVWhCaXVUa3AwbE9LVTM5RFl2dHRRQjMiLCJpYXQiOjE3MTAxMDEwMzcsImV4cCI6MTcxMDEwNDYzNywiZW1haWwiOiJyb2RnYXJ6YUBnbWFpbC5jb20iLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImZpcmViYXNlIjp7ImlkZW50aXRpZXMiOnsiZW1haWwiOlsicm9kZ2FyemFAZ21haWwuY29tIl19LCJzaWduX2luX3Byb3ZpZGVyIjoicGFzc3dvcmQifX0.ya_ltGpqjL_NRV11bbKVnGvtRbArQjdmDkn_vqfd0hwVo2KK27Ks5LhRvfVDV2sHQpgDmbJevIRBAVeat-b4CfOB9tNjV6Gyu_Kmd-Y7N_SFWrovam3AAxw67X-R4wuvNA25Ml-xIMtL1P07eOTGmoaF21NoW_FaxSh_KTgLtnfo6-2lUuR_2BCLlyQ45t_s6znOVQFIGYhjVldbvQV0U2TBDnFWSTzGyd_FGU8I9yYoh4g3co-I18-8k-Zn3TPaoPbT6kgXvGag3Nkay7ATJd-8z84P3jyxii-390yEbgqwJ7k33wf6SHlkadsgA0UJrfe1yOAOs7hCymJPooOYkg:gS9RMUhBiuTkp0lOKU39DYvttQB3")
         >>> output = lobbyview.legislators(legislator_first_name="John", legislator_last_name="McCain")
         >>> output.data[0]['legislator_id']
         'M000303'
@@ -333,128 +334,128 @@ class LobbyView:
         return IssueResponse(data['data'])
 
 
-def networks(self, client_uuid=None, legislator_id=None, min_report_year=None, max_report_year=None, min_bills_sponsored=None, max_bills_sponsored=None):
-    """
-    Gets network information from the LobbyView API based on the provided parameters.
+    def networks(self, client_uuid=None, legislator_id=None, min_report_year=None, max_report_year=None, min_bills_sponsored=None, max_bills_sponsored=None):
+        """
+        Gets network information from the LobbyView API based on the provided parameters.
 
-    :param client_uuid: Unique identifier of the client
-    :param legislator_id: Unique identifier of the legislator
-    :param min_report_year: Minimum year of the report
-    :param max_report_year: Maximum year of the report
-    :param min_bills_sponsored: Minimum number of bills sponsored by the legislator in a specific year lobbied by the client
-    :param max_bills_sponsored: Maximum number of bills sponsored by the legislator in a specific year lobbied by the client
-    :return: NetworkResponse object containing the network data
-    """
-    query_params = []
-    if client_uuid:
-        query_params.append(f'client_uuid=eq.{client_uuid}')
-    if legislator_id:
-        query_params.append(f'legislator_id=eq.{legislator_id}')
-    if min_report_year:
-        query_params.append(f'report_year=gte.{min_report_year}')
-    if max_report_year:
-        query_params.append(f'report_year=lte.{max_report_year}')
-    if min_bills_sponsored:
-        query_params.append(f'n_bills_sponsored=gte.{min_bills_sponsored}')
-    if max_bills_sponsored:
-        query_params.append(f'n_bills_sponsored=lte.{max_bills_sponsored}')
-    
-    query_string = '&'.join(query_params)
-    data = self.get_data(f'/api/networks?{query_string}')
+        :param client_uuid: Unique identifier of the client
+        :param legislator_id: Unique identifier of the legislator
+        :param min_report_year: Minimum year of the report
+        :param max_report_year: Maximum year of the report
+        :param min_bills_sponsored: Minimum number of bills sponsored by the legislator in a specific year lobbied by the client
+        :param max_bills_sponsored: Maximum number of bills sponsored by the legislator in a specific year lobbied by the client
+        :return: NetworkResponse object containing the network data
+        """
+        query_params = []
+        if client_uuid:
+            query_params.append(f'client_uuid=eq.{client_uuid}')
+        if legislator_id:
+            query_params.append(f'legislator_id=eq.{legislator_id}')
+        if min_report_year:
+            query_params.append(f'report_year=gte.{min_report_year}')
+        if max_report_year:
+            query_params.append(f'report_year=lte.{max_report_year}')
+        if min_bills_sponsored:
+            query_params.append(f'n_bills_sponsored=gte.{min_bills_sponsored}')
+        if max_bills_sponsored:
+            query_params.append(f'n_bills_sponsored=lte.{max_bills_sponsored}')
+        
+        query_string = '&'.join(query_params)
+        data = self.get_data(f'/api/networks?{query_string}')
 
-    return NetworkResponse(data['data'])
+        return NetworkResponse(data['data'])
 
-def texts(self, report_uuid=None, issue_ordi=None, issue_code=None, issue_text=None):
-    """
-    Gets issue text data from the LobbyView API based on the provided parameters.
+    def texts(self, report_uuid=None, issue_ordi=None, issue_code=None, issue_text=None):
+        """
+        Gets issue text data from the LobbyView API based on the provided parameters.
 
-    :param report_uuid: Unique identifier of the report
-    :param issue_ordi: An integer given to the issue
-    :param issue_code: General Issue Area Code (Section 15)
-    :param issue_text: Specific lobbying issues (Section 16)
-    :return: TextResponse object containing the text data
-    """
-    query_params = []
-    if report_uuid:
-        query_params.append(f'report_uuid=eq.{report_uuid}')
-    if issue_ordi:
-        query_params.append(f'issue_ordi=eq.{issue_ordi}')
-    if issue_code:
-        query_params.append(f'issue_code=eq.{issue_code}')
-    if issue_text:
-        query_params.append(f'issue_text=ilike.*{issue_text}*')
-    
-    query_string = '&'.join(query_params)
-    data = self.get_data(f'/api/texts?{query_string}')
+        :param report_uuid: Unique identifier of the report
+        :param issue_ordi: An integer given to the issue
+        :param issue_code: General Issue Area Code (Section 15)
+        :param issue_text: Specific lobbying issues (Section 16)
+        :return: TextResponse object containing the text data
+        """
+        query_params = []
+        if report_uuid:
+            query_params.append(f'report_uuid=eq.{report_uuid}')
+        if issue_ordi:
+            query_params.append(f'issue_ordi=eq.{issue_ordi}')
+        if issue_code:
+            query_params.append(f'issue_code=eq.{issue_code}')
+        if issue_text:
+            query_params.append(f'issue_text=ilike.*{issue_text}*')
+        
+        query_string = '&'.join(query_params)
+        data = self.get_data(f'/api/texts?{query_string}')
 
-    return TextResponse(data['data'])
+        return TextResponse(data['data'])
 
-def quarter_level_networks(self, client_uuid=None, legislator_id=None, report_year=None, report_quarter_code=None, min_bills_sponsored=None, max_bills_sponsored=None):
-    """
-    Gets quarter-level network information from the LobbyView API based on the provided parameters.
+    def quarter_level_networks(self, client_uuid=None, legislator_id=None, report_year=None, report_quarter_code=None, min_bills_sponsored=None, max_bills_sponsored=None):
+        """
+        Gets quarter-level network information from the LobbyView API based on the provided parameters.
 
-    :param client_uuid: Unique identifier of the client
-    :param legislator_id: Unique identifier of the legislator
-    :param report_year: Year of the report
-    :param report_quarter_code: Quarter period of the report
-    :param min_bills_sponsored: Minimum number of bills sponsored by the legislator in a specific quarter lobbied by the client
-    :param max_bills_sponsored: Maximum number of bills sponsored by the legislator in a specific quarter lobbied by the client
-    :return: QuarterLevelNetworkResponse object containing the quarter-level network data
-    """
-    query_params = []
-    if client_uuid:
-        query_params.append(f'client_uuid=eq.{client_uuid}')
-    if legislator_id:
-        query_params.append(f'legislator_id=eq.{legislator_id}')
-    if report_year:
-        query_params.append(f'report_year=eq.{report_year}')
-    if report_quarter_code:
-        query_params.append(f'report_quarter_code=eq.{report_quarter_code}')
-    if min_bills_sponsored:
-        query_params.append(f'n_bills_sponsored=gte.{min_bills_sponsored}')
-    if max_bills_sponsored: 
-        query_params.append(f'n_bills_sponsored=lte.{max_bills_sponsored}')
-    
-    query_string = '&'.join(query_params)
-    data = self.get_data(f'/api/quarter_level_networks?{query_string}')
+        :param client_uuid: Unique identifier of the client
+        :param legislator_id: Unique identifier of the legislator
+        :param report_year: Year of the report
+        :param report_quarter_code: Quarter period of the report
+        :param min_bills_sponsored: Minimum number of bills sponsored by the legislator in a specific quarter lobbied by the client
+        :param max_bills_sponsored: Maximum number of bills sponsored by the legislator in a specific quarter lobbied by the client
+        :return: QuarterLevelNetworkResponse object containing the quarter-level network data
+        """
+        query_params = []
+        if client_uuid:
+            query_params.append(f'client_uuid=eq.{client_uuid}')
+        if legislator_id:
+            query_params.append(f'legislator_id=eq.{legislator_id}')
+        if report_year:
+            query_params.append(f'report_year=eq.{report_year}')
+        if report_quarter_code:
+            query_params.append(f'report_quarter_code=eq.{report_quarter_code}')
+        if min_bills_sponsored:
+            query_params.append(f'n_bills_sponsored=gte.{min_bills_sponsored}')
+        if max_bills_sponsored: 
+            query_params.append(f'n_bills_sponsored=lte.{max_bills_sponsored}')
+        
+        query_string = '&'.join(query_params)
+        data = self.get_data(f'/api/quarter_level_networks?{query_string}')
 
-    return QuarterLevelNetworkResponse(data['data'])
+        return QuarterLevelNetworkResponse(data['data'])
 
-def bill_client_networks(self, congress_number=None, bill_chamber=None, 
-                     bill_resolution_type=None, bill_number=None, 
-                     report_uuid=None, issue_ordi=None, client_uuid=None):
-    """
-    Gets bill-client network information from the LobbyView API based on the provided parameters.
+    def bill_client_networks(self, congress_number=None, bill_chamber=None, 
+                        bill_resolution_type=None, bill_number=None, 
+                        report_uuid=None, issue_ordi=None, client_uuid=None):
+        """
+        Gets bill-client network information from the LobbyView API based on the provided parameters.
 
-    :param congress_number: Session of Congress
-    :param bill_chamber: Chamber of the legislative branch (Component of the bill_id composite key)
-    :param bill_resolution_type: Bill type (Component of the bill_id composite key)  
-    :param bill_number: Bill number (Component of the bill_id composite key)
-    :param report_uuid: Unique identifier of the report
-    :param issue_ordi: An integer given to the issue
-    :param client_uuid: Unique identifier of the client
-    :return: BillClientNetworkResponse object containing the bill-client network data
-    """  
-    query_params = []
-    if congress_number:
-        query_params.append(f'congress_number=eq.{congress_number}')
-    if bill_chamber:
-        query_params.append(f'bill_chamber=eq.{bill_chamber}')
-    if bill_resolution_type:
-        query_params.append(f'bill_resolution_type=eq.{bill_resolution_type}')
-    if bill_number:  
-        query_params.append(f'bill_number=eq.{bill_number}')
-    if report_uuid:
-        query_params.append(f'report_uuid=eq.{report_uuid}') 
-    if issue_ordi:
-        query_params.append(f'issue_ordi=eq.{issue_ordi}')
-    if client_uuid:
-        query_params.append(f'client_uuid=eq.{client_uuid}')
-    
-    query_string = '&'.join(query_params)
-    data = self.get_data(f'/api/bill_client_networks?{query_string}')
+        :param congress_number: Session of Congress
+        :param bill_chamber: Chamber of the legislative branch (Component of the bill_id composite key)
+        :param bill_resolution_type: Bill type (Component of the bill_id composite key)  
+        :param bill_number: Bill number (Component of the bill_id composite key)
+        :param report_uuid: Unique identifier of the report
+        :param issue_ordi: An integer given to the issue
+        :param client_uuid: Unique identifier of the client
+        :return: BillClientNetworkResponse object containing the bill-client network data
+        """  
+        query_params = []
+        if congress_number:
+            query_params.append(f'congress_number=eq.{congress_number}')
+        if bill_chamber:
+            query_params.append(f'bill_chamber=eq.{bill_chamber}')
+        if bill_resolution_type:
+            query_params.append(f'bill_resolution_type=eq.{bill_resolution_type}')
+        if bill_number:  
+            query_params.append(f'bill_number=eq.{bill_number}')
+        if report_uuid:
+            query_params.append(f'report_uuid=eq.{report_uuid}') 
+        if issue_ordi:
+            query_params.append(f'issue_ordi=eq.{issue_ordi}')
+        if client_uuid:
+            query_params.append(f'client_uuid=eq.{client_uuid}')
+        
+        query_string = '&'.join(query_params)
+        data = self.get_data(f'/api/bill_client_networks?{query_string}')
 
-    return BillClientNetworkResponse(data['data'])
+        return BillClientNetworkResponse(data['data'])
 
 if __name__ == "__main__":
     load_dotenv("tests/.env")
