@@ -3,8 +3,6 @@ import json
 from dotenv import load_dotenv
 import os
 
-hard_code_token = "eyJhbGciOiJSUzI1NiIsImtpZCI6IjYwOWY4ZTMzN2ZjNzg1NTE0ZTExMGM2ZDg0N2Y0M2M3NDM1M2U0YWYiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vZ2l0aHViLTczNTA0IiwiYXVkIjoiZ2l0aHViLTczNTA0IiwiYXV0aF90aW1lIjoxNzA5MDkzMDMyLCJ1c2VyX2lkIjoiVVdldVNQQ2ZuM1JZUGV3SFg1Mk9mZ0xuZGRFMiIsInN1YiI6IlVXZXVTUENmbjNSWVBld0hYNTJPZmdMbmRkRTIiLCJpYXQiOjE3MTAxNjcyMDUsImV4cCI6MTcxMDE3MDgwNSwiZW1haWwiOiJhYmNAbWl0LmVkdSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwiZmlyZWJhc2UiOnsiaWRlbnRpdGllcyI6eyJlbWFpbCI6WyJhYmNAbWl0LmVkdSJdfSwic2lnbl9pbl9wcm92aWRlciI6InBhc3N3b3JkIn19.rQv8IaTN9RZvkt9ITi0bLZOwgqSAxk4yMOG6YBcorGkScO70vd9YlaXSrg0CZuRgsOeRthaW7-Mt9jG2BW9hPZG_Q_jyfQlsm_LCr_fawMobojaV4QxBwAm-vcOPvj8kgr-NcyFUQhUEi0pAGfNYWTG1s9ERk_NouI2hOFJ7YRT3fU2icBIqoVMqj-Sjbnac-k5YRCzPvg0GzzRyaj_sXuLtKRoEC9NJg47EkPH8WVmF9rrDN845WTZYtqV-9JjnftOuo1fUnseXEuHN1DnIkmQLoIV74gfAB8InZeuuj6AiU80DlDED9JTt98_mv-lpp2NxUGExxATPIoC4urflmw:UWeuSPCfn3RYPewHX52OfgLnddE2"
-
 class LobbyViewResponse:
     """
     Base class for LobbyView API responses.
@@ -461,7 +459,7 @@ class LobbyView:
 if __name__ == "__main__":
     load_dotenv("tests/.env")
     load_dotenv("../../tests/.env")
-    LOBBYVIEW_TOKEN = os.environ.get('LOBBYVIEW_TOKEN', hard_code_token)
+    LOBBYVIEW_TOKEN = os.environ.get('LOBBYVIEW_TOKEN', "NO TOKEN FOUND")
 
     import doctest 
     results = doctest.testmod(extraglobs={'lobbyview': LobbyView(LOBBYVIEW_TOKEN)})
