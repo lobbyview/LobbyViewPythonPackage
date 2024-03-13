@@ -23,9 +23,6 @@ jobs:
         os: [macOS-latest]
 
     steps:
-    env:
-      LOBBYVIEW_TOKEN: ${{ secrets.LOBBYVIEW_TOKEN }}
-
     - uses: actions/checkout@v3
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v3
@@ -46,6 +43,8 @@ jobs:
     #     flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     
     - name: Test functions and run coverage report
+      env:
+          LOBBYVIEW_TOKEN: ${{ secrets.LOBBYVIEW_TOKEN }}
       run: |
         coverage run src/lobbyview/LobbyView.py
         coverage report -m
@@ -53,6 +52,8 @@ jobs:
         coverage report -m
 
     # - name: Run tests and generate coverage report
+    #   env:
+    #         LOBBYVIEW_TOKEN: ${{ secrets.LOBBYVIEW_TOKEN }}
     #   run: |
     #     pytest --cov=./src --cov-report=html --doctest-modules
     
