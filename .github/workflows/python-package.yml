@@ -26,7 +26,7 @@ jobs:
     steps:
     env:
       LOBBYVIEW_TOKEN: ${{ secrets.LOBBYVIEW_TOKEN }}
-      
+
     - uses: actions/checkout@v3
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v3
@@ -45,19 +45,20 @@ jobs:
     #     flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
     #     # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
     #     flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-    # - name: Test functions and run coverage report
-    #   run: |
-    #     coverage run src/lobbyview/LobbyView.py
-    #     coverage report -m
-    #     coverage run -m pytest
-    #     coverage report -m
-
-    - name: Run tests and generate coverage report
-      run: |
-        pytest --cov=./src --cov-report=html --doctest-modules
     
-    - name: Upload coverage report
-      uses: actions/upload-artifact@v3
-      with:
-        name: coverage-report
-        path: htmlcov/
+    - name: Test functions and run coverage report
+      run: |
+        coverage run src/lobbyview/LobbyView.py
+        coverage report -m
+        coverage run -m pytest
+        coverage report -m
+
+    # - name: Run tests and generate coverage report
+    #   run: |
+    #     pytest --cov=./src --cov-report=html --doctest-modules
+    
+    # - name: Upload coverage report
+    #   uses: actions/upload-artifact@v3
+    #   with:
+    #     name: coverage-report
+    #     path: htmlcov/
