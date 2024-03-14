@@ -1,6 +1,7 @@
 import http.client
 import json
 from dotenv import load_dotenv
+import ssl
 import os
 
 class LobbyViewResponse:
@@ -8,13 +9,19 @@ class LobbyViewResponse:
     Base class for LobbyView API responses.
     """
     def __init__(self, data):
-        self.data = data
+        self.data = data['data']                # the actual data
+        self.current_page = data['currentPage'] # current page number
+        self.total_pages = data['totalPage']    # total pages available
+        self.total_rows = data['totalNumber']   # total rows available (not the number of rows in the response)
 
     def __str__(self):
         return json.dumps(self.data, indent=2)
 
     def __iter__(self):
         return iter(self.data)
+    
+    def page_info(self):
+        return f"Current Page: {self.current_page}\nTotal Pages: {self.total_pages}\nTotal Rows: {self.total_rows}"
 
 class LegislatorResponse(LobbyViewResponse):
     """
@@ -115,7 +122,11 @@ class LobbyView:
         Initialize the LobbyView class with the provided API token.
         """
         self.lobbyview_token = lobbyview_token
-        self.connection = http.client.HTTPSConnection('rest-api.lobbyview.org')
+        # self.connection = http.client.HTTPSConnection('rest-api.lobbyview.org')
+
+        context = ssl._create_unverified_context()
+        self.connection = http.client.HTTPSConnection("lobbyview-rest-api-test.eba-witbq7ed.us-east-1.elasticbeanstalk.com", context=context)
+
         self.headers = {
             'token': self.lobbyview_token,
         }
@@ -140,7 +151,7 @@ class LobbyView:
     def legislators(self, legislator_id=None, legislator_govtrack_id=None, 
                         legislator_first_name=None, legislator_last_name=None,
                         legislator_full_name=None, legislator_gender=None,
-                        min_birthday=None, max_birthday=None):
+                        min_birthday=None, max_birthday=None, page=1):
         """
         Gets legislator information from the LobbyView API based on the provided parameters.
 
@@ -178,16 +189,18 @@ class LobbyView:
             query_params.append(f'legislator_birthday=gte.{min_birthday}')
         if max_birthday:  
             query_params.append(f'legislator_birthday=lte.{max_birthday}')
+        if page != 1:
+            query_params.append(f'page={page}')
             
         query_string = '&'.join(query_params)
         data = self.get_data(f'/api/legislators?{query_string}')
 
-        return LegislatorResponse(data['data'])
+        return LegislatorResponse(data)
     
     def bills(self, congress_number=None, bill_chamber=None,
               bill_resolution_type=None, bill_number=None, bill_state=None, 
               legislator_id=None, min_introduced_date=None, max_introduced_date=None,
-              min_updated_date=None, max_updated_date=None):
+              min_updated_date=None, max_updated_date=None, page=1):
         """
         Gets bill information from the LobbyView API based on the provided parameters.
 
@@ -228,10 +241,10 @@ class LobbyView:
         query_string = '&'.join(query_params)
         data = self.get_data(f'/api/bills?{query_string}')
 
-        return BillResponse(data['data'])
+        return BillResponse(data)
 
     def clients(self, client_uuid=None, client_name=None, 
-                    min_naics=None, max_naics=None, naics_description=None):
+                    min_naics=None, max_naics=None, naics_description=None, page=1):
         """
         Gets client information from the LobbyView API based on the provided parameters.
 
@@ -257,11 +270,11 @@ class LobbyView:
         query_string = '&'.join(query_params)
         data = self.get_data(f'/api/clients?{query_string}')
 
-        return ClientResponse(data['data'])
+        return ClientResponse(data)
 
     def reports(self, report_uuid=None, client_uuid=None, registrant_uuid=None, 
             registrant_name=None, report_year=None, report_quarter_code=None, 
-            min_amount=None, max_amount=None, is_no_activity=None, is_client_self_filer=None, is_amendment=None):
+            min_amount=None, max_amount=None, is_no_activity=None, is_client_self_filer=None, is_amendment=None, page=1):
         """
         Gets report information from the LobbyView API based on the provided parameters.
 
@@ -305,9 +318,9 @@ class LobbyView:
         query_string = '&'.join(query_params)
         data = self.get_data(f'/api/reports?{query_string}')
 
-        return ReportResponse(data['data'])
+        return ReportResponse(data)
 
-    def issues(self, report_uuid=None, issue_ordi=None, issue_code=None, gov_entity=None):
+    def issues(self, report_uuid=None, issue_ordi=None, issue_code=None, gov_entity=None, page=1):
         """
         Gets issue information from the LobbyView API based on the provided parameters.
 
@@ -330,10 +343,10 @@ class LobbyView:
         query_string = '&'.join(query_params)
         data = self.get_data(f'/api/issues?{query_string}')
 
-        return IssueResponse(data['data'])
+        return IssueResponse(data)
 
 
-    def networks(self, client_uuid=None, legislator_id=None, min_report_year=None, max_report_year=None, min_bills_sponsored=None, max_bills_sponsored=None):
+    def networks(self, client_uuid=None, legislator_id=None, min_report_year=None, max_report_year=None, min_bills_sponsored=None, max_bills_sponsored=None, page=1):
         """
         Gets network information from the LobbyView API based on the provided parameters.
 
@@ -362,9 +375,9 @@ class LobbyView:
         query_string = '&'.join(query_params)
         data = self.get_data(f'/api/networks?{query_string}')
 
-        return NetworkResponse(data['data'])
+        return NetworkResponse(data)
 
-    def texts(self, report_uuid=None, issue_ordi=None, issue_code=None, issue_text=None):
+    def texts(self, report_uuid=None, issue_ordi=None, issue_code=None, issue_text=None, page=1):
         """
         Gets issue text data from the LobbyView API based on the provided parameters.
 
@@ -387,9 +400,9 @@ class LobbyView:
         query_string = '&'.join(query_params)
         data = self.get_data(f'/api/texts?{query_string}')
 
-        return TextResponse(data['data'])
+        return TextResponse(data)
 
-    def quarter_level_networks(self, client_uuid=None, legislator_id=None, report_year=None, report_quarter_code=None, min_bills_sponsored=None, max_bills_sponsored=None):
+    def quarter_level_networks(self, client_uuid=None, legislator_id=None, report_year=None, report_quarter_code=None, min_bills_sponsored=None, max_bills_sponsored=None, page=1):
         """
         Gets quarter-level network information from the LobbyView API based on the provided parameters.
 
@@ -418,11 +431,11 @@ class LobbyView:
         query_string = '&'.join(query_params)
         data = self.get_data(f'/api/quarter_level_networks?{query_string}')
 
-        return QuarterLevelNetworkResponse(data['data'])
+        return QuarterLevelNetworkResponse(data)
 
     def bill_client_networks(self, congress_number=None, bill_chamber=None, 
                         bill_resolution_type=None, bill_number=None, 
-                        report_uuid=None, issue_ordi=None, client_uuid=None):
+                        report_uuid=None, issue_ordi=None, client_uuid=None, page=1):
         """
         Gets bill-client network information from the LobbyView API based on the provided parameters.
 
@@ -450,11 +463,13 @@ class LobbyView:
             query_params.append(f'issue_ordi=eq.{issue_ordi}')
         if client_uuid:
             query_params.append(f'client_uuid=eq.{client_uuid}')
+        if page != 1:
+            query_params.append(f'page={page}')
         
         query_string = '&'.join(query_params)
         data = self.get_data(f'/api/bill_client_networks?{query_string}')
 
-        return BillClientNetworkResponse(data['data'])
+        return BillClientNetworkResponse(data)
 
 if __name__ == "__main__":
     load_dotenv("tests/.env")
