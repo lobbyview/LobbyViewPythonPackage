@@ -1,5 +1,6 @@
 import os
 from dotenv import load_dotenv
+import time
 
 import sys
 sys.path.append('./src/lobbyview/')
@@ -76,18 +77,19 @@ def test_bill_client_networks():
     assert output.data[0]['issue_ordi'] == 2
 
 if __name__ == "__main__":
-    test_legislators()
-    test_legislators_ranges()
-    test_bills()
-    test_bills_ranges()
-    test_clients()
-    test_clients_naics_ranges()
-    test_reports()
-    test_reports_amount_ranges()
-    test_issues()
-    test_networks()
-    test_networks_ranges()
-    test_texts()
-    test_quarter_level_networks()
-    test_quarter_level_networks_ranges()
-    test_bill_client_networks()
+    pass
+    # test_legislators()
+    # test_legislators_ranges()
+    # test_bills()
+    # test_bills_ranges()
+    # test_clients()
+    # test_clients_naics_ranges()
+    # test_reports()
+    # test_reports_amount_ranges()
+    # test_issues()
+    # test_networks()
+    # test_networks_ranges()
+    # test_texts()
+    # test_quarter_level_networks()
+    # test_quarter_level_networks_ranges()
+    # test_bill_client_networks()
