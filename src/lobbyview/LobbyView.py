@@ -139,6 +139,7 @@ class LobbyView:
         Returns the JSON response data.
         """
         try:
+            query_string = query_string.replace(" ", "%20")
             self.connection.request('GET', query_string, None, self.headers)
             response = self.connection.getresponse()
             data_string = response.read().decode('utf-8')
