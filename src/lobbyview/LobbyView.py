@@ -238,6 +238,8 @@ class LobbyView:
             query_params.append(f'bill_date_updated=gte.{min_updated_date}')
         if max_updated_date:
             query_params.append(f'bill_date_updated=lte.{max_updated_date}')
+        if page != 1:
+            query_params.append(f'page={page}')
             
         query_string = '&'.join(query_params)
         data = self.get_data(f'/api/bills?{query_string}')
@@ -267,6 +269,8 @@ class LobbyView:
             query_params.append(f'primary_naics=lte.{max_naics}')
         if naics_description:
             query_params.append(f'naics_description=ilike.*{naics_description}*')
+        if page != 1:
+            query_params.append(f'page={page}')
         
         query_string = '&'.join(query_params)
         data = self.get_data(f'/api/clients?{query_string}')
@@ -315,6 +319,8 @@ class LobbyView:
             query_params.append(f'is_client_self_filer=eq.{is_client_self_filer}')
         if is_amendment is not None:
             query_params.append(f'is_amendment=eq.{is_amendment}')
+        if page != 1:
+            query_params.append(f'page={page}')
         
         query_string = '&'.join(query_params)
         data = self.get_data(f'/api/reports?{query_string}')
@@ -340,6 +346,8 @@ class LobbyView:
             query_params.append(f'issue_code=eq.{issue_code}')
         if gov_entity:
             query_params.append(f'gov_entity=ilike.*{gov_entity}*')
+        if page != 1:
+            query_params.append(f'page={page}')
         
         query_string = '&'.join(query_params)
         data = self.get_data(f'/api/issues?{query_string}')
@@ -372,6 +380,8 @@ class LobbyView:
             query_params.append(f'n_bills_sponsored=gte.{min_bills_sponsored}')
         if max_bills_sponsored:
             query_params.append(f'n_bills_sponsored=lte.{max_bills_sponsored}')
+        if page != 1:
+            query_params.append(f'page={page}')
         
         query_string = '&'.join(query_params)
         data = self.get_data(f'/api/networks?{query_string}')
@@ -397,6 +407,8 @@ class LobbyView:
             query_params.append(f'issue_code=eq.{issue_code}')
         if issue_text:
             query_params.append(f'issue_text=ilike.*{issue_text}*')
+        if page != 1:
+            query_params.append(f'page={page}')
         
         query_string = '&'.join(query_params)
         data = self.get_data(f'/api/texts?{query_string}')
@@ -428,6 +440,8 @@ class LobbyView:
             query_params.append(f'n_bills_sponsored=gte.{min_bills_sponsored}')
         if max_bills_sponsored: 
             query_params.append(f'n_bills_sponsored=lte.{max_bills_sponsored}')
+        if page != 1:
+            query_params.append(f'page={page}')
         
         query_string = '&'.join(query_params)
         data = self.get_data(f'/api/quarter_level_networks?{query_string}')
