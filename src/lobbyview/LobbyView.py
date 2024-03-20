@@ -9,10 +9,13 @@ class LobbyViewResponse:
     Base class for LobbyView API responses.
     """
     def __init__(self, data):
-        self.data = data['data']                # the actual data
-        self.current_page = data['currentPage'] # current page number
-        self.total_pages = data['totalPage']    # total pages available
-        self.total_rows = data['totalNumber']   # total rows available (not the number of rows in the response)
+        self.data = data['data']                     # the actual data
+        self.current_page = int(data['currentPage']) # current page number
+        self.total_pages = int(data['totalPage'])    # total pages available
+        self.total_rows = int(data['totalNumber'])   # total rows available (not the number of rows in the response)
+
+        if self.current_page > self.total_pages:
+            raise Exception("Invalid Page Number. Please select a page within the available range.")
 
     def __str__(self):
         return json.dumps(self.data, indent=2)
@@ -144,7 +147,7 @@ class LobbyView:
             response = self.connection.getresponse()
             data_string = response.read().decode('utf-8')
             data = json.loads(data_string)
-
+            
             return data
         except:
             raise Exception("Unsuccessful Connection to LobbyView Endpoints. Please check your token and try again.")

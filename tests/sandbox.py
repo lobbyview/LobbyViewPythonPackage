@@ -13,11 +13,11 @@ LOBBYVIEW_TOKEN = os.environ.get('LOBBYVIEW_TOKEN', "NO TOKEN FOUND")
 lobbyview = LobbyView(LOBBYVIEW_TOKEN)
 
 def test_legislators():
-    output = lobbyview.legislators(legislator_first_name="John")
+    output = lobbyview.legislators(legislator_first_name="John", legislator_last_name="McCain", page=3)
     print(output.page_info())
 
-    output = lobbyview.legislators(legislator_first_name="John", page=2)
-    print(output)
+    # output = lobbyview.legislators(legislator_first_name="John", page=2)
+    # print(output)
 
 if __name__ == "__main__":
     test_legislators()
