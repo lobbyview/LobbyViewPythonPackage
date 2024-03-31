@@ -39,12 +39,17 @@ jobs:
     #     # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
     #     flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     
-    - name: Test functions and run coverage report
+    - name: Doctest
       env:
           LOBBYVIEW_TOKEN: ${{ secrets.LOBBYVIEW_TOKEN }}
       run: |
         coverage run src/lobbyview/LobbyView.py
         coverage report -m
+
+    - name: Pytest
+      env:
+          LOBBYVIEW_TOKEN: ${{ secrets.LOBBYVIEW_TOKEN }}
+      run: |
         coverage run -m pytest
         coverage report -m
 
