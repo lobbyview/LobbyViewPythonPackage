@@ -1,3 +1,8 @@
+'''
+Python wrapper for Lobbyview Rest API; uses same endpoints and parameter names as outlined in the
+[LobbyView Rest API Documentation](https://rest-api.lobbyview.org/)
+'''
+
 import http.client
 import json
 from dotenv import load_dotenv
@@ -219,6 +224,10 @@ class LobbyView:
         :param min_updated_date: Minimum date of most recent status change (YYYY-MM-DD)
         :param max_updated_date: Maximum date of most recent status change (YYYY-MM-DD)
         :return: BillResponse object containing the bill data
+
+        >>> output = lobbyview.bills(congress_number=111, bill_chamber="H", bill_number=4173)
+        >>> output.data[0]['bill_state']
+        'ENACTED:SIGNED'
         """
         query_params = []
         if congress_number:
@@ -260,6 +269,10 @@ class LobbyView:
         :param max_naics: Maximum NAICS code to which the client belongs
         :param naics_description: Descriptions of the NAICS code
         :return: ClientResponse object containing the client data
+
+        >>> output = lobbyview.clients(client_name="Microsoft Corporation")
+        >>> output.data[0]['client_uuid']
+        '44563806-56d2-5e99-84a1-95d22a7a69b3'
         """
         query_params = []
         if client_uuid:
@@ -298,6 +311,10 @@ class LobbyView:
         :param is_client_self_filer: An organization employing its own in-house lobbyist(s)
         :param is_amendment: Amendment of previous report
         :return: ReportResponse object containing the report data
+
+        >>> output = lobbyview.reports(report_year=2020, report_quarter_code="2", is_client_self_filer=True, report_uuid="4b799814-3e94-5ee1-8dd4-b32aead9aca6")
+        >>> output.data[0]['amount']
+        '$11,680,000.00'
         """
         query_params = []
         if report_uuid:
@@ -339,6 +356,8 @@ class LobbyView:
         :param issue_code: General Issue Area Code (Section 15)
         :param gov_entity: House(s) of Congress and Federal agencies (Section 17)
         :return: IssueResponse object containing the issue data
+
+        >>> output = lobbyview.issues(issue_code="TRD")
         """
         query_params = []
         if report_uuid:
@@ -369,6 +388,10 @@ class LobbyView:
         :param min_bills_sponsored: Minimum number of bills sponsored by the legislator in a specific year lobbied by the client
         :param max_bills_sponsored: Maximum number of bills sponsored by the legislator in a specific year lobbied by the client
         :return: NetworkResponse object containing the network data
+
+        >>> output = lobbyview.networks(client_uuid="44563806-56d2-5e99-84a1-95d22a7a69b3", legislator_id="M000303")
+        >>> output.data[0]['report_year']
+        2017
         """
         query_params = []
         if client_uuid:
@@ -400,6 +423,8 @@ class LobbyView:
         :param issue_code: General Issue Area Code (Section 15)
         :param issue_text: Specific lobbying issues (Section 16)
         :return: TextResponse object containing the text data
+
+        >>> output = lobbyview.texts(issue_code="HCR", issue_text="covid")
         """
         query_params = []
         if report_uuid:
@@ -429,6 +454,10 @@ class LobbyView:
         :param min_bills_sponsored: Minimum number of bills sponsored by the legislator in a specific quarter lobbied by the client
         :param max_bills_sponsored: Maximum number of bills sponsored by the legislator in a specific quarter lobbied by the client
         :return: QuarterLevelNetworkResponse object containing the quarter-level network data
+
+        >>> output = lobbyview.quarter_level_networks(client_uuid="44563806-56d2-5e99-84a1-95d22a7a69b3", legislator_id="M000303", report_year=2017, report_quarter_code=4)
+        >>> output.data[0]['n_bills_sponsored']
+        1
         """
         query_params = []
         if client_uuid:
@@ -465,6 +494,10 @@ class LobbyView:
         :param issue_ordi: An integer given to the issue
         :param client_uuid: Unique identifier of the client
         :return: BillClientNetworkResponse object containing the bill-client network data
+
+        >>> output = lobbyview.bill_client_networks(congress_number=114, bill_chamber="H", bill_number=1174, client_uuid="44563806-56d2-5e99-84a1-95d22a7a69b3")
+        >>> output.data[0]['issue_ordi']
+        2
         """  
         query_params = []
         if congress_number:
