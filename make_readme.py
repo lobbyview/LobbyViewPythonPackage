@@ -3,13 +3,13 @@ import ast
 def parse_docstring(docstring):
     """
     Parse the docstring to extract and format description, parameters, returns sections,
-    and format doctests as code blocks.
+    and format examples as code blocks.
     """
     if not docstring:
         return "No documentation available."
 
     lines = docstring.split('\n')
-    description, params, returns, doctest_block = [], [], [], []
+    description, params, returns, example_block = [], [], [], []
     current_section = description
 
     for line in lines:
@@ -21,9 +21,9 @@ def parse_docstring(docstring):
             current_section = returns
             line = line.replace(':return:', '').strip()
             line = f"- {line}"
-        elif line.strip().startswith('>>>') or (doctest_block and not line.strip().startswith(':')):
-            # This line is part of a doctest or subsequent line of a doctest block
-            current_section = doctest_block
+        elif line.strip().startswith('>>>') or (example_block and not line.strip().startswith(':')):
+            # This line is part of an example or subsequent line of an example block
+            current_section = example_block
         current_section.append(line)
 
     # Format sections
@@ -31,9 +31,9 @@ def parse_docstring(docstring):
     if description: formatted_docstring += '\n'.join(description) + '\n\n'
     if params: formatted_docstring += "#### Parameters:\n" + '\n'.join(params) + '\n\n'
     if returns: formatted_docstring += "#### Returns:\n" + '\n'.join(returns) + '\n\n'
-    if doctest_block:
-        formatted_doctest = "#### Doctest:\n" + "```python\n" + '\n'.join(doctest_block) + "\n```\n"
-        formatted_docstring += formatted_doctest
+    if example_block:
+        formatted_example = "#### Example:\n" + "```python\n" + '\n'.join(example_block) + "\n```\n"
+        formatted_docstring += formatted_example
 
     return formatted_docstring
 

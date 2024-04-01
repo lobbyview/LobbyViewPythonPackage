@@ -8,4 +8,4 @@ src/lobbyview.egg-info/SOURCES.txt
 src/lobbyview.egg-info/dependency_links.txt
 src/lobbyview.egg-info/requires.txt
 src/lobbyview.egg-info/top_level.txt
-tests/test-wrapper.py
+tests/test_wrapper.py
