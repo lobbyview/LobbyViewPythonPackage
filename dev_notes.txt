@@ -1,0 +1,10 @@
+To run doctest:
+>>> python LobbyView.py 
+To run pytest:
+>>> pytest
+For coverage reports: 
+>>> coverage run LobbyView.py
+>>> coverage report 
+For uploading to PyPi: edit pyproject.toml with new version
+>>> python -m build
+>>> twine upload dist/*

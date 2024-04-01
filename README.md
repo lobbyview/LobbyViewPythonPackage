@@ -88,8 +88,9 @@ Gets legislator information from the LobbyView API based on the provided paramet
 - LegislatorResponse object containing the legislator data
 
 
-#### Doctest:
+#### Example:
 ```python
+>>> lobbyview = LobbyView(LOBBYVIEW_TOKEN)
 >>> output = lobbyview.legislators(legislator_first_name="John", legislator_last_name="McCain")
 >>> output.data[0]['legislator_id']
 'M000303'
@@ -119,8 +120,9 @@ Gets bill information from the LobbyView API based on the provided parameters.
 - BillResponse object containing the bill data
 
 
-#### Doctest:
+#### Example:
 ```python
+>>> lobbyview = LobbyView(LOBBYVIEW_TOKEN)
 >>> output = lobbyview.bills(congress_number=111, bill_chamber="H", bill_number=4173)
 >>> output.data[0]['bill_state']
 'ENACTED:SIGNED'
@@ -142,8 +144,9 @@ Gets client information from the LobbyView API based on the provided parameters.
 - ClientResponse object containing the client data
 
 
-#### Doctest:
+#### Example:
 ```python
+>>> lobbyview = LobbyView(LOBBYVIEW_TOKEN)
 >>> output = lobbyview.clients(client_name="Microsoft Corporation")
 >>> output.data[0]['client_uuid']
 '44563806-56d2-5e99-84a1-95d22a7a69b3'
@@ -171,8 +174,9 @@ Gets report information from the LobbyView API based on the provided parameters.
 - ReportResponse object containing the report data
 
 
-#### Doctest:
+#### Example:
 ```python
+>>> lobbyview = LobbyView(LOBBYVIEW_TOKEN)
 >>> output = lobbyview.reports(report_year=2020, report_quarter_code="2", is_client_self_filer=True, report_uuid="4b799814-3e94-5ee1-8dd4-b32aead9aca6")
 >>> output.data[0]['amount']
 '$11,680,000.00'
@@ -193,8 +197,9 @@ Gets issue information from the LobbyView API based on the provided parameters.
 - IssueResponse object containing the issue data
 
 
-#### Doctest:
+#### Example:
 ```python
+>>> lobbyview = LobbyView(LOBBYVIEW_TOKEN)
 >>> output = lobbyview.issues(issue_code="TRD")
 ```
 
@@ -215,8 +220,9 @@ Gets network information from the LobbyView API based on the provided parameters
 - NetworkResponse object containing the network data
 
 
-#### Doctest:
+#### Example:
 ```python
+>>> lobbyview = LobbyView(LOBBYVIEW_TOKEN)
 >>> output = lobbyview.networks(client_uuid="44563806-56d2-5e99-84a1-95d22a7a69b3", legislator_id="M000303")
 >>> output.data[0]['report_year']
 2017
@@ -237,8 +243,9 @@ Gets issue text data from the LobbyView API based on the provided parameters.
 - TextResponse object containing the text data
 
 
-#### Doctest:
+#### Example:
 ```python
+>>> lobbyview = LobbyView(LOBBYVIEW_TOKEN)
 >>> output = lobbyview.texts(issue_code="HCR", issue_text="covid")
 ```
 
@@ -259,8 +266,9 @@ Gets quarter-level network information from the LobbyView API based on the provi
 - QuarterLevelNetworkResponse object containing the quarter-level network data
 
 
-#### Doctest:
+#### Example:
 ```python
+>>> lobbyview = LobbyView(LOBBYVIEW_TOKEN)
 >>> output = lobbyview.quarter_level_networks(client_uuid="44563806-56d2-5e99-84a1-95d22a7a69b3", legislator_id="M000303", report_year=2017, report_quarter_code=4)
 >>> output.data[0]['n_bills_sponsored']
 1
@@ -284,8 +292,9 @@ Gets bill-client network information from the LobbyView API based on the provide
 - BillClientNetworkResponse object containing the bill-client network data
 
 
-#### Doctest:
+#### Example:
 ```python
+>>> lobbyview = LobbyView(LOBBYVIEW_TOKEN)
 >>> output = lobbyview.bill_client_networks(congress_number=114, bill_chamber="H", bill_number=1174, client_uuid="44563806-56d2-5e99-84a1-95d22a7a69b3")
 >>> output.data[0]['issue_ordi']
 2

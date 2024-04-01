@@ -174,6 +174,7 @@ class LobbyView:
         :param max_birthday: Maximum birthday of the legislator (YYYY-MM-DD)
         :return: LegislatorResponse object containing the legislator data
 
+        >>> lobbyview = LobbyView(LOBBYVIEW_TOKEN)
         >>> output = lobbyview.legislators(legislator_first_name="John", legislator_last_name="McCain")
         >>> output.data[0]['legislator_id']
         'M000303'
@@ -225,6 +226,7 @@ class LobbyView:
         :param max_updated_date: Maximum date of most recent status change (YYYY-MM-DD)
         :return: BillResponse object containing the bill data
 
+        >>> lobbyview = LobbyView(LOBBYVIEW_TOKEN)
         >>> output = lobbyview.bills(congress_number=111, bill_chamber="H", bill_number=4173)
         >>> output.data[0]['bill_state']
         'ENACTED:SIGNED'
@@ -270,6 +272,7 @@ class LobbyView:
         :param naics_description: Descriptions of the NAICS code
         :return: ClientResponse object containing the client data
 
+        >>> lobbyview = LobbyView(LOBBYVIEW_TOKEN)
         >>> output = lobbyview.clients(client_name="Microsoft Corporation")
         >>> output.data[0]['client_uuid']
         '44563806-56d2-5e99-84a1-95d22a7a69b3'
@@ -312,6 +315,7 @@ class LobbyView:
         :param is_amendment: Amendment of previous report
         :return: ReportResponse object containing the report data
 
+        >>> lobbyview = LobbyView(LOBBYVIEW_TOKEN)
         >>> output = lobbyview.reports(report_year=2020, report_quarter_code="2", is_client_self_filer=True, report_uuid="4b799814-3e94-5ee1-8dd4-b32aead9aca6")
         >>> output.data[0]['amount']
         '$11,680,000.00'
@@ -357,6 +361,7 @@ class LobbyView:
         :param gov_entity: House(s) of Congress and Federal agencies (Section 17)
         :return: IssueResponse object containing the issue data
 
+        >>> lobbyview = LobbyView(LOBBYVIEW_TOKEN)
         >>> output = lobbyview.issues(issue_code="TRD")
         """
         query_params = []
@@ -389,6 +394,7 @@ class LobbyView:
         :param max_bills_sponsored: Maximum number of bills sponsored by the legislator in a specific year lobbied by the client
         :return: NetworkResponse object containing the network data
 
+        >>> lobbyview = LobbyView(LOBBYVIEW_TOKEN)
         >>> output = lobbyview.networks(client_uuid="44563806-56d2-5e99-84a1-95d22a7a69b3", legislator_id="M000303")
         >>> output.data[0]['report_year']
         2017
@@ -424,6 +430,7 @@ class LobbyView:
         :param issue_text: Specific lobbying issues (Section 16)
         :return: TextResponse object containing the text data
 
+        >>> lobbyview = LobbyView(LOBBYVIEW_TOKEN)
         >>> output = lobbyview.texts(issue_code="HCR", issue_text="covid")
         """
         query_params = []
@@ -455,6 +462,7 @@ class LobbyView:
         :param max_bills_sponsored: Maximum number of bills sponsored by the legislator in a specific quarter lobbied by the client
         :return: QuarterLevelNetworkResponse object containing the quarter-level network data
 
+        >>> lobbyview = LobbyView(LOBBYVIEW_TOKEN)
         >>> output = lobbyview.quarter_level_networks(client_uuid="44563806-56d2-5e99-84a1-95d22a7a69b3", legislator_id="M000303", report_year=2017, report_quarter_code=4)
         >>> output.data[0]['n_bills_sponsored']
         1
@@ -495,6 +503,7 @@ class LobbyView:
         :param client_uuid: Unique identifier of the client
         :return: BillClientNetworkResponse object containing the bill-client network data
 
+        >>> lobbyview = LobbyView(LOBBYVIEW_TOKEN)
         >>> output = lobbyview.bill_client_networks(congress_number=114, bill_chamber="H", bill_number=1174, client_uuid="44563806-56d2-5e99-84a1-95d22a7a69b3")
         >>> output.data[0]['issue_ordi']
         2
