@@ -125,7 +125,7 @@ class LobbyView:
     """
     Main class for interacting with the LobbyView API.
     """
-    def __init__(self, lobbyview_token):
+    def __init__(self, lobbyview_token, test_connection=True):
         """
         Initialize the LobbyView class with the provided API token.
         """
@@ -139,7 +139,11 @@ class LobbyView:
             'token': self.lobbyview_token,
         }
 
-        self.get_data('/api/legislators') # test connection
+        if test_connection:
+            try:
+                self.get_data('/api/legislators')
+            except Exception as e:
+                print(f"Warning: Connection test failed - {str(e)}")
  
     def get_data(self, query_string):
         """
@@ -150,12 +154,43 @@ class LobbyView:
             query_string = query_string.replace(" ", "%20")
             self.connection.request('GET', query_string, None, self.headers)
             response = self.connection.getresponse()
-            data_string = response.read().decode('utf-8')
-            data = json.loads(data_string)
-            
-            return data
-        except:
-            raise Exception("Unsuccessful Connection to LobbyView Endpoints. Please check your token and try again.")
+            status_code = response.status
+
+            if status_code == 200:
+                data_string = response.read().decode('utf-8')
+                data = json.loads(data_string)
+                return data
+            elif status_code == 401:
+                raise Exception("Unauthorized. Please check your LobbyView token and ensure it is valid.")
+            elif status_code == 429:
+                raise Exception("Too many requests. Please wait a moment and try again.")
+            elif status_code == 206:
+                raise Exception("Partial Content returned. Request may exceed the maximum allowed limit.")
+            else:
+                raise Exception(f"Unexpected status code: {status_code}")
+
+        except Exception as e:
+            raise Exception(f"Unsuccessful Connection to LobbyView Endpoints. Please check your token and try again: {str(e)}")
+        
+    def get_all_pages(self, endpoint, **kwargs):
+        """
+        Retrieves all pages of data from the specified API endpoint.
+        :param endpoint: The API endpoint (e.g., '/api/legislators').
+        :param kwargs: Additional query parameters.
+        :return: A list containing all the data from all pages.
+        """
+        all_data = []
+        page = 1
+        while True:
+            kwargs['page'] = page
+            query_params = [f"{key}={value}" for key, value in kwargs.items()]
+            query_string = f"{endpoint}?{'&'.join(query_params)}"
+            response_data = self.get_data(query_string)
+            all_data.extend(response_data['data'])
+            if page >= response_data['totalPage']:
+                break
+            page += 1
+        return all_data
     
     def legislators(self, legislator_id=None, legislator_govtrack_id=None, 
                         legislator_first_name=None, legislator_last_name=None,
