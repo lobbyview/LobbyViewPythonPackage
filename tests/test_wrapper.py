@@ -73,6 +73,7 @@ def test_quarter_level_networks_ranges():
     assert len(output.data) > 0
 
 def test_bill_client_networks():
+    print(f"LOBBYVIEW_TOKEN is {'present' if LOBBYVIEW_TOKEN != 'NO TOKEN FOUND' else 'not found'}")
     output = lobbyview.bill_client_networks(congress_number=114, bill_chamber="H", bill_number=1174, client_uuid="44563806-56d2-5e99-84a1-95d22a7a69b3")
     assert output.data[0]['issue_ordi'] == 2
 
