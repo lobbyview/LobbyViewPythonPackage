@@ -53,8 +53,8 @@ def test_issues():
     assert len(output.data) > 0
 
 def test_networks():
-    output = lobbyview.networks(client_uuid="44563806-56d2-5e99-84a1-95d22a7a69b3", legislator_id="M000303")
-    assert output.data[0]['report_year'] == 2017
+    output = lobbyview.networks(client_uuid="44563806-56d2-5e99-84a1-95d22a7a69b3", legislator_id="M000303", min_report_year=2017, max_report_year=2017)
+    assert output.data[0]['n_bills_sponsored'] == 1
 
 def test_networks_ranges():
     output = lobbyview.networks(min_report_year=2015, max_report_year=2020, min_bills_sponsored=1)

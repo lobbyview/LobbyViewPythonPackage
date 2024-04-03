@@ -150,27 +150,29 @@ class LobbyView:
         Sends a GET request to the LobbyView API with the provided query string.
         Returns the JSON response data.
         """
+        status_messages = {
+            200: None,  # OK
+            401: "Unauthorized. Please check your LobbyView token and ensure it is valid.",
+            429: "Too many requests. Please wait a moment and try again.",
+            206: "Partial Content returned. Request may exceed the maximum allowed limit.",
+        }
+
         try:
             query_string = query_string.replace(" ", "%20")
             self.connection.request('GET', query_string, None, self.headers)
             response = self.connection.getresponse()
             status_code = response.status
 
-            if status_code == 200:
-                data_string = response.read().decode('utf-8')
-                data = json.loads(data_string)
-                return data
-            elif status_code == 401:
-                raise Exception("Unauthorized. Please check your LobbyView token and ensure it is valid.")
-            elif status_code == 429:
-                raise Exception("Too many requests. Please wait a moment and try again.")
-            elif status_code == 206:
-                raise Exception("Partial Content returned. Request may exceed the maximum allowed limit.")
-            else:
-                raise Exception(f"Unexpected status code: {status_code}")
+            if status_code != 200:
+                # Get the error message based on status code, if not found raise with a generic message
+                error_message = status_messages.get(status_code, f"Unexpected status code: {status_code}")
+                raise ValueError(error_message)
+
+            data_string = response.read().decode('utf-8')
+            return json.loads(data_string)
 
         except Exception as e:
-            raise Exception(f"Unsuccessful Connection to LobbyView Endpoints. Please check your token and try again: {str(e)}")
+            raise Exception(f"Unsuccessful Connection to LobbyView Endpoints: {str(e)}")
         
     def get_all_pages(self, endpoint, **kwargs):
         """
