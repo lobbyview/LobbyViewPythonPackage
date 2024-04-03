@@ -7,8 +7,8 @@ sys.path.append('./src/lobbyview/')
 sys.path.append('../src/lobbyview/')
 from LobbyView import LobbyView
 
-load_dotenv("./.env")
-load_dotenv("./tests/.env")
+# load_dotenv("./.env")
+# load_dotenv("./tests/.env")
 LOBBYVIEW_TOKEN = os.environ.get('LOBBYVIEW_TOKEN', "NO TOKEN FOUND")
 
 lobbyview = LobbyView(LOBBYVIEW_TOKEN)
