@@ -10,7 +10,7 @@ from LobbyView import LobbyView
 # load_dotenv("./.env")
 # load_dotenv("./tests/.env")
 LOBBYVIEW_TOKEN = os.environ.get('LOBBYVIEW_TOKEN', "NO TOKEN FOUND")
-
+print(f"LOBBYVIEW_TOKEN is {'present' if LOBBYVIEW_TOKEN != 'NO TOKEN FOUND' else 'not found'}")
 lobbyview = LobbyView(LOBBYVIEW_TOKEN)
 
 def test_legislators():
