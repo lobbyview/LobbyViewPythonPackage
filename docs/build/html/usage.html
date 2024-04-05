@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Usage &mdash; LobbyView 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=01f34227"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="API Documentation" href="api.html" />
+    <link rel="prev" title="Installation" href="installation.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            LobbyView
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Usage</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#initialization">Initialization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#retrieving-legislator-data">Retrieving Legislator Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#retrieving-bill-data">Retrieving Bill Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#retrieving-client-data">Retrieving Client Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#retrieving-report-data">Retrieving Report Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#retrieving-issue-data">Retrieving Issue Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#retrieving-network-data">Retrieving Network Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#retrieving-text-data">Retrieving Text Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#retrieving-quarter-level-network-data">Retrieving Quarter-Level Network Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#retrieving-bill-client-network-data">Retrieving Bill-Client Network Data</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API Documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">LobbyView</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Usage</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/usage.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="usage">
+<h1>Usage<a class="headerlink" href="#usage" title="Link to this heading"></a></h1>
+<p>The LobbyView Python package provides a simple and intuitive interface for interacting with the LobbyView API. This section will guide you through the usage of the package and demonstrate how to retrieve various types of data.</p>
+<section id="initialization">
+<h2>Initialization<a class="headerlink" href="#initialization" title="Link to this heading"></a></h2>
+<p>To start using the LobbyView package, you need to create an instance of the <code class="docutils literal notranslate"><span class="pre">LobbyView</span></code> class. Make sure you have obtained an API token from the LobbyView website at lobbyview.org and set it as an environment variable or pass it directly to the constructor.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">lobbyview</span> <span class="kn">import</span> <span class="n">LobbyView</span>
+
+<span class="n">lv</span> <span class="o">=</span> <span class="n">LobbyView</span><span class="p">(</span><span class="n">api_token</span><span class="o">=</span><span class="s1">&#39;your-api-token&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Replace <code class="docutils literal notranslate"><span class="pre">'your-api-token'</span></code> with your actual API token.</p>
+</section>
+<section id="retrieving-legislator-data">
+<h2>Retrieving Legislator Data<a class="headerlink" href="#retrieving-legislator-data" title="Link to this heading"></a></h2>
+<p>You can retrieve data about legislators using the <code class="docutils literal notranslate"><span class="pre">legislators</span></code> method:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Get a specific legislator by ID</span>
+<span class="n">output</span> <span class="o">=</span> <span class="n">lv</span><span class="o">.</span><span class="n">legislators</span><span class="p">(</span><span class="n">legislator_id</span><span class="o">=</span><span class="s2">&quot;M000303&quot;</span><span class="p">)</span>
+<span class="n">legislator</span> <span class="o">=</span> <span class="n">output</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">legislator</span><span class="p">[</span><span class="s1">&#39;legislator_full_name&#39;</span><span class="p">])</span>  <span class="c1"># Output: John McCain</span>
+
+<span class="c1"># Search for legislators by name</span>
+<span class="n">output</span> <span class="o">=</span> <span class="n">lv</span><span class="o">.</span><span class="n">legislators</span><span class="p">(</span><span class="n">legislator_first_name</span><span class="o">=</span><span class="s2">&quot;John&quot;</span><span class="p">,</span> <span class="n">legislator_last_name</span><span class="o">=</span><span class="s2">&quot;McCain&quot;</span><span class="p">)</span>
+<span class="n">legislator_id</span> <span class="o">=</span> <span class="n">output</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;legislator_id&#39;</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">legislator_id</span><span class="p">)</span>  <span class="c1"># Output: M000303</span>
+</pre></div>
+</div>
+</section>
+<section id="retrieving-bill-data">
+<h2>Retrieving Bill Data<a class="headerlink" href="#retrieving-bill-data" title="Link to this heading"></a></h2>
+<p>You can retrieve data about bills using the <code class="docutils literal notranslate"><span class="pre">bills</span></code> method:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Get a specific bill by congress number, chamber, and bill number</span>
+<span class="n">output</span> <span class="o">=</span> <span class="n">lv</span><span class="o">.</span><span class="n">bills</span><span class="p">(</span><span class="n">congress_number</span><span class="o">=</span><span class="mi">111</span><span class="p">,</span> <span class="n">bill_chamber</span><span class="o">=</span><span class="s2">&quot;H&quot;</span><span class="p">,</span> <span class="n">bill_number</span><span class="o">=</span><span class="mi">4173</span><span class="p">)</span>
+<span class="n">bill_state</span> <span class="o">=</span> <span class="n">output</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;bill_state&#39;</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">bill_state</span><span class="p">)</span>  <span class="c1"># Output: ENACTED:SIGNED</span>
+</pre></div>
+</div>
+</section>
+<section id="retrieving-client-data">
+<h2>Retrieving Client Data<a class="headerlink" href="#retrieving-client-data" title="Link to this heading"></a></h2>
+<p>You can retrieve data about lobbying clients using the <code class="docutils literal notranslate"><span class="pre">clients</span></code> method:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Search for clients by name</span>
+<span class="n">output</span> <span class="o">=</span> <span class="n">lv</span><span class="o">.</span><span class="n">clients</span><span class="p">(</span><span class="n">client_name</span><span class="o">=</span><span class="s2">&quot;Microsoft Corporation&quot;</span><span class="p">)</span>
+<span class="n">client_uuid</span> <span class="o">=</span> <span class="n">output</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;client_uuid&#39;</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">client_uuid</span><span class="p">)</span>  <span class="c1"># Output: 44563806-56d2-5e99-84a1-95d22a7a69b3</span>
+</pre></div>
+</div>
+</section>
+<section id="retrieving-report-data">
+<h2>Retrieving Report Data<a class="headerlink" href="#retrieving-report-data" title="Link to this heading"></a></h2>
+<p>You can retrieve lobbying report data using the <code class="docutils literal notranslate"><span class="pre">reports</span></code> method:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Get a specific report by year, quarter, client self-filer status, and report UUID</span>
+<span class="n">output</span> <span class="o">=</span> <span class="n">lv</span><span class="o">.</span><span class="n">reports</span><span class="p">(</span><span class="n">report_year</span><span class="o">=</span><span class="mi">2020</span><span class="p">,</span> <span class="n">report_quarter_code</span><span class="o">=</span><span class="s2">&quot;2&quot;</span><span class="p">,</span> <span class="n">is_client_self_filer</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">report_uuid</span><span class="o">=</span><span class="s2">&quot;4b799814-3e94-5ee1-8dd4-b32aead9aca6&quot;</span><span class="p">)</span>
+<span class="n">amount</span> <span class="o">=</span> <span class="n">output</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;amount&#39;</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">amount</span><span class="p">)</span>  <span class="c1"># Output: $11,680,000.00</span>
+</pre></div>
+</div>
+</section>
+<section id="retrieving-issue-data">
+<h2>Retrieving Issue Data<a class="headerlink" href="#retrieving-issue-data" title="Link to this heading"></a></h2>
+<p>You can retrieve data about lobbying issues using the <code class="docutils literal notranslate"><span class="pre">issues</span></code> method:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Search for issues by issue code</span>
+<span class="n">output</span> <span class="o">=</span> <span class="n">lv</span><span class="o">.</span><span class="n">issues</span><span class="p">(</span><span class="n">issue_code</span><span class="o">=</span><span class="s2">&quot;TRD&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="retrieving-network-data">
+<h2>Retrieving Network Data<a class="headerlink" href="#retrieving-network-data" title="Link to this heading"></a></h2>
+<p>You can retrieve network data that represents relationships between legislators and lobbying clients using the <code class="docutils literal notranslate"><span class="pre">networks</span></code> method:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Get network data for a specific client and legislator</span>
+<span class="n">output</span> <span class="o">=</span> <span class="n">lv</span><span class="o">.</span><span class="n">networks</span><span class="p">(</span><span class="n">client_uuid</span><span class="o">=</span><span class="s2">&quot;44563806-56d2-5e99-84a1-95d22a7a69b3&quot;</span><span class="p">,</span> <span class="n">legislator_id</span><span class="o">=</span><span class="s2">&quot;M000303&quot;</span><span class="p">)</span>
+<span class="n">report_year</span> <span class="o">=</span> <span class="n">output</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;report_year&#39;</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">report_year</span><span class="p">)</span>  <span class="c1"># Output: 2017</span>
+</pre></div>
+</div>
+</section>
+<section id="retrieving-text-data">
+<h2>Retrieving Text Data<a class="headerlink" href="#retrieving-text-data" title="Link to this heading"></a></h2>
+<p>You can retrieve text data associated with lobbying issues using the <code class="docutils literal notranslate"><span class="pre">texts</span></code> method:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Search for text data by issue code and text content</span>
+<span class="n">output</span> <span class="o">=</span> <span class="n">lv</span><span class="o">.</span><span class="n">texts</span><span class="p">(</span><span class="n">issue_code</span><span class="o">=</span><span class="s2">&quot;HCR&quot;</span><span class="p">,</span> <span class="n">issue_text</span><span class="o">=</span><span class="s2">&quot;covid&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="retrieving-quarter-level-network-data">
+<h2>Retrieving Quarter-Level Network Data<a class="headerlink" href="#retrieving-quarter-level-network-data" title="Link to this heading"></a></h2>
+<p>You can retrieve quarter-level network data using the <code class="docutils literal notranslate"><span class="pre">quarter_level_networks</span></code> method:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Get quarter-level network data for a specific client, legislator, year, and quarter</span>
+<span class="n">output</span> <span class="o">=</span> <span class="n">lv</span><span class="o">.</span><span class="n">quarter_level_networks</span><span class="p">(</span><span class="n">client_uuid</span><span class="o">=</span><span class="s2">&quot;44563806-56d2-5e99-84a1-95d22a7a69b3&quot;</span><span class="p">,</span> <span class="n">legislator_id</span><span class="o">=</span><span class="s2">&quot;M000303&quot;</span><span class="p">,</span> <span class="n">report_year</span><span class="o">=</span><span class="mi">2017</span><span class="p">,</span> <span class="n">report_quarter_code</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">bills_sponsored</span> <span class="o">=</span> <span class="n">output</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;n_bills_sponsored&#39;</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">bills_sponsored</span><span class="p">)</span>  <span class="c1"># Output: 1</span>
+</pre></div>
+</div>
+</section>
+<section id="retrieving-bill-client-network-data">
+<h2>Retrieving Bill-Client Network Data<a class="headerlink" href="#retrieving-bill-client-network-data" title="Link to this heading"></a></h2>
+<p>You can retrieve bill-client network data using the <code class="docutils literal notranslate"><span class="pre">bill_client_networks</span></code> method:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Get bill-client network data for a specific bill and client</span>
+<span class="n">output</span> <span class="o">=</span> <span class="n">lv</span><span class="o">.</span><span class="n">bill_client_networks</span><span class="p">(</span><span class="n">congress_number</span><span class="o">=</span><span class="mi">114</span><span class="p">,</span> <span class="n">bill_chamber</span><span class="o">=</span><span class="s2">&quot;H&quot;</span><span class="p">,</span> <span class="n">bill_number</span><span class="o">=</span><span class="mi">1174</span><span class="p">,</span> <span class="n">client_uuid</span><span class="o">=</span><span class="s2">&quot;44563806-56d2-5e99-84a1-95d22a7a69b3&quot;</span><span class="p">)</span>
+<span class="n">issue_ordi</span> <span class="o">=</span> <span class="n">output</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;issue_ordi&#39;</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">issue_ordi</span><span class="p">)</span>  <span class="c1"># Output: 2</span>
+</pre></div>
+</div>
+<p>These examples demonstrate how to use the main methods provided by the LobbyView package to retrieve different types of data from the LobbyView API. Each method returns a response object containing the retrieved data, which can be accessed using the <code class="docutils literal notranslate"><span class="pre">data</span></code> attribute.</p>
+<p>Remember to handle any exceptions that may occur during API requests, such as authentication errors or rate limiting.</p>
+<p>For more detailed information on the available parameters and return values for each method, please refer to the API documentation.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="installation.html" class="btn btn-neutral float-left" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="api.html" class="btn btn-neutral float-right" title="API Documentation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, LobbyView Team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
