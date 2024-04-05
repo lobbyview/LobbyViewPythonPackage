@@ -9,6 +9,25 @@ from dotenv import load_dotenv
 import ssl
 import os
 
+class LobbyViewError(Exception):
+    pass
+
+class UnauthorizedError(LobbyViewError):
+    def __init__(self):
+        super().__init__()
+
+class TooManyRequestsError(LobbyViewError):
+    def __init__(self):
+        super().__init__()
+
+class PartialContentError(LobbyViewError):
+    def __init__(self):
+        super().__init__()
+
+class UnexpectedStatusCodeError(LobbyViewError):
+    def __init__(self, status_code):
+        super().__init__()
+
 class LobbyViewResponse:
     """
     Base class for LobbyView API responses.
@@ -150,49 +169,74 @@ class LobbyView:
         Sends a GET request to the LobbyView API with the provided query string.
         Returns the JSON response data.
         """
-        status_messages = {
-            200: None,  # OK
-            401: "Unauthorized. Please check your LobbyView token and ensure it is valid.",
-            429: "Too many requests. Please wait a moment and try again.",
-            206: "Partial Content returned. Request may exceed the maximum allowed limit.",
-        }
-
         try:
             query_string = query_string.replace(" ", "%20")
             self.connection.request('GET', query_string, None, self.headers)
             response = self.connection.getresponse()
             status_code = response.status
 
-            if status_code != 200:
-                # Get the error message based on status code, if not found raise with a generic message
-                error_message = status_messages.get(status_code, f"Unexpected status code: {status_code}")
-                raise ValueError(error_message)
-
-            data_string = response.read().decode('utf-8')
-            return json.loads(data_string)
+            if status_code == 200:
+                data_string = response.read().decode('utf-8')
+                return json.loads(data_string)
+            elif status_code == 401:
+                raise UnauthorizedError()
+            elif status_code == 429:
+                raise TooManyRequestsError()
+            elif status_code == 206:
+                raise PartialContentError()
+            else:
+                raise UnexpectedStatusCodeError(status_code)
 
         except Exception as e:
-            raise Exception(f"Unsuccessful Connection to LobbyView Endpoints: {str(e)}")
-        
-    def get_all_pages(self, endpoint, **kwargs):
+            raise Exception(f"Unsuccessful connection to LobbyView endpoints: {str(e)}")
+
+    def paginate(func, **kwargs):
         """
-        Retrieves all pages of data from the specified API endpoint.
-        :param endpoint: The API endpoint (e.g., '/api/legislators').
-        :param kwargs: Additional query parameters.
-        :return: A list containing all the data from all pages.
+        Paginates the data retrieval from the LobbyView API using lazy evaluation
+        via a genrator that yields results one at a time.
+
+        :param func: The API endpoint function to be paginated.
+        :param args: Additional positional arguments to be passed to the API endpoint function.
+        :param kwargs: Additional keyword arguments to be passed to the API endpoint function.
+        :return: A generator object that yields paginated results one item at a time.
+
+        example usage:
+
+        ```
+        for legislator in paginate(lobbyview.legislators, legislator_state="CA"):
+            print(f"Legislator: {legislator['legislator_full_name']}")
+
+        for bill in paginate(lobbyview.bills, congress_number=117, bill_resolution_type="hr"):
+            print(f"Bill: {bill['bill_number']} - {bill['bill_title']}")
+
+        for client in paginate(lobbyview.clients, client_name="Microsoft", min_naics=500000):
+            print(f"Client: {client['client_name']} - NAICS: {client['primary_naics']}")
+        ```
+
+        Throws errors when an issue occurs during pagination via the classes defined above.
         """
-        all_data = []
         page = 1
+
         while True:
+            print(f"Retrieving page {page}...")
             kwargs['page'] = page
-            query_params = [f"{key}={value}" for key, value in kwargs.items()]
-            query_string = f"{endpoint}?{'&'.join(query_params)}"
-            response_data = self.get_data(query_string)
-            all_data.extend(response_data['data'])
-            if page >= response_data['totalPage']:
+
+            try:
+                response = func(**kwargs)
+                yield from response.data
+
+                if page >= response.total_pages:
+                    break
+
+                page += 1
+
+            except PartialContentError as e:
+                print(f"Error occurred: {str(e)}")
+                print("Partial results retrieved. Please wait for more quota.")
                 break
-            page += 1
-        return all_data
+            except LobbyViewError as e:
+                print(f"Error occurred: {str(e)}")
+                break
     
     def legislators(self, legislator_id=None, legislator_govtrack_id=None, 
                         legislator_first_name=None, legislator_last_name=None,
