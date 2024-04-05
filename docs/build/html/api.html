@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>API Documentation &mdash; LobbyView 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=01f34227"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Usage" href="usage.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            LobbyView
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">API Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#lobbyview.LobbyView.BillClientNetworkResponse"><code class="docutils literal notranslate"><span class="pre">BillClientNetworkResponse</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#lobbyview.LobbyView.BillResponse"><code class="docutils literal notranslate"><span class="pre">BillResponse</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#lobbyview.LobbyView.ClientResponse"><code class="docutils literal notranslate"><span class="pre">ClientResponse</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#lobbyview.LobbyView.IssueResponse"><code class="docutils literal notranslate"><span class="pre">IssueResponse</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#lobbyview.LobbyView.LegislatorResponse"><code class="docutils literal notranslate"><span class="pre">LegislatorResponse</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#lobbyview.LobbyView.LobbyView"><code class="docutils literal notranslate"><span class="pre">LobbyView</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#lobbyview.LobbyView.LobbyView.bill_client_networks"><code class="docutils literal notranslate"><span class="pre">LobbyView.bill_client_networks()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#lobbyview.LobbyView.LobbyView.bills"><code class="docutils literal notranslate"><span class="pre">LobbyView.bills()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#lobbyview.LobbyView.LobbyView.clients"><code class="docutils literal notranslate"><span class="pre">LobbyView.clients()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#lobbyview.LobbyView.LobbyView.get_data"><code class="docutils literal notranslate"><span class="pre">LobbyView.get_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#lobbyview.LobbyView.LobbyView.issues"><code class="docutils literal notranslate"><span class="pre">LobbyView.issues()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#lobbyview.LobbyView.LobbyView.legislators"><code class="docutils literal notranslate"><span class="pre">LobbyView.legislators()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#lobbyview.LobbyView.LobbyView.networks"><code class="docutils literal notranslate"><span class="pre">LobbyView.networks()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#lobbyview.LobbyView.LobbyView.paginate"><code class="docutils literal notranslate"><span class="pre">LobbyView.paginate()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#lobbyview.LobbyView.LobbyView.quarter_level_networks"><code class="docutils literal notranslate"><span class="pre">LobbyView.quarter_level_networks()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#lobbyview.LobbyView.LobbyView.reports"><code class="docutils literal notranslate"><span class="pre">LobbyView.reports()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#lobbyview.LobbyView.LobbyView.texts"><code class="docutils literal notranslate"><span class="pre">LobbyView.texts()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#lobbyview.LobbyView.LobbyViewError"><code class="docutils literal notranslate"><span class="pre">LobbyViewError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#lobbyview.LobbyView.LobbyViewResponse"><code class="docutils literal notranslate"><span class="pre">LobbyViewResponse</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#lobbyview.LobbyView.LobbyViewResponse.page_info"><code class="docutils literal notranslate"><span class="pre">LobbyViewResponse.page_info()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#lobbyview.LobbyView.NetworkResponse"><code class="docutils literal notranslate"><span class="pre">NetworkResponse</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#lobbyview.LobbyView.PartialContentError"><code class="docutils literal notranslate"><span class="pre">PartialContentError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#lobbyview.LobbyView.QuarterLevelNetworkResponse"><code class="docutils literal notranslate"><span class="pre">QuarterLevelNetworkResponse</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#lobbyview.LobbyView.ReportResponse"><code class="docutils literal notranslate"><span class="pre">ReportResponse</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#lobbyview.LobbyView.TextResponse"><code class="docutils literal notranslate"><span class="pre">TextResponse</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#lobbyview.LobbyView.TooManyRequestsError"><code class="docutils literal notranslate"><span class="pre">TooManyRequestsError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#lobbyview.LobbyView.UnauthorizedError"><code class="docutils literal notranslate"><span class="pre">UnauthorizedError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#lobbyview.LobbyView.UnexpectedStatusCodeError"><code class="docutils literal notranslate"><span class="pre">UnexpectedStatusCodeError</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">LobbyView</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">API Documentation</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/api.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-lobbyview.LobbyView">
+<span id="api-documentation"></span><h1>API Documentation<a class="headerlink" href="#module-lobbyview.LobbyView" title="Link to this heading"></a></h1>
+<p>Python wrapper for Lobbyview Rest API; uses same endpoints and parameter names as outlined in the
+[LobbyView Rest API Documentation](<a class="reference external" href="https://rest-api.lobbyview.org/">https://rest-api.lobbyview.org/</a>)</p>
+<p>The LobbyView API provides access to data on lobbying activities in the United States, including 
+information on legislators, bills, clients, reports, issues, networks, texts, quarter-level networks, 
+and bill-client networks.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="lobbyview.LobbyView.BillClientNetworkResponse">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lobbyview.LobbyView.</span></span><span class="sig-name descname"><span class="pre">BillClientNetworkResponse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lobbyview.LobbyView.BillClientNetworkResponse" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#lobbyview.LobbyView.LobbyViewResponse" title="lobbyview.LobbyView.LobbyViewResponse"><code class="xref py py-class docutils literal notranslate"><span class="pre">LobbyViewResponse</span></code></a></p>
+<p>Response class for bill-client network data.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="lobbyview.LobbyView.BillResponse">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lobbyview.LobbyView.</span></span><span class="sig-name descname"><span class="pre">BillResponse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lobbyview.LobbyView.BillResponse" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#lobbyview.LobbyView.LobbyViewResponse" title="lobbyview.LobbyView.LobbyViewResponse"><code class="xref py py-class docutils literal notranslate"><span class="pre">LobbyViewResponse</span></code></a></p>
+<p>Response class for bill data.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="lobbyview.LobbyView.ClientResponse">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lobbyview.LobbyView.</span></span><span class="sig-name descname"><span class="pre">ClientResponse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lobbyview.LobbyView.ClientResponse" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#lobbyview.LobbyView.LobbyViewResponse" title="lobbyview.LobbyView.LobbyViewResponse"><code class="xref py py-class docutils literal notranslate"><span class="pre">LobbyViewResponse</span></code></a></p>
+<p>Response class for client data.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="lobbyview.LobbyView.IssueResponse">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lobbyview.LobbyView.</span></span><span class="sig-name descname"><span class="pre">IssueResponse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lobbyview.LobbyView.IssueResponse" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#lobbyview.LobbyView.LobbyViewResponse" title="lobbyview.LobbyView.LobbyViewResponse"><code class="xref py py-class docutils literal notranslate"><span class="pre">LobbyViewResponse</span></code></a></p>
+<p>Response class for issue data.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="lobbyview.LobbyView.LegislatorResponse">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lobbyview.LobbyView.</span></span><span class="sig-name descname"><span class="pre">LegislatorResponse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lobbyview.LobbyView.LegislatorResponse" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#lobbyview.LobbyView.LobbyViewResponse" title="lobbyview.LobbyView.LobbyViewResponse"><code class="xref py py-class docutils literal notranslate"><span class="pre">LobbyViewResponse</span></code></a></p>
+<p>Response class for legislator data.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="lobbyview.LobbyView.LobbyView">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lobbyview.LobbyView.</span></span><span class="sig-name descname"><span class="pre">LobbyView</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lobbyview_token</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_connection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lobbyview.LobbyView.LobbyView" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Main class for interacting with the LobbyView API.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="lobbyview.LobbyView.LobbyView.bill_client_networks">
+<span class="sig-name descname"><span class="pre">bill_client_networks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">congress_number</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bill_chamber</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bill_resolution_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bill_number</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">report_uuid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">issue_ordi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">client_uuid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">page</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lobbyview.LobbyView.LobbyView.bill_client_networks" title="Link to this definition"></a></dt>
+<dd><p>Gets bill-client network information from the LobbyView API based on the provided parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>congress_number</strong> – Session of Congress</p></li>
+<li><p><strong>bill_chamber</strong> – Chamber of the legislative branch (Component of the bill_id composite key)</p></li>
+<li><p><strong>bill_resolution_type</strong> – Bill type (Component of the bill_id composite key)</p></li>
+<li><p><strong>bill_number</strong> – Bill number (Component of the bill_id composite key)</p></li>
+<li><p><strong>report_uuid</strong> – Unique identifier of the report</p></li>
+<li><p><strong>issue_ordi</strong> – An integer given to the issue</p></li>
+<li><p><strong>client_uuid</strong> – Unique identifier of the client</p></li>
+<li><p><strong>page</strong> – Page number of the results</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>BillClientNetworkResponse object containing the bill-client network data</p>
+</dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">lobbyview</span> <span class="o">=</span> <span class="n">LobbyView</span><span class="p">(</span><span class="n">LOBBYVIEW_TOKEN</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">output</span> <span class="o">=</span> <span class="n">lobbyview</span><span class="o">.</span><span class="n">bill_client_networks</span><span class="p">(</span><span class="n">congress_number</span><span class="o">=</span><span class="mi">114</span><span class="p">,</span> <span class="n">bill_chamber</span><span class="o">=</span><span class="s2">&quot;H&quot;</span><span class="p">,</span> <span class="n">bill_number</span><span class="o">=</span><span class="mi">1174</span><span class="p">,</span> <span class="n">client_uuid</span><span class="o">=</span><span class="s2">&quot;44563806-56d2-5e99-84a1-95d22a7a69b3&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">output</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;issue_ordi&#39;</span><span class="p">]</span>
+<span class="go">2</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lobbyview.LobbyView.LobbyView.bills">
+<span class="sig-name descname"><span class="pre">bills</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">congress_number</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bill_chamber</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bill_resolution_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bill_number</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bill_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">legislator_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_introduced_date</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_introduced_date</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_updated_date</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_updated_date</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">page</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lobbyview.LobbyView.LobbyView.bills" title="Link to this definition"></a></dt>
+<dd><p>Gets bill information from the LobbyView API based on the provided parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>congress_number</strong> – Session of Congress</p></li>
+<li><p><strong>bill_chamber</strong> – Chamber of the legislative branch (Component of the bill_id composite key)</p></li>
+<li><p><strong>bill_resolution_type</strong> – Bill type (Component of the bill_id composite key)</p></li>
+<li><p><strong>bill_number</strong> – Bill number (Component of the bill_id composite key)</p></li>
+<li><p><strong>bill_state</strong> – Bill status</p></li>
+<li><p><strong>legislator_id</strong> – Sponsor of the bill</p></li>
+<li><p><strong>min_introduced_date</strong> – Minimum date of introduction to Congress (YYYY-MM-DD)</p></li>
+<li><p><strong>max_introduced_date</strong> – Maximum date of introduction to Congress (YYYY-MM-DD)</p></li>
+<li><p><strong>min_updated_date</strong> – Minimum date of most recent status change (YYYY-MM-DD)</p></li>
+<li><p><strong>max_updated_date</strong> – Maximum date of most recent status change (YYYY-MM-DD)</p></li>
+<li><p><strong>page</strong> – Page number of the results</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>BillResponse object containing the bill data</p>
+</dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">lobbyview</span> <span class="o">=</span> <span class="n">LobbyView</span><span class="p">(</span><span class="n">LOBBYVIEW_TOKEN</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">output</span> <span class="o">=</span> <span class="n">lobbyview</span><span class="o">.</span><span class="n">bills</span><span class="p">(</span><span class="n">congress_number</span><span class="o">=</span><span class="mi">111</span><span class="p">,</span> <span class="n">bill_chamber</span><span class="o">=</span><span class="s2">&quot;H&quot;</span><span class="p">,</span> <span class="n">bill_number</span><span class="o">=</span><span class="mi">4173</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">output</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;bill_state&#39;</span><span class="p">]</span>
+<span class="go">&#39;ENACTED:SIGNED&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lobbyview.LobbyView.LobbyView.clients">
+<span class="sig-name descname"><span class="pre">clients</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client_uuid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">client_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_naics</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_naics</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">naics_description</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">page</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lobbyview.LobbyView.LobbyView.clients" title="Link to this definition"></a></dt>
+<dd><p>Gets client information from the LobbyView API based on the provided parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>client_uuid</strong> – Unique identifier of the client</p></li>
+<li><p><strong>client_name</strong> – Name of the client</p></li>
+<li><p><strong>min_naics</strong> – Minimum NAICS code to which the client belongs</p></li>
+<li><p><strong>max_naics</strong> – Maximum NAICS code to which the client belongs</p></li>
+<li><p><strong>naics_description</strong> – Descriptions of the NAICS code</p></li>
+<li><p><strong>page</strong> – Page number of the results</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>ClientResponse object containing the client data</p>
+</dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">lobbyview</span> <span class="o">=</span> <span class="n">LobbyView</span><span class="p">(</span><span class="n">LOBBYVIEW_TOKEN</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">output</span> <span class="o">=</span> <span class="n">lobbyview</span><span class="o">.</span><span class="n">clients</span><span class="p">(</span><span class="n">client_name</span><span class="o">=</span><span class="s2">&quot;Microsoft Corporation&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">output</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;client_uuid&#39;</span><span class="p">]</span>
+<span class="go">&#39;44563806-56d2-5e99-84a1-95d22a7a69b3&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lobbyview.LobbyView.LobbyView.get_data">
+<span class="sig-name descname"><span class="pre">get_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query_string</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lobbyview.LobbyView.LobbyView.get_data" title="Link to this definition"></a></dt>
+<dd><p>Sends a GET request to the LobbyView API with the provided query string.
+Returns the JSON response data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>query_string</strong> – Query string for the API endpoint</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>JSON data from the API response</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="#lobbyview.LobbyView.UnauthorizedError" title="lobbyview.LobbyView.UnauthorizedError"><strong>UnauthorizedError</strong></a> – If the API returns a 401 Unauthorized status code</p></li>
+<li><p><a class="reference internal" href="#lobbyview.LobbyView.TooManyRequestsError" title="lobbyview.LobbyView.TooManyRequestsError"><strong>TooManyRequestsError</strong></a> – If the API returns a 429 Too Many Requests status code</p></li>
+<li><p><a class="reference internal" href="#lobbyview.LobbyView.PartialContentError" title="lobbyview.LobbyView.PartialContentError"><strong>PartialContentError</strong></a> – If the API returns a 206 Partial Content status code</p></li>
+<li><p><a class="reference internal" href="#lobbyview.LobbyView.UnexpectedStatusCodeError" title="lobbyview.LobbyView.UnexpectedStatusCodeError"><strong>UnexpectedStatusCodeError</strong></a> – If the API returns an unexpected status code</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lobbyview.LobbyView.LobbyView.issues">
+<span class="sig-name descname"><span class="pre">issues</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">report_uuid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">issue_ordi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">issue_code</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gov_entity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">page</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lobbyview.LobbyView.LobbyView.issues" title="Link to this definition"></a></dt>
+<dd><p>Gets issue information from the LobbyView API based on the provided parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>report_uuid</strong> – Unique identifier of the report</p></li>
+<li><p><strong>issue_ordi</strong> – An integer given to the issue</p></li>
+<li><p><strong>issue_code</strong> – General Issue Area Code (Section 15)</p></li>
+<li><p><strong>gov_entity</strong> – House(s) of Congress and Federal agencies (Section 17)</p></li>
+<li><p><strong>page</strong> – Page number of the results</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>IssueResponse object containing the issue data</p>
+</dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">lobbyview</span> <span class="o">=</span> <span class="n">LobbyView</span><span class="p">(</span><span class="n">LOBBYVIEW_TOKEN</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">output</span> <span class="o">=</span> <span class="n">lobbyview</span><span class="o">.</span><span class="n">issues</span><span class="p">(</span><span class="n">issue_code</span><span class="o">=</span><span class="s2">&quot;TRD&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lobbyview.LobbyView.LobbyView.legislators">
+<span class="sig-name descname"><span class="pre">legislators</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">legislator_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">legislator_govtrack_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">legislator_first_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">legislator_last_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">legislator_full_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">legislator_gender</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_birthday</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_birthday</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">page</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lobbyview.LobbyView.LobbyView.legislators" title="Link to this definition"></a></dt>
+<dd><p>Gets legislator information from the LobbyView API based on the provided parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>legislator_id</strong> – Unique identifier of the legislator from LobbyView</p></li>
+<li><p><strong>legislator_govtrack_id</strong> – Unique identifier of the legislator from GovTrack</p></li>
+<li><p><strong>legislator_first_name</strong> – First name of the legislator</p></li>
+<li><p><strong>legislator_last_name</strong> – Last name of the legislator</p></li>
+<li><p><strong>legislator_full_name</strong> – Full name of the legislator</p></li>
+<li><p><strong>legislator_gender</strong> – Gender of the legislator</p></li>
+<li><p><strong>min_birthday</strong> – Minimum birthday of the legislator (YYYY-MM-DD)</p></li>
+<li><p><strong>max_birthday</strong> – Maximum birthday of the legislator (YYYY-MM-DD)</p></li>
+<li><p><strong>page</strong> – Page number of the results</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>LegislatorResponse object containing the legislator data</p>
+</dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">lobbyview</span> <span class="o">=</span> <span class="n">LobbyView</span><span class="p">(</span><span class="n">LOBBYVIEW_TOKEN</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">output</span> <span class="o">=</span> <span class="n">lobbyview</span><span class="o">.</span><span class="n">legislators</span><span class="p">(</span><span class="n">legislator_first_name</span><span class="o">=</span><span class="s2">&quot;John&quot;</span><span class="p">,</span> <span class="n">legislator_last_name</span><span class="o">=</span><span class="s2">&quot;McCain&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">output</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;legislator_id&#39;</span><span class="p">]</span>
+<span class="go">&#39;M000303&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">output</span> <span class="o">=</span> <span class="n">lobbyview</span><span class="o">.</span><span class="n">legislators</span><span class="p">(</span><span class="n">legislator_id</span><span class="o">=</span><span class="s2">&quot;M000303&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">output</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;legislator_full_name&#39;</span><span class="p">]</span>
+<span class="go">&#39;John McCain&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lobbyview.LobbyView.LobbyView.networks">
+<span class="sig-name descname"><span class="pre">networks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client_uuid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">legislator_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_report_year</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_report_year</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_bills_sponsored</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_bills_sponsored</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">page</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lobbyview.LobbyView.LobbyView.networks" title="Link to this definition"></a></dt>
+<dd><p>Gets network information from the LobbyView API based on the provided parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>client_uuid</strong> – Unique identifier of the client</p></li>
+<li><p><strong>legislator_id</strong> – Unique identifier of the legislator</p></li>
+<li><p><strong>min_report_year</strong> – Minimum year of the report</p></li>
+<li><p><strong>max_report_year</strong> – Maximum year of the report</p></li>
+<li><p><strong>min_bills_sponsored</strong> – Minimum number of bills sponsored by the legislator in a specific year lobbied by the client</p></li>
+<li><p><strong>max_bills_sponsored</strong> – Maximum number of bills sponsored by the legislator in a specific year lobbied by the client</p></li>
+<li><p><strong>page</strong> – Page number of the results</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>NetworkResponse object containing the network data</p>
+</dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">lobbyview</span> <span class="o">=</span> <span class="n">LobbyView</span><span class="p">(</span><span class="n">LOBBYVIEW_TOKEN</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">output</span> <span class="o">=</span> <span class="n">lobbyview</span><span class="o">.</span><span class="n">networks</span><span class="p">(</span><span class="n">client_uuid</span><span class="o">=</span><span class="s2">&quot;44563806-56d2-5e99-84a1-95d22a7a69b3&quot;</span><span class="p">,</span> <span class="n">legislator_id</span><span class="o">=</span><span class="s2">&quot;M000303&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">output</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;report_year&#39;</span><span class="p">]</span>
+<span class="go">2017</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lobbyview.LobbyView.LobbyView.paginate">
+<span class="sig-name descname"><span class="pre">paginate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lobbyview.LobbyView.LobbyView.paginate" title="Link to this definition"></a></dt>
+<dd><p>Paginates the data retrieval from the LobbyView API using lazy evaluation
+via a genrator that yields results one at a time.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>func</strong> – The API endpoint function to be paginated.</p></li>
+<li><p><strong>kwargs</strong> – Additional keyword arguments to be passed to the API endpoint function.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A generator object that yields paginated results one item at a time.</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="#lobbyview.LobbyView.PartialContentError" title="lobbyview.LobbyView.PartialContentError"><strong>PartialContentError</strong></a> – If the API returns a 206 Partial Content status code</p></li>
+<li><p><a class="reference internal" href="#lobbyview.LobbyView.LobbyViewError" title="lobbyview.LobbyView.LobbyViewError"><strong>LobbyViewError</strong></a> – If a different error occurs during pagination</p></li>
+</ul>
+</dd>
+</dl>
+<p>example usage:</p>
+<dl class="simple">
+<dt>for legislator in paginate(lobbyview.legislators, legislator_state=’CA’):</dt><dd><p>print(f’Legislator: {legislator[‘legislator_full_name’]}’)</p>
+</dd>
+<dt>for bill in paginate(lobbyview.bills, congress_number=117, bill_resolution_type=’hr’):</dt><dd><p>print(f’Bill: {bill[‘bill_number’]} - {bill[‘bill_title’]}’)</p>
+</dd>
+<dt>for client in paginate(lobbyview.clients, client_name=’Microsoft’, min_naics=500000):</dt><dd><p>print(f’Client: {client[‘client_name’]} - NAICS: {client[‘primary_naics’]}’)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lobbyview.LobbyView.LobbyView.quarter_level_networks">
+<span class="sig-name descname"><span class="pre">quarter_level_networks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client_uuid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">legislator_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">report_year</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">report_quarter_code</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_bills_sponsored</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_bills_sponsored</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">page</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lobbyview.LobbyView.LobbyView.quarter_level_networks" title="Link to this definition"></a></dt>
+<dd><p>Gets quarter-level network information from the LobbyView API based on the provided parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>client_uuid</strong> – Unique identifier of the client</p></li>
+<li><p><strong>legislator_id</strong> – Unique identifier of the legislator</p></li>
+<li><p><strong>report_year</strong> – Year of the report</p></li>
+<li><p><strong>report_quarter_code</strong> – Quarter period of the report</p></li>
+<li><p><strong>min_bills_sponsored</strong> – Minimum number of bills sponsored by the legislator in a specific quarter lobbied by the client</p></li>
+<li><p><strong>max_bills_sponsored</strong> – Maximum number of bills sponsored by the legislator in a specific quarter lobbied by the client</p></li>
+<li><p><strong>page</strong> – Page number of the results</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>QuarterLevelNetworkResponse object containing the quarter-level network data</p>
+</dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">lobbyview</span> <span class="o">=</span> <span class="n">LobbyView</span><span class="p">(</span><span class="n">LOBBYVIEW_TOKEN</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">output</span> <span class="o">=</span> <span class="n">lobbyview</span><span class="o">.</span><span class="n">quarter_level_networks</span><span class="p">(</span><span class="n">client_uuid</span><span class="o">=</span><span class="s2">&quot;44563806-56d2-5e99-84a1-95d22a7a69b3&quot;</span><span class="p">,</span> <span class="n">legislator_id</span><span class="o">=</span><span class="s2">&quot;M000303&quot;</span><span class="p">,</span> <span class="n">report_year</span><span class="o">=</span><span class="mi">2017</span><span class="p">,</span> <span class="n">report_quarter_code</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">output</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;n_bills_sponsored&#39;</span><span class="p">]</span>
+<span class="go">1</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lobbyview.LobbyView.LobbyView.reports">
+<span class="sig-name descname"><span class="pre">reports</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">report_uuid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">client_uuid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">registrant_uuid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">registrant_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">report_year</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">report_quarter_code</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_amount</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_amount</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_no_activity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_client_self_filer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_amendment</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">page</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lobbyview.LobbyView.LobbyView.reports" title="Link to this definition"></a></dt>
+<dd><p>Gets report information from the LobbyView API based on the provided parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>report_uuid</strong> – Unique identifier of the report</p></li>
+<li><p><strong>client_uuid</strong> – Unique identifier of the client</p></li>
+<li><p><strong>registrant_uuid</strong> – Unique identifier of the registrant</p></li>
+<li><p><strong>registrant_name</strong> – Name of the registrant</p></li>
+<li><p><strong>report_year</strong> – Year of the report</p></li>
+<li><p><strong>report_quarter_code</strong> – Quarter period of the report</p></li>
+<li><p><strong>min_amount</strong> – Minimum lobbying firm income or lobbying expense (in-house)</p></li>
+<li><p><strong>max_amount</strong> – Maximum lobbying firm income or lobbying expense (in-house)</p></li>
+<li><p><strong>is_no_activity</strong> – Quarterly activity indicator</p></li>
+<li><p><strong>is_client_self_filer</strong> – An organization employing its own in-house lobbyist(s)</p></li>
+<li><p><strong>is_amendment</strong> – Amendment of previous report</p></li>
+<li><p><strong>page</strong> – Page number of the results</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>ReportResponse object containing the report data</p>
+</dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">lobbyview</span> <span class="o">=</span> <span class="n">LobbyView</span><span class="p">(</span><span class="n">LOBBYVIEW_TOKEN</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">output</span> <span class="o">=</span> <span class="n">lobbyview</span><span class="o">.</span><span class="n">reports</span><span class="p">(</span><span class="n">report_year</span><span class="o">=</span><span class="mi">2020</span><span class="p">,</span> <span class="n">report_quarter_code</span><span class="o">=</span><span class="s2">&quot;2&quot;</span><span class="p">,</span> <span class="n">is_client_self_filer</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">report_uuid</span><span class="o">=</span><span class="s2">&quot;4b799814-3e94-5ee1-8dd4-b32aead9aca6&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">output</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;amount&#39;</span><span class="p">]</span>
+<span class="go">&#39;$11,680,000.00&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lobbyview.LobbyView.LobbyView.texts">
+<span class="sig-name descname"><span class="pre">texts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">report_uuid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">issue_ordi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">issue_code</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">issue_text</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">page</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lobbyview.LobbyView.LobbyView.texts" title="Link to this definition"></a></dt>
+<dd><p>Gets issue text data from the LobbyView API based on the provided parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>report_uuid</strong> – Unique identifier of the report</p></li>
+<li><p><strong>issue_ordi</strong> – An integer given to the issue</p></li>
+<li><p><strong>issue_code</strong> – General Issue Area Code (Section 15)</p></li>
+<li><p><strong>issue_text</strong> – Specific lobbying issues (Section 16)</p></li>
+<li><p><strong>page</strong> – Page number of the results</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>TextResponse object containing the text data</p>
+</dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">lobbyview</span> <span class="o">=</span> <span class="n">LobbyView</span><span class="p">(</span><span class="n">LOBBYVIEW_TOKEN</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">output</span> <span class="o">=</span> <span class="n">lobbyview</span><span class="o">.</span><span class="n">texts</span><span class="p">(</span><span class="n">issue_code</span><span class="o">=</span><span class="s2">&quot;HCR&quot;</span><span class="p">,</span> <span class="n">issue_text</span><span class="o">=</span><span class="s2">&quot;covid&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="lobbyview.LobbyView.LobbyViewError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lobbyview.LobbyView.</span></span><span class="sig-name descname"><span class="pre">LobbyViewError</span></span><a class="headerlink" href="#lobbyview.LobbyView.LobbyViewError" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+<p>Base class for LobbyView API errors.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="lobbyview.LobbyView.LobbyViewResponse">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lobbyview.LobbyView.</span></span><span class="sig-name descname"><span class="pre">LobbyViewResponse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lobbyview.LobbyView.LobbyViewResponse" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Base class for LobbyView API responses.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="lobbyview.LobbyView.LobbyViewResponse.page_info">
+<span class="sig-name descname"><span class="pre">page_info</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lobbyview.LobbyView.LobbyViewResponse.page_info" title="Link to this definition"></a></dt>
+<dd><p>Returns a string representation of the current page information.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="lobbyview.LobbyView.NetworkResponse">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lobbyview.LobbyView.</span></span><span class="sig-name descname"><span class="pre">NetworkResponse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lobbyview.LobbyView.NetworkResponse" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#lobbyview.LobbyView.LobbyViewResponse" title="lobbyview.LobbyView.LobbyViewResponse"><code class="xref py py-class docutils literal notranslate"><span class="pre">LobbyViewResponse</span></code></a></p>
+<p>Response class for network data.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="lobbyview.LobbyView.PartialContentError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lobbyview.LobbyView.</span></span><span class="sig-name descname"><span class="pre">PartialContentError</span></span><a class="headerlink" href="#lobbyview.LobbyView.PartialContentError" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#lobbyview.LobbyView.LobbyViewError" title="lobbyview.LobbyView.LobbyViewError"><code class="xref py py-class docutils literal notranslate"><span class="pre">LobbyViewError</span></code></a></p>
+<p>Raised when the API returns a partial response.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="lobbyview.LobbyView.QuarterLevelNetworkResponse">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lobbyview.LobbyView.</span></span><span class="sig-name descname"><span class="pre">QuarterLevelNetworkResponse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lobbyview.LobbyView.QuarterLevelNetworkResponse" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#lobbyview.LobbyView.LobbyViewResponse" title="lobbyview.LobbyView.LobbyViewResponse"><code class="xref py py-class docutils literal notranslate"><span class="pre">LobbyViewResponse</span></code></a></p>
+<p>Response class for quarter-level network data.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="lobbyview.LobbyView.ReportResponse">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lobbyview.LobbyView.</span></span><span class="sig-name descname"><span class="pre">ReportResponse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lobbyview.LobbyView.ReportResponse" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#lobbyview.LobbyView.LobbyViewResponse" title="lobbyview.LobbyView.LobbyViewResponse"><code class="xref py py-class docutils literal notranslate"><span class="pre">LobbyViewResponse</span></code></a></p>
+<p>Response class for report data.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="lobbyview.LobbyView.TextResponse">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lobbyview.LobbyView.</span></span><span class="sig-name descname"><span class="pre">TextResponse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lobbyview.LobbyView.TextResponse" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#lobbyview.LobbyView.LobbyViewResponse" title="lobbyview.LobbyView.LobbyViewResponse"><code class="xref py py-class docutils literal notranslate"><span class="pre">LobbyViewResponse</span></code></a></p>
+<p>Response class for text data.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="lobbyview.LobbyView.TooManyRequestsError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lobbyview.LobbyView.</span></span><span class="sig-name descname"><span class="pre">TooManyRequestsError</span></span><a class="headerlink" href="#lobbyview.LobbyView.TooManyRequestsError" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#lobbyview.LobbyView.LobbyViewError" title="lobbyview.LobbyView.LobbyViewError"><code class="xref py py-class docutils literal notranslate"><span class="pre">LobbyViewError</span></code></a></p>
+<p>Raised when the API rate limit is exceeded.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="lobbyview.LobbyView.UnauthorizedError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lobbyview.LobbyView.</span></span><span class="sig-name descname"><span class="pre">UnauthorizedError</span></span><a class="headerlink" href="#lobbyview.LobbyView.UnauthorizedError" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#lobbyview.LobbyView.LobbyViewError" title="lobbyview.LobbyView.LobbyViewError"><code class="xref py py-class docutils literal notranslate"><span class="pre">LobbyViewError</span></code></a></p>
+<p>Raised when the API token is invalid or unauthorized.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="lobbyview.LobbyView.UnexpectedStatusCodeError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lobbyview.LobbyView.</span></span><span class="sig-name descname"><span class="pre">UnexpectedStatusCodeError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">status_code</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lobbyview.LobbyView.UnexpectedStatusCodeError" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#lobbyview.LobbyView.LobbyViewError" title="lobbyview.LobbyView.LobbyViewError"><code class="xref py py-class docutils literal notranslate"><span class="pre">LobbyViewError</span></code></a></p>
+<p>Raised when the API returns an unexpected status code.</p>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="usage.html" class="btn btn-neutral float-left" title="Usage" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, LobbyView Team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
