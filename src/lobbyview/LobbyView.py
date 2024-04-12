@@ -561,7 +561,7 @@ class LobbyView:
         >>> lobbyview = LobbyView(LOBBYVIEW_TOKEN)
         >>> output = lobbyview.networks(client_uuid="44563806-56d2-5e99-84a1-95d22a7a69b3", legislator_id="M000303")
         >>> output.data[0]['report_year']
-        2017
+        2006
         """
         query_params = []
         if client_uuid:
