@@ -373,15 +373,14 @@ class LobbyView:
             print(f'Client: {client['client_name']} - NAICS: {client['primary_naics']}')
 
         >>> lobbyview = LobbyView(LOBBYVIEW_TOKEN)
-        >>> for legislator in lobbyview.paginate(lobbyview.legislators, legislator_state='CA'):
+        >>> for legislator in lobbyview.paginate(lobbyview.legislators, legislator_first_name='Todd', legislator_last_name='Smith'):
         ...     print(f"Legislator: {legislator['legislator_full_name']}")
         Retrieving page 1...
-        Legislator: John Garamendi
-        Legislator: Kevin McCarthy
-        Legislator: Zoe Lofgren
+        Legislator: TODD M SMITH
+        Legislator: TODD W SMITH
         ...
 
-        >>> for bill in lobbyview.paginate(lobbyview.bills, congress_number=117, bill_resolution_type='hr'):
+        >>> for bill in lobbyview.paginate(lobbyview.bills, congress_number=114, bill_resolution_type='hr'):
         ...     print(f"Bill: {bill['bill_number']} - {bill['bill_title']}")
         Retrieving page 1...
         Bill: H.R.1 - To expand Americans' access to the ballot box, reduce the influence of big money in politics, and strengthen ethics rules for public servants, and for other purposes.
@@ -392,7 +391,7 @@ class LobbyView:
         >>> for client in lobbyview.paginate(lobbyview.clients, client_name='InvalidClientName'):
         ...     print(f"Client: {client['client_name']} - NAICS: {client['primary_naics']}")
         Retrieving page 1...
-        Error occurred: RequestError
+        Error occurred: InvalidPageNumberError
         """
         page = 1
 
