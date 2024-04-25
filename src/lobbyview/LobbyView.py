@@ -106,7 +106,7 @@ class LobbyViewResponse:
         >>> response = LobbyViewResponse(data)
         Traceback (most recent call last):
         ...
-        InvalidPageNumberError
+        InvalidPageNumberError: InvalidPageNumberError
         """
         self.data = data['data']                     # the actual data
         self.current_page = int(data['currentPage']) # current page number
@@ -311,18 +311,19 @@ class LobbyView:
         >>> lobbyview.get_data('/api/legislators')
         Traceback (most recent call last):
         ...
-        UnauthorizedError
+        UnauthorizedError: UnauthorizedError
 
         >>> lobbyview = LobbyView(LOBBYVIEW_TOKEN)
         >>> lobbyview.get_data('/api/invalid_endpoint')
         Traceback (most recent call last):
         ...
-        UnexpectedStatusCodeError
+        UnexpectedStatusCodeError: UnexpectedStatusCodeError
 
         >>> lobbyview = LobbyView(LOBBYVIEW_TOKEN)
         >>> lobbyview.get_data('/api/legislators?invalid_param=value')
-        Traceback (most recent call last)    ...
-        RequestError
+        Traceback (most recent call last):
+        ...
+        UnexpectedStatusCodeError: UnexpectedStatusCodeError
         """
         try:
             query_string = query_string.replace(" ", "%20")
@@ -373,7 +374,7 @@ class LobbyView:
 
         >>> lobbyview = LobbyView(LOBBYVIEW_TOKEN)
         >>> for legislator in lobbyview.paginate(lobbyview.legislators, legislator_state='CA'):
-        ...     print(f'Legislator: {legislator['legislator_full_name']}')
+        ...     print(f"Legislator: {legislator['legislator_full_name']}")
         Retrieving page 1...
         Legislator: John Garamendi
         Legislator: Kevin McCarthy
@@ -381,7 +382,7 @@ class LobbyView:
         ...
 
         >>> for bill in lobbyview.paginate(lobbyview.bills, congress_number=117, bill_resolution_type='hr'):
-        ...     print(f'Bill: {bill['bill_number']} - {bill['bill_title']}')
+        ...     print(f"Bill: {bill['bill_number']} - {bill['bill_title']}")
         Retrieving page 1...
         Bill: H.R.1 - To expand Americans' access to the ballot box, reduce the influence of big money in politics, and strengthen ethics rules for public servants, and for other purposes.
         Bill: H.R.2 - Moving Forward Act
@@ -389,7 +390,7 @@ class LobbyView:
         ...
 
         >>> for client in lobbyview.paginate(lobbyview.clients, client_name='InvalidClientName'):
-        ...     print(f'Client: {client['client_name']} - NAICS: {client['primary_naics']}')
+        ...     print(f"Client: {client['client_name']} - NAICS: {client['primary_naics']}")
         Retrieving page 1...
         Error occurred: RequestError
         """
