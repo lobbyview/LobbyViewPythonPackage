@@ -373,14 +373,14 @@ class LobbyView:
             print(f'Client: {client['client_name']} - NAICS: {client['primary_naics']}')
 
         >>> lobbyview = LobbyView(LOBBYVIEW_TOKEN)
-        >>> for legislator in lobbyview.paginate(lobbyview.legislators, legislator_first_name='Todd', legislator_last_name='Smith'):
+        >>> for legislator in lobbyview.paginate(lobbyview.legislators, legislator_first_name="John", legislator_last_name="McCain"):
         ...     print(f"Legislator: {legislator['legislator_full_name']}")
         Retrieving page 1...
         Legislator: TODD M SMITH
         Legislator: TODD W SMITH
         ...
 
-        >>> for bill in lobbyview.paginate(lobbyview.bills, congress_number=114, bill_resolution_type='hr'):
+        >>> for bill in lobbyview.paginate(lobbyview.bills, congress_number=111, bill_chamber="H", bill_number=4173):
         ...     print(f"Bill: {bill['bill_number']} - {bill['bill_title']}")
         Retrieving page 1...
         Bill: H.R.1 - To expand Americans' access to the ballot box, reduce the influence of big money in politics, and strengthen ethics rules for public servants, and for other purposes.
