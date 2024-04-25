@@ -377,15 +377,11 @@ class LobbyView:
         ...     print(f"Legislator: {legislator['legislator_full_name']}")
         Retrieving page 1...
         Legislator: John McCain
-        ...
 
         >>> for bill in lobbyview.paginate(lobbyview.bills, congress_number=111, bill_chamber="H", bill_number=4173):
         ...     print(f"Bill: {bill['bill_number']} - {bill['bill_chamber']}")
         Retrieving page 1...
-        Bill: H.R.1 - To expand Americans' access to the ballot box, reduce the influence of big money in politics, and strengthen ethics rules for public servants, and for other purposes.
-        Bill: H.R.2 - Moving Forward Act
-        Bill: H.R.3 - Elijah E. Cummings Lower Drug Costs Now Act
-        ...
+        Bill: 4173 - H
 
         >>> for client in lobbyview.paginate(lobbyview.clients, client_name='InvalidClientName'):
         ...     print(f"Client: {client['client_name']} - NAICS: {client['primary_naics']}")
