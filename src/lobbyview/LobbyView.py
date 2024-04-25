@@ -1,6 +1,8 @@
 '''
-This module provides a Python interface to the LobbyView REST API. It uses the same endpoints and
-parameter names as outlined in the LobbyView REST API Documentation (https://rest-api.lobbyview.org/).
+This module provides a Python interface to the LobbyView REST API. It uses the same endpoints
+and
+parameter names as outlined in the LobbyView REST API Documentation
+(https://rest-api.lobbyview.org/).
 
 The LobbyView API provides comprehensive data on lobbying activities in the United States.
 This includes information on:
@@ -15,21 +17,21 @@ This includes information on:
 - Quarter-level networks: Lobbying networks on a quarterly basis.
 - Bill-client networks: Connections between bills and the clients they affect.
 
-This module also defines several custom exceptions to handle errors that may occur when interacting
-with the LobbyView API.
+This module also defines several custom exceptions to handle errors that may occur when
+interacting with the LobbyView API.
 
-The main class that users interact with is the LobbyViewResponse class. This class encapsulates the
-data returned by the API and provides methods for navigating through the data. It includes the actual
-data, the current page number, the total number of pages, and the total number of rows available.
-Users can use this class to easily access the data returned by the API and navigate through paginated
-results.
+The main class that users interact with is the LobbyViewResponse class. This class
+encapsulates the data returned by the API and provides methods for navigating through the
+data. It includes the actual data, the current page number, the total number of pages, and
+the total number of rows available. Users can use this class to easily access the data
+returned by the API and navigate through paginated results.
 '''
 import http.client
 import json
-from dotenv import load_dotenv
-import ssl
 import os
-import doctest 
+import ssl
+import doctest
+from dotenv import load_dotenv
 
 class LobbyViewError(Exception):
     """
@@ -40,7 +42,6 @@ class LobbyViewError(Exception):
         Returns a string representation of the error, which is the name of the class.
         """
         return self.__class__.__name__
-    pass
 
 class UnauthorizedError(LobbyViewError):
     """
@@ -67,7 +68,7 @@ class UnexpectedStatusCodeError(LobbyViewError):
     """
     Raised when the API returns an unexpected status code.
     """
-    def __init__(self, status_code):
+    def __init__(self):
         super().__init__()
 
 class InvalidPageNumberError(LobbyViewError):
@@ -93,12 +94,14 @@ class LobbyViewResponse:
         Initializes the LobbyViewResponse object with the provided JSON data.
 
         :param dict data: JSON data from the LobbyView API response
-        :raises Exception: If the current page number is greater than the total number of pages
+        :raises Exception: If the current page number is greater than the total number of
+        pages
         """
         self.data = data['data']                     # the actual data
         self.current_page = int(data['currentPage']) # current page number
         self.total_pages = int(data['totalPage'])    # total pages available
-        self.total_rows = int(data['totalNumber'])   # total rows available (not the number of rows in the response)
+        self.total_rows = int(data['totalNumber'])   # total rows available (not the number
+                                                     # of rows in the response)
 
         if self.current_page > self.total_pages:
             raise InvalidPageNumberError()
@@ -114,7 +117,7 @@ class LobbyViewResponse:
         Returns an iterator for the data.
         """
         return iter(self.data)
-    
+
     def page_info(self):
         """
         Returns a string representation of the current page information.
@@ -226,7 +229,8 @@ class QuarterLevelNetworkResponse(LobbyViewResponse):
     def __str__(self):
         """
         Returns a string representation of the quarter-level network data.
-        Displays the client UUID, legislator ID, year, quarter, and number of bills sponsored.
+        Displays the client UUID, legislator ID, year, quarter, and number of bills
+        sponsored.
         """
         output = "Quarter-Level Networks:\n"
         for network in self.data:
@@ -263,7 +267,10 @@ class LobbyView:
 
         context = ssl._create_unverified_context()
         # temporary connection to test API with unlimited token
-        self.connection = http.client.HTTPSConnection("lobbyview-rest-api-test.eba-witbq7ed.us-east-1.elasticbeanstalk.com", context=context)
+        self.connection = http.client.HTTPSConnection(
+            "lobbyview-rest-api-test.eba-witbq7ed.us-east-1.elasticbeanstalk.com", 
+            context=context
+            )
 
         self.headers = {
             'token': self.lobbyview_token,
@@ -272,8 +279,8 @@ class LobbyView:
         if test_connection:
             try:
                 self.get_data('/api/legislators')
-            except Exception as e:
-                print(f"Warning: Connection test failed - {str(e)}")
+            except Exception as exc:
+                print(f"Warning: Connection test failed - {str(exc)}")
 
     def get_data(self, query_string):
         """
@@ -283,7 +290,8 @@ class LobbyView:
         :param str query_string: Query string for the API endpoint
         :return: JSON data from the API response
         :raises UnauthorizedError: If the API returns a 401 Unauthorized status code
-        :raises TooManyRequestsError: If the API returns a 429 Too Many Requests status code
+        :raises TooManyRequestsError: If the API returns a 429 Too Many Requests status
+        code
         :raises PartialContentError: If the API returns a 206 Partial Content status code
         :raises UnexpectedStatusCodeError: If the API returns an unexpected status code
         :raises RequestError: If an error occurs during the request
@@ -298,40 +306,41 @@ class LobbyView:
                 data_string = response.read().decode('utf-8')
                 # use json.loads to convert the string to a dictionary
                 return json.loads(data_string)
-            elif status_code == 401:
+            if status_code == 401:
                 raise UnauthorizedError()
-            elif status_code == 429:
+            if status_code == 429:
                 raise TooManyRequestsError()
-            elif status_code == 206:
+            if status_code == 206:
                 raise PartialContentError()
-            else:
-                raise UnexpectedStatusCodeError(status_code)
-        except (UnauthorizedError, TooManyRequestsError, PartialContentError, UnexpectedStatusCodeError):
+            raise UnexpectedStatusCodeError()
+        except (UnauthorizedError, TooManyRequestsError,
+                PartialContentError, UnexpectedStatusCodeError):
             raise
-        except Exception as e:
+        except Exception as exc:
             # error occurred during the request
-            raise RequestError()
+            raise RequestError() from exc
 
-    def paginate(func, **kwargs):
+    def paginate(self, func, **kwargs):
         """
         Paginates the data retrieval from the LobbyView API using lazy evaluation
         via a genrator that yields results one at a time.
 
         :param function func: The API endpoint function to be paginated.
-        :param dict kwargs: Additional keyword arguments to be passed to the API endpoint function.
+        :param dict kwargs: Additional keyword arguments to be passed to the API endpoint
+        function.
         :return: A generator object that yields paginated results one item at a time.
         :raises PartialContentError: If the API returns a 206 Partial Content status code
         :raises LobbyViewError: If a different error occurs during pagination
 
         example usage:
 
-        for legislator in paginate(lobbyview.legislators, legislator_state='CA'):
+        for legislator in lobbyview.paginate(lobbyview.legislators, legislator_state='CA'):
             print(f'Legislator: {legislator['legislator_full_name']}')
 
-        for bill in paginate(lobbyview.bills, congress_number=117, bill_resolution_type='hr'):
+        for bill in lobbyview.paginate(lobbyview.bills, congress_number=117, bill_resolution_type='hr'):
             print(f'Bill: {bill['bill_number']} - {bill['bill_title']}')
 
-        for client in paginate(lobbyview.clients, client_name='Microsoft', min_naics=500000):
+        for client in lobbyview.paginate(lobbyview.clients, client_name='Microsoft', min_naics=500000):
             print(f'Client: {client['client_name']} - NAICS: {client['primary_naics']}')
         """
         page = 1
@@ -350,23 +359,25 @@ class LobbyView:
 
                 page += 1
 
-            except PartialContentError as e:
-                print(f"Error occurred: {str(e)}")
+            except PartialContentError as exc:
+                print(f"Error occurred: {str(exc)}")
                 print("Partial results retrieved. Please wait for more quota.")
                 break
-            except LobbyViewError as e:
-                print(f"Error occurred: {str(e)}")
+            except LobbyViewError as exc:
+                print(f"Error occurred: {str(exc)}")
                 break
-    
-    def legislators(self, legislator_id=None, legislator_govtrack_id=None, 
+
+    def legislators(self, legislator_id=None, legislator_govtrack_id=None,
                         legislator_first_name=None, legislator_last_name=None,
                         legislator_full_name=None, legislator_gender=None,
                         min_birthday=None, max_birthday=None, page=1):
         """
-        Gets legislator information from the LobbyView API based on the provided parameters.
+        Gets legislator information from the LobbyView API based on the provided
+        parameters.
 
         :param str legislator_id: Unique identifier of the legislator from LobbyView
-        :param str legislator_govtrack_id: Unique identifier of the legislator from GovTrack
+        :param str legislator_govtrack_id: Unique identifier of the legislator from
+        GovTrack
         :param str legislator_first_name: First name of the legislator
         :param str legislator_last_name: Last name of the legislator
         :param str legislator_full_name: Full name of the legislator
@@ -392,40 +403,46 @@ class LobbyView:
         if legislator_first_name:
             query_params.append(f'legislator_first_name=ilike.*{legislator_first_name}*')
         if legislator_last_name:
-            query_params.append(f'legislator_last_name=ilike.*{legislator_last_name}*')  
+            query_params.append(f'legislator_last_name=ilike.*{legislator_last_name}*')
         if legislator_full_name:
             query_params.append(f'legislator_full_name=ilike.*{legislator_full_name}*')
         if legislator_gender:
             query_params.append(f'legislator_gender=eq.{legislator_gender}')
         if min_birthday:
             query_params.append(f'legislator_birthday=gte.{min_birthday}')
-        if max_birthday:  
+        if max_birthday:
             query_params.append(f'legislator_birthday=lte.{max_birthday}')
         if page != 1:
             query_params.append(f'page={page}')
-            
+
         query_string = '&'.join(query_params)
         data = self.get_data(f'/api/legislators?{query_string}')
 
         return LegislatorResponse(data)
-    
+
     def bills(self, congress_number=None, bill_chamber=None,
-              bill_resolution_type=None, bill_number=None, bill_state=None, 
+              bill_resolution_type=None, bill_number=None, bill_state=None,
               legislator_id=None, min_introduced_date=None, max_introduced_date=None,
               min_updated_date=None, max_updated_date=None, page=1):
         """
         Gets bill information from the LobbyView API based on the provided parameters.
 
         :param int congress_number: Session of Congress
-        :param str bill_chamber: Chamber of the legislative branch (Component of the bill_id composite key)
-        :param str bill_resolution_type: Bill type (Component of the bill_id composite key)
+        :param str bill_chamber: Chamber of the legislative branch
+        (Component of the bill_id composite key)
+        :param str bill_resolution_type: Bill type (Component of the bill_id composite 
+        key)
         :param int bill_number: Bill number (Component of the bill_id composite key)
         :param str bill_state: Bill status
         :param str legislator_id: Sponsor of the bill
-        :param str min_introduced_date: Minimum date of introduction to Congress (YYYY-MM-DD)
-        :param str max_introduced_date: Maximum date of introduction to Congress (YYYY-MM-DD)
-        :param str min_updated_date: Minimum date of most recent status change (YYYY-MM-DD)
-        :param str max_updated_date: Maximum date of most recent status change (YYYY-MM-DD)
+        :param str min_introduced_date: Minimum date of introduction to Congress
+        (YYYY-MM-DD)
+        :param str max_introduced_date: Maximum date of introduction to Congress
+        (YYYY-MM-DD)
+        :param str min_updated_date: Minimum date of most recent status change
+        (YYYY-MM-DD)
+        :param str max_updated_date: Maximum date of most recent status change
+        (YYYY-MM-DD)
         :param int page: Page number of the results, default is 1
         :return: BillResponse object containing the bill data
 
@@ -438,17 +455,17 @@ class LobbyView:
         if congress_number:
             query_params.append(f'congress_number=eq.{congress_number}')
         if bill_chamber:
-            query_params.append(f'bill_chamber=eq.{bill_chamber}') 
+            query_params.append(f'bill_chamber=eq.{bill_chamber}')
         if bill_resolution_type:
             query_params.append(f'bill_resolution_type=eq.{bill_resolution_type}')
         if bill_number:
             query_params.append(f'bill_number=eq.{bill_number}')
         if bill_state:
             query_params.append(f'bill_state=ilike.*{bill_state}*')
-        if legislator_id:  
+        if legislator_id:
             query_params.append(f'legislator_id=eq.{legislator_id}')
         if min_introduced_date:
-            query_params.append(f'bill_introduced_datetime=gte.{min_introduced_date}')  
+            query_params.append(f'bill_introduced_datetime=gte.{min_introduced_date}')
         if max_introduced_date:
             query_params.append(f'bill_introduced_datetime=lte.{max_introduced_date}')
         if min_updated_date:
@@ -457,13 +474,13 @@ class LobbyView:
             query_params.append(f'bill_date_updated=lte.{max_updated_date}')
         if page != 1:
             query_params.append(f'page={page}')
-            
+
         query_string = '&'.join(query_params)
         data = self.get_data(f'/api/bills?{query_string}')
 
         return BillResponse(data)
 
-    def clients(self, client_uuid=None, client_name=None, 
+    def clients(self, client_uuid=None, client_name=None,
                     min_naics=None, max_naics=None, naics_description=None, page=1):
         """
         Gets client information from the LobbyView API based on the provided parameters.
@@ -494,15 +511,16 @@ class LobbyView:
             query_params.append(f'naics_description=ilike.*{naics_description}*')
         if page != 1:
             query_params.append(f'page={page}')
-        
+
         query_string = '&'.join(query_params)
         data = self.get_data(f'/api/clients?{query_string}')
 
         return ClientResponse(data)
 
-    def reports(self, report_uuid=None, client_uuid=None, registrant_uuid=None, 
-            registrant_name=None, report_year=None, report_quarter_code=None, 
-            min_amount=None, max_amount=None, is_no_activity=None, is_client_self_filer=None, is_amendment=None, page=1):
+    def reports(self, report_uuid=None, client_uuid=None, registrant_uuid=None,
+            registrant_name=None, report_year=None, report_quarter_code=None,
+            min_amount=None, max_amount=None, is_no_activity=None,
+            is_client_self_filer=None, is_amendment=None, page=1):
         """
         Gets report information from the LobbyView API based on the provided parameters.
 
@@ -512,10 +530,13 @@ class LobbyView:
         :param str registrant_name: Name of the registrant
         :param int report_year: Year of the report
         :param str report_quarter_code: Quarter period of the report
-        :param str min_amount: Minimum lobbying firm income or lobbying expense (in-house)
-        :param str max_amount: Maximum lobbying firm income or lobbying expense (in-house)
+        :param str min_amount: Minimum lobbying firm income or lobbying expense
+        (in-house)
+        :param str max_amount: Maximum lobbying firm income or lobbying expense
+        (in-house)
         :param bool is_no_activity: Quarterly activity indicator
-        :param bool is_client_self_filer: An organization employing its own in-house lobbyist(s)
+        :param bool is_client_self_filer: An organization employing its own in-house
+        lobbyist(s)
         :param bool is_amendment: Amendment of previous report
         :param int page: Page number of the results, default is 1
         :return: ReportResponse object containing the report data
@@ -550,13 +571,14 @@ class LobbyView:
             query_params.append(f'is_amendment=eq.{is_amendment}')
         if page != 1:
             query_params.append(f'page={page}')
-        
+
         query_string = '&'.join(query_params)
         data = self.get_data(f'/api/reports?{query_string}')
 
         return ReportResponse(data)
 
-    def issues(self, report_uuid=None, issue_ordi=None, issue_code=None, gov_entity=None, page=1):
+    def issues(self, report_uuid=None, issue_ordi=None, issue_code=None, gov_entity=None,
+               page=1):
         """
         Gets issue information from the LobbyView API based on the provided parameters.
 
@@ -581,14 +603,16 @@ class LobbyView:
             query_params.append(f'gov_entity=ilike.*{gov_entity}*')
         if page != 1:
             query_params.append(f'page={page}')
-        
+
         query_string = '&'.join(query_params)
         data = self.get_data(f'/api/issues?{query_string}')
 
         return IssueResponse(data)
 
 
-    def networks(self, client_uuid=None, legislator_id=None, min_report_year=None, max_report_year=None, min_bills_sponsored=None, max_bills_sponsored=None, page=1):
+    def networks(self, client_uuid=None, legislator_id=None, min_report_year=None,
+                 max_report_year=None, min_bills_sponsored=None, max_bills_sponsored=None,
+                 page=1):
         """
         Gets network information from the LobbyView API based on the provided parameters.
 
@@ -596,8 +620,10 @@ class LobbyView:
         :param str legislator_id: Unique identifier of the legislator
         :param int min_report_year: Minimum year of the report
         :param int max_report_year: Maximum year of the report
-        :param int min_bills_sponsored: Minimum number of bills sponsored by the legislator in a specific year lobbied by the client
-        :param int max_bills_sponsored: Maximum number of bills sponsored by the legislator in a specific year lobbied by the client
+        :param int min_bills_sponsored: Minimum number of bills sponsored by the legislator
+        in a specific year lobbied by the client
+        :param int max_bills_sponsored: Maximum number of bills sponsored by the legislator
+        in a specific year lobbied by the client
         :param int page: Page number of the results, default is 1
         :return: NetworkResponse object containing the network data
 
@@ -621,13 +647,14 @@ class LobbyView:
             query_params.append(f'n_bills_sponsored=lte.{max_bills_sponsored}')
         if page != 1:
             query_params.append(f'page={page}')
-        
+
         query_string = '&'.join(query_params)
         data = self.get_data(f'/api/networks?{query_string}')
 
         return NetworkResponse(data)
 
-    def texts(self, report_uuid=None, issue_ordi=None, issue_code=None, issue_text=None, page=1):
+    def texts(self, report_uuid=None, issue_ordi=None, issue_code=None, issue_text=None,
+              page=1):
         """
         Gets issue text data from the LobbyView API based on the provided parameters.
 
@@ -652,22 +679,27 @@ class LobbyView:
             query_params.append(f'issue_text=ilike.*{issue_text}*')
         if page != 1:
             query_params.append(f'page={page}')
-        
+
         query_string = '&'.join(query_params)
         data = self.get_data(f'/api/texts?{query_string}')
 
         return TextResponse(data)
 
-    def quarter_level_networks(self, client_uuid=None, legislator_id=None, report_year=None, report_quarter_code=None, min_bills_sponsored=None, max_bills_sponsored=None, page=1):
+    def quarter_level_networks(self, client_uuid=None, legislator_id=None, report_year=None,
+                               report_quarter_code=None, min_bills_sponsored=None,
+                               max_bills_sponsored=None, page=1):
         """
-        Gets quarter-level network information from the LobbyView API based on the provided parameters.
+        Gets quarter-level network information from the LobbyView API based on the provided
+        parameters.
 
         :param str client_uuid: Unique identifier of the client
         :param str legislator_id: Unique identifier of the legislator
         :param int report_year: Year of the report
         :param str report_quarter_code: Quarter period of the report
-        :param int min_bills_sponsored: Minimum number of bills sponsored by the legislator in a specific quarter lobbied by the client
-        :param int max_bills_sponsored: Maximum number of bills sponsored by the legislator in a specific quarter lobbied by the client
+        :param int min_bills_sponsored: Minimum number of bills sponsored by the legislator
+        in a specific quarter lobbied by the client
+        :param int max_bills_sponsored: Maximum number of bills sponsored by the legislator
+        in a specific quarter lobbied by the client
         :param int page: Page number of the results, default is 1
         :return: QuarterLevelNetworkResponse object containing the quarter-level network data
 
@@ -687,24 +719,26 @@ class LobbyView:
             query_params.append(f'report_quarter_code=eq.{report_quarter_code}')
         if min_bills_sponsored:
             query_params.append(f'n_bills_sponsored=gte.{min_bills_sponsored}')
-        if max_bills_sponsored: 
+        if max_bills_sponsored:
             query_params.append(f'n_bills_sponsored=lte.{max_bills_sponsored}')
         if page != 1:
             query_params.append(f'page={page}')
-        
+
         query_string = '&'.join(query_params)
         data = self.get_data(f'/api/quarter_level_networks?{query_string}')
 
         return QuarterLevelNetworkResponse(data)
 
-    def bill_client_networks(self, congress_number=None, bill_chamber=None, 
-                        bill_resolution_type=None, bill_number=None, 
+    def bill_client_networks(self, congress_number=None, bill_chamber=None,
+                        bill_resolution_type=None, bill_number=None,
                         report_uuid=None, issue_ordi=None, client_uuid=None, page=1):
         """
-        Gets bill-client network information from the LobbyView API based on the provided parameters.
+        Gets bill-client network information from the LobbyView API based on the provided
+        parameters.
 
         :param int congress_number: Session of Congress
-        :param str bill_chamber: Chamber of the legislative branch (Component of the bill_id composite key)
+        :param str bill_chamber: Chamber of the legislative branch (Component of the
+        bill_id composite key)
         :param str bill_resolution_type: Bill type (Component of the bill_id composite key)
         :param int bill_number: Bill number (Component of the bill_id composite key)
         :param str report_uuid: Unique identifier of the report
@@ -717,7 +751,7 @@ class LobbyView:
         >>> output = lobbyview.bill_client_networks(congress_number=114, bill_chamber="H", bill_number=1174, client_uuid="44563806-56d2-5e99-84a1-95d22a7a69b3")
         >>> output.data[0]['issue_ordi']
         2
-        """  
+        """
         query_params = []
         if congress_number:
             query_params.append(f'congress_number=eq.{congress_number}')
@@ -725,17 +759,17 @@ class LobbyView:
             query_params.append(f'bill_chamber=eq.{bill_chamber}')
         if bill_resolution_type:
             query_params.append(f'bill_resolution_type=eq.{bill_resolution_type}')
-        if bill_number:  
+        if bill_number:
             query_params.append(f'bill_number=eq.{bill_number}')
         if report_uuid:
-            query_params.append(f'report_uuid=eq.{report_uuid}') 
+            query_params.append(f'report_uuid=eq.{report_uuid}')
         if issue_ordi:
             query_params.append(f'issue_ordi=eq.{issue_ordi}')
         if client_uuid:
             query_params.append(f'client_uuid=eq.{client_uuid}')
         if page != 1:
             query_params.append(f'page={page}')
-        
+
         query_string = '&'.join(query_params)
         data = self.get_data(f'/api/bill_client_networks?{query_string}')
 
