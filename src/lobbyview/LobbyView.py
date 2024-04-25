@@ -94,8 +94,8 @@ class LobbyViewResponse:
         Initializes the LobbyViewResponse object with the provided JSON data.
 
         :param dict data: JSON data from the LobbyView API response
-        :raises Exception: If the current page number is greater than the total number of
-        pages
+        :raises InvalidPageNumberError: If the current page number is greater than the total number of
+            pages
         """
         self.data = data['data']                     # the actual data
         self.current_page = int(data['currentPage']) # current page number
@@ -291,7 +291,7 @@ class LobbyView:
         :return: JSON data from the API response
         :raises UnauthorizedError: If the API returns a 401 Unauthorized status code
         :raises TooManyRequestsError: If the API returns a 429 Too Many Requests status
-        code
+            code
         :raises PartialContentError: If the API returns a 206 Partial Content status code
         :raises UnexpectedStatusCodeError: If the API returns an unexpected status code
         :raises RequestError: If an error occurs during the request
@@ -327,7 +327,7 @@ class LobbyView:
 
         :param function func: The API endpoint function to be paginated.
         :param dict kwargs: Additional keyword arguments to be passed to the API endpoint
-        function.
+            function.
         :return: A generator object that yields paginated results one item at a time.
         :raises PartialContentError: If the API returns a 206 Partial Content status code
         :raises LobbyViewError: If a different error occurs during pagination
@@ -377,7 +377,7 @@ class LobbyView:
 
         :param str legislator_id: Unique identifier of the legislator from LobbyView
         :param str legislator_govtrack_id: Unique identifier of the legislator from
-        GovTrack
+            GovTrack
         :param str legislator_first_name: First name of the legislator
         :param str legislator_last_name: Last name of the legislator
         :param str legislator_full_name: Full name of the legislator
@@ -429,20 +429,20 @@ class LobbyView:
 
         :param int congress_number: Session of Congress
         :param str bill_chamber: Chamber of the legislative branch
-        (Component of the bill_id composite key)
+            (Component of the bill_id composite key)
         :param str bill_resolution_type: Bill type (Component of the bill_id composite 
-        key)
+            key)
         :param int bill_number: Bill number (Component of the bill_id composite key)
         :param str bill_state: Bill status
         :param str legislator_id: Sponsor of the bill
         :param str min_introduced_date: Minimum date of introduction to Congress
-        (YYYY-MM-DD)
+            (YYYY-MM-DD)
         :param str max_introduced_date: Maximum date of introduction to Congress
-        (YYYY-MM-DD)
+            (YYYY-MM-DD)
         :param str min_updated_date: Minimum date of most recent status change
-        (YYYY-MM-DD)
+            (YYYY-MM-DD)
         :param str max_updated_date: Maximum date of most recent status change
-        (YYYY-MM-DD)
+            (YYYY-MM-DD)
         :param int page: Page number of the results, default is 1
         :return: BillResponse object containing the bill data
 
@@ -531,12 +531,12 @@ class LobbyView:
         :param int report_year: Year of the report
         :param str report_quarter_code: Quarter period of the report
         :param str min_amount: Minimum lobbying firm income or lobbying expense
-        (in-house)
+            (in-house)
         :param str max_amount: Maximum lobbying firm income or lobbying expense
-        (in-house)
+            (in-house)
         :param bool is_no_activity: Quarterly activity indicator
         :param bool is_client_self_filer: An organization employing its own in-house
-        lobbyist(s)
+            lobbyist(s)
         :param bool is_amendment: Amendment of previous report
         :param int page: Page number of the results, default is 1
         :return: ReportResponse object containing the report data
@@ -621,9 +621,9 @@ class LobbyView:
         :param int min_report_year: Minimum year of the report
         :param int max_report_year: Maximum year of the report
         :param int min_bills_sponsored: Minimum number of bills sponsored by the legislator
-        in a specific year lobbied by the client
+            in a specific year lobbied by the client
         :param int max_bills_sponsored: Maximum number of bills sponsored by the legislator
-        in a specific year lobbied by the client
+            in a specific year lobbied by the client
         :param int page: Page number of the results, default is 1
         :return: NetworkResponse object containing the network data
 
@@ -697,9 +697,9 @@ class LobbyView:
         :param int report_year: Year of the report
         :param str report_quarter_code: Quarter period of the report
         :param int min_bills_sponsored: Minimum number of bills sponsored by the legislator
-        in a specific quarter lobbied by the client
+            in a specific quarter lobbied by the client
         :param int max_bills_sponsored: Maximum number of bills sponsored by the legislator
-        in a specific quarter lobbied by the client
+            in a specific quarter lobbied by the client
         :param int page: Page number of the results, default is 1
         :return: QuarterLevelNetworkResponse object containing the quarter-level network data
 
@@ -738,7 +738,7 @@ class LobbyView:
 
         :param int congress_number: Session of Congress
         :param str bill_chamber: Chamber of the legislative branch (Component of the
-        bill_id composite key)
+            bill_id composite key)
         :param str bill_resolution_type: Bill type (Component of the bill_id composite key)
         :param int bill_number: Bill number (Component of the bill_id composite key)
         :param str report_uuid: Unique identifier of the report
@@ -788,4 +788,3 @@ if __name__ == "__main__":
         print(results_string)
     else:
         raise Exception(results_string)
-    
