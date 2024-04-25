@@ -96,6 +96,17 @@ class LobbyViewResponse:
         :param dict data: JSON data from the LobbyView API response
         :raises InvalidPageNumberError: If the current page number is greater than the total number of
             pages
+
+        >>> data = {
+        ...     'data': [],
+        ...     'currentPage': 2,
+        ...     'totalPage': 1,
+        ...     'totalNumber': 0
+        ... }
+        >>> response = LobbyViewResponse(data)
+        Traceback (most recent call last):
+        ...
+        InvalidPageNumberError
         """
         self.data = data['data']                     # the actual data
         self.current_page = int(data['currentPage']) # current page number
@@ -295,6 +306,23 @@ class LobbyView:
         :raises PartialContentError: If the API returns a 206 Partial Content status code
         :raises UnexpectedStatusCodeError: If the API returns an unexpected status code
         :raises RequestError: If an error occurs during the request
+
+        >>> lobbyview = LobbyView("invalid_token", test_connection=False)
+        >>> lobbyview.get_data('/api/legislators')
+        Traceback (most recent call last):
+        ...
+        UnauthorizedError
+
+        >>> lobbyview = LobbyView(LOBBYVIEW_TOKEN)
+        >>> lobbyview.get_data('/api/invalid_endpoint')
+        Traceback (most recent call last):
+        ...
+        UnexpectedStatusCodeError
+
+        >>> lobbyview = LobbyView(LOBBYVIEW_TOKEN)
+        >>> lobbyview.get_data('/api/legislators?invalid_param=value')
+        Traceback (most recent call last)    ...
+        RequestError
         """
         try:
             query_string = query_string.replace(" ", "%20")
@@ -342,6 +370,28 @@ class LobbyView:
 
         for client in lobbyview.paginate(lobbyview.clients, client_name='Microsoft', min_naics=500000):
             print(f'Client: {client['client_name']} - NAICS: {client['primary_naics']}')
+
+        >>> lobbyview = LobbyView(LOBBYVIEW_TOKEN)
+        >>> for legislator in lobbyview.paginate(lobbyview.legislators, legislator_state='CA'):
+        ...     print(f'Legislator: {legislator['legislator_full_name']}')
+        Retrieving page 1...
+        Legislator: John Garamendi
+        Legislator: Kevin McCarthy
+        Legislator: Zoe Lofgren
+        ...
+
+        >>> for bill in lobbyview.paginate(lobbyview.bills, congress_number=117, bill_resolution_type='hr'):
+        ...     print(f'Bill: {bill['bill_number']} - {bill['bill_title']}')
+        Retrieving page 1...
+        Bill: H.R.1 - To expand Americans' access to the ballot box, reduce the influence of big money in politics, and strengthen ethics rules for public servants, and for other purposes.
+        Bill: H.R.2 - Moving Forward Act
+        Bill: H.R.3 - Elijah E. Cummings Lower Drug Costs Now Act
+        ...
+
+        >>> for client in lobbyview.paginate(lobbyview.clients, client_name='InvalidClientName'):
+        ...     print(f'Client: {client['client_name']} - NAICS: {client['primary_naics']}')
+        Retrieving page 1...
+        Error occurred: RequestError
         """
         page = 1
 
