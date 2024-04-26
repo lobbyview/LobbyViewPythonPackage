@@ -1107,7 +1107,7 @@ class LobbyView:
         return BillClientNetworkResponse(data)
 
 if __name__ == "__main__":
-    # loads token from .env file/environment variable
+    # loads token from .env file/environment variables
     load_dotenv("tests/.env")
     load_dotenv("../../tests/.env")
     LOBBYVIEW_TOKEN = os.environ.get('LOBBYVIEW_TOKEN', "NO TOKEN FOUND")
