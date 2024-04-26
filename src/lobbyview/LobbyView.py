@@ -437,6 +437,13 @@ class LobbyView:
         Issue Ordi: 2
         Issue Ordi: 5
         Issue Ordi: 4
+        ...
+
+        >>> lobbyview = LobbyView(LOBBYVIEW_TOKEN)
+        >>> for text in lobbyview.paginate(lobbyview.texts, issue_code="HCR", issue_text="covid"):
+        ...     print(f"Issue Code: {text['issue_code']}")
+        Retrieving page 1...
+        Issue Code: HCR
         """
         page = 1
 
