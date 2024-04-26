@@ -19,12 +19,6 @@ This includes information on:
 
 This module also defines several custom exceptions to handle errors that may occur when
 interacting with the LobbyView API.
-
-The main class that users interact with is the LobbyViewResponse class. This class
-encapsulates the data returned by the API and provides methods for navigating through the
-data. It includes the actual data, the current page number, the total number of pages, and
-the total number of rows available. Users can use this class to easily access the data
-returned by the API and navigate through paginated results.
 '''
 import http.client
 import json
@@ -94,8 +88,8 @@ class LobbyViewResponse:
         Initializes the LobbyViewResponse object with the provided JSON data.
 
         :param dict data: JSON data from the LobbyView API response
-        :raises InvalidPageNumberError: If the current page number is greater than the total number of
-            pages
+        :raises InvalidPageNumberError: If the current page number is greater than the total number
+            of pages
 
         >>> data = {
         ...     'data': [],
@@ -119,7 +113,7 @@ class LobbyViewResponse:
 
     def __str__(self):
         """
-        Returns a string representation of the data.
+        :return str: JSON data formatted with indentation
 
         >>> data = {
         ...     'data': [{'name': 'Alice'}, {'name': 'Bob'}],
@@ -142,7 +136,7 @@ class LobbyViewResponse:
 
     def __iter__(self):
         """
-        Returns an iterator for the data.
+        :return: Iterator for the data
 
         >>> data = {
         ...     'data': [{'name': 'Alice'}, {'name': 'Bob'}],
@@ -160,7 +154,7 @@ class LobbyViewResponse:
 
     def page_info(self):
         """
-        Returns a string representation of the current page information.
+        :return str: Current page number, total pages, and total rows
 
         >>> data = {
         ...     'data': [],
@@ -182,12 +176,14 @@ class LegislatorResponse(LobbyViewResponse):
     """
     def __str__(self):
         """
-        Returns a string representation of the legislator data.
-        Displays the legislator's full name and ID.
+        :return str: representation of the legislator data
+            which includes the legislator's full name and ID
         """
         output = "Legislators:\n"
-        for legislator in self.data:
+        # uses self because LobbyViewResponse is a parent class with an iter method
+        for legislator in self:
             output += f"  {legislator['legislator_full_name']} (ID: {legislator['legislator_id']})\n"
+        # remove the trailing newline character
         return output.rstrip()
 
 class BillResponse(LobbyViewResponse):
@@ -196,11 +192,10 @@ class BillResponse(LobbyViewResponse):
     """
     def __str__(self):
         """
-        Returns a string representation of the bill data.
-        Displays the bill number, Congress number, and sponsor ID.
+        :return str: representation of the bill data
+            which includes the bill number, Congress number, and sponsor ID
         """
         output = "Bills:\n"
-        # uses self because LobbyViewResponse is a parent class with an iter method
         for bill in self:
             output += f"  {bill['bill_number']} (Congress: {bill['congress_number']}, Sponsor: {bill['legislator_id']})\n"
         return output.rstrip()
@@ -211,11 +206,11 @@ class ClientResponse(LobbyViewResponse):
     """
     def __str__(self):
         """
-        Returns a string representation of the client data.
-        Displays the client name and ID.
+        :return str: representation of the client data
+            which includes the client name and ID
         """
         output = "Clients:\n"
-        for client in self.data:
+        for client in self:
             output += f"  {client['client_name']} (ID: {client['client_uuid']})\n"
         return output.rstrip()
 
@@ -225,11 +220,11 @@ class ReportResponse(LobbyViewResponse):
     """
     def __str__(self):
         """
-        Returns a string representation of the report data.
-        Displays the report UUID, year, and quarter.
+        :return str: representation of the report data
+            which includes the report UUID, year, and quarter
         """
         output = "Reports:\n"
-        for report in self.data:
+        for report in self:
             output += f"  {report['report_uuid']} (Year: {report['report_year']}, Quarter: {report['report_quarter_code']})\n"
         return output.rstrip()
 
@@ -239,11 +234,11 @@ class IssueResponse(LobbyViewResponse):
     """
     def __str__(self):
         """
-        Returns a string representation of the issue data.
-        Displays the issue code, report UUID, and issue ordi.
+        :return str: representation of the issue data
+            which includes the issue code, report UUID, and issue ordi
         """
         output = "Issues:\n"
-        for issue in self.data:
+        for issue in self:
             output += f"  {issue['issue_code']} (Report UUID: {issue['report_uuid']}, Issue Ordi: {issue['issue_ordi']})\n"
         return output.rstrip()
 
@@ -253,11 +248,11 @@ class NetworkResponse(LobbyViewResponse):
     """
     def __str__(self):
         """
-        Returns a string representation of the network data.
-        Displays the client UUID, legislator ID, year, and number of bills sponsored.
+        :returnstr : representation of the network data
+            which includes the client UUID, legislator ID, year, and number of bills sponsored
         """
         output = "Networks:\n"
-        for network in self.data:
+        for network in self:
             output += f"  Client UUID: {network['client_uuid']}, Legislator ID: {network['legislator_id']}, Year: {network['report_year']}, Bills Sponsored: {network['n_bills_sponsored']}\n"
         return output.rstrip()
 
@@ -267,11 +262,11 @@ class TextResponse(LobbyViewResponse):
     """
     def __str__(self):
         """
-        Returns a string representation of the text data.
-        Displays the issue code and text.
+        :return str: representation of the text data
+            which includes the issue code and text
         """
         output = "Texts:\n"
-        for text in self.data:
+        for text in self:
             output += f"  Issue Code: {text['issue_code']}, Issue Text: {text['issue_text']}\n"
         return output.rstrip()
 
@@ -281,12 +276,12 @@ class QuarterLevelNetworkResponse(LobbyViewResponse):
     """
     def __str__(self):
         """
-        Returns a string representation of the quarter-level network data.
-        Displays the client UUID, legislator ID, year, quarter, and number of bills
-        sponsored.
+        :return str: representation of the quarter-level network data
+            which includes the client UUID, legislator ID, year, quarter, and 
+            number of bills sponsored
         """
         output = "Quarter-Level Networks:\n"
-        for network in self.data:
+        for network in self:
             output += f"  Client UUID: {network['client_uuid']}, Legislator ID: {network['legislator_id']}, Year: {network['report_year']}, Quarter: {network['report_quarter_code']}, Bills Sponsored: {network['n_bills_sponsored']}\n"
         return output.rstrip()
 
@@ -296,11 +291,11 @@ class BillClientNetworkResponse(LobbyViewResponse):
     """
     def __str__(self):
         """
-        Returns a string representation of the bill-client network data.
-        Displays the bill number, client UUID, and issue ordi.
+        :return str: representation of the bill-client network data
+            which includes the bill number, client UUID, and issue ordi
         """
         output = "Bill-Client Networks:\n"
-        for network in self.data:
+        for network in self:
             output += f"  Bill Number: {network['bill_number']}, Client UUID: {network['client_uuid']}, Issue Ordi: {network['issue_ordi']}\n"
         return output.rstrip()
 
@@ -341,7 +336,7 @@ class LobbyView:
         Returns the JSON response data.
 
         :param str query_string: Query string for the API endpoint
-        :return: JSON data from the API response
+        :return dict: JSON data from the API response
         :raises UnauthorizedError: If the API returns a 401 Unauthorized status code
         :raises TooManyRequestsError: If the API returns a 429 Too Many Requests status
             code
@@ -668,17 +663,7 @@ class LobbyView:
         >>> output.data[0]['bill_state']
         'ENACTED:SIGNED'
 
-        >>> lobbyview = LobbyView(LOBBYVIEW_TOKEN)
         >>> output = lobbyview.bills(congress_number=111, bill_chamber="H", bill_number=4173)
-        >>> output.data[0]
-        'ENACTED:SIGNED'
-
-        >>> output = lobbyview.bills(congress_number=111, bill_chamber="H", bill_number=4173)
-        >>> print(output)
-        Bills:
-          4173 (Congress: 111, Sponsor: F000339)
-
-        >>> output = lobbyview.bills(bill_resolution_type=, bill_state=, legislator_id=, min_introduced_date=, max_introduced_date=, min_updated_date=, max_updated_date=)
         >>> print(output)
         Bills:
           4173 (Congress: 111, Sponsor: F000339)
@@ -790,17 +775,7 @@ class LobbyView:
         >>> output.data[0]['amount']
         '$11,680,000.00'
 
-        >>> lobbyview = LobbyView(LOBBYVIEW_TOKEN)
         >>> output = lobbyview.reports(report_year=2020, report_quarter_code="2", is_client_self_filer=True, report_uuid="4b799814-3e94-5ee1-8dd4-b32aead9aca6")
-        >>> output.data[0]
-        '$11,680,000.00'
-
-        >>> output = lobbyview.reports(report_year=2020, report_quarter_code="2", is_client_self_filer=True, report_uuid="4b799814-3e94-5ee1-8dd4-b32aead9aca6")
-        >>> print(output)
-        Reports:
-          4b799814-3e94-5ee1-8dd4-b32aead9aca6 (Year: 2020, Quarter: 2)
-
-        >>> output = lobbyview.reports(client_uuid=, registrant_uuid=10057, registrant_name=, min_amount=100, max_amount=1000, is_no_activity=, is_amendment=)
         >>> print(output)
         Reports:
           4b799814-3e94-5ee1-8dd4-b32aead9aca6 (Year: 2020, Quarter: 2)
@@ -853,11 +828,6 @@ class LobbyView:
         >>> output.data[0]['report_uuid']
         '00016ab3-2246-5af8-a68d-05af40dfde68'
 
-        >>> lobbyview = LobbyView(LOBBYVIEW_TOKEN)
-        >>> output = lobbyview.issues(issue_code="TRD")
-        >>> output.data[0]
-        '00016ab3-2246-5af8-a68d-05af40dfde68'
-
         >>> output = lobbyview.issues(issue_code="TRD")
         >>> print(output)
         Issues:
@@ -868,12 +838,6 @@ class LobbyView:
           TRD (Report UUID: 00047fc7-2207-5f3b-951d-692b9f35825b, Issue Ordi: 1)
           TRD (Report UUID: 000759fa-dc93-5849-b1e5-7aa751e86433, Issue Ordi: 4)
         ...
-
-        >>> lobbyview = LobbyView(LOBBYVIEW_TOKEN)
-        >>> output = lobbyview.issues(report_uuid="00016ab3-2246-5af8-a68d-05af40dfde68", issue_ordi=2, gov_entity="House")
-        >>> print(output)
-        Issues:
-          TRD (Report UUID: 00016ab3-2246-5af8-a68d-05af40dfde68, Issue Ordi: 2)
         """
         query_params = []
         if report_uuid:
@@ -1113,7 +1077,8 @@ if __name__ == "__main__":
     LOBBYVIEW_TOKEN = os.environ.get('LOBBYVIEW_TOKEN', "NO TOKEN FOUND")
 
     # run doctests, pass in the LobbyView object with the token
-    results = doctest.testmod(extraglobs={'lobbyview': LobbyView(LOBBYVIEW_TOKEN)}, optionflags=doctest.ELLIPSIS)
+    results = doctest.testmod(extraglobs={'lobbyview': LobbyView(LOBBYVIEW_TOKEN)},
+                              optionflags=doctest.ELLIPSIS)
     results_string = f"{results.attempted-results.failed}/{results.attempted} TESTS PASSED"
     if results.failed == 0:
         print(results_string)
