@@ -130,12 +130,12 @@ class LobbyViewResponse:
         >>> response = LobbyViewResponse(data)
         >>> print(response)
         [
-            {
-                "name": "Alice"
-            },
-            {
-                "name": "Bob"
-            }
+          {
+            "name": "Alice"
+          },
+          {
+            "name": "Bob"
+          }
         ]
         """
         return json.dumps(self.data, indent=2)
@@ -485,7 +485,7 @@ class LobbyView:
         >>> output = lobbyview.legislators(legislator_first_name="John", legislator_last_name="McCain")
         >>> print(output)
         Legislators:
-            John McCain (ID: M000303)
+          John McCain (ID: M000303)
         """
         query_params = []
         if legislator_id:
@@ -545,7 +545,8 @@ class LobbyView:
 
         >>> output = lobbyview.bills(congress_number=111, bill_chamber="H", bill_number=4173)
         >>> print(output)
-        Bill: 4173 (Congress: 111, Sponsor: M000303)
+        Bills:
+          4173 (Congress: 111, Sponsor: F000339)
         """
         query_params = []
         if congress_number:
@@ -596,7 +597,10 @@ class LobbyView:
 
         >>> output = lobbyview.clients(client_name="Microsoft Corporation")
         >>> print(output)
-        Client: Microsoft Corporation (ID: 44563806-56d2-5e99-84a1-95d22a7a69b3)
+        Clients:
+          Microsoft Corporation (ID: 44563806-56d2-5e99-84a1-95d22a7a69b3)
+          PCT Government Relations on behalf of Microsoft Corporation (ID: 62eb98f6-ea3a-542d-abdb-7d2fce94b4f8)
+          Cornerstone Government Affairs obo Microsoft Corporation (ID: d6634602-1d0b-560d-b4ac-e04194782ad3)
         """
         query_params = []
         if client_uuid:
@@ -649,7 +653,7 @@ class LobbyView:
         >>> output = lobbyview.reports(report_year=2020, report_quarter_code="2", is_client_self_filer=True, report_uuid="4b799814-3e94-5ee1-8dd4-b32aead9aca6")
         >>> print(output)
         Reports:
-            4b799814-3e94-5ee1-8dd4-b32aead9aca6 (Year: 2020, Quarter: 2)
+          4b799814-3e94-5ee1-8dd4-b32aead9aca6 (Year: 2020, Quarter: 2)
         """
         query_params = []
         if report_uuid:
@@ -697,18 +701,18 @@ class LobbyView:
         >>> lobbyview = LobbyView(LOBBYVIEW_TOKEN)
         >>> output = lobbyview.issues(issue_code="TRD")
         >>> output.data[0]['report_uuid']
-        '4b799814-3e94-5ee1-8dd4-b32aead9aca6'
+        '00016ab3-2246-5af8-a68d-05af40dfde68'
 
         >>> output = lobbyview.issues(issue_code="TRD")
         >>> print(output)
         Issues:
-        TRD (Report UUID: 00016ab3-2246-5af8-a68d-05af40dfde68, Issue Ordi: 2)
-        TRD (Report UUID: 0001f9b9-84d7-5ceb-af03-8987bb76d593, Issue Ordi: 1)
-        TRD (Report UUID: 00020868-67be-5975-955d-7ecab8d42e6e, Issue Ordi: 2)
-        TRD (Report UUID: 00040172-6cda-5b31-8d83-9c1bcfd4b289, Issue Ordi: 1)
-        TRD (Report UUID: 00047fc7-2207-5f3b-951d-692b9f35825b, Issue Ordi: 1)
-        TRD (Report UUID: 000759fa-dc93-5849-b1e5-7aa751e86433, Issue Ordi: 4)
-        ...
+          TRD (Report UUID: 00016ab3-2246-5af8-a68d-05af40dfde68, Issue Ordi: 2)
+          TRD (Report UUID: 0001f9b9-84d7-5ceb-af03-8987bb76d593, Issue Ordi: 1)
+          TRD (Report UUID: 00020868-67be-5975-955d-7ecab8d42e6e, Issue Ordi: 2)
+          TRD (Report UUID: 00040172-6cda-5b31-8d83-9c1bcfd4b289, Issue Ordi: 1)
+          TRD (Report UUID: 00047fc7-2207-5f3b-951d-692b9f35825b, Issue Ordi: 1)
+          TRD (Report UUID: 000759fa-dc93-5849-b1e5-7aa751e86433, Issue Ordi: 4)
+          ...
         """
         query_params = []
         if report_uuid:
@@ -753,8 +757,8 @@ class LobbyView:
         >>> output = lobbyview.networks(client_uuid="44563806-56d2-5e99-84a1-95d22a7a69b3", legislator_id="M000303")
         >>> print(output)
         Networks:
-            Client UUID: 44563806-56d2-5e99-84a1-95d22a7a69b3, Legislator ID: M000303, Year: 2006, Bills Sponsored: 1
-            Client UUID: 44563806-56d2-5e99-84a1-95d22a7a69b3, Legislator ID: M000303, Year: 2017, Bills Sponsored: 1
+          Client UUID: 44563806-56d2-5e99-84a1-95d22a7a69b3, Legislator ID: M000303, Year: 2006, Bills Sponsored: 1
+          Client UUID: 44563806-56d2-5e99-84a1-95d22a7a69b3, Legislator ID: M000303, Year: 2017, Bills Sponsored: 1
         """
         query_params = []
         if client_uuid:
@@ -797,7 +801,7 @@ class LobbyView:
         >>> output = lobbyview.texts(issue_code="HCR", issue_text="covid")
         >>> print(output)
         Texts:
-            Issue Code: HCR, Issue Text: HR 748 CARES Act - Issues related to COVID-19 relief
+          Issue Code: HCR, Issue Text: HR 748 CARES Act - Issues related to COVID-19 relief
         ...
         """
         query_params = []
@@ -843,7 +847,7 @@ class LobbyView:
         >>> output = lobbyview.quarter_level_networks(client_uuid="44563806-56d2-5e99-84a1-95d22a7a69b3", legislator_id="M000303", report_year=2017, report_quarter_code=4)
         >>> print(output)
         Quarter-Level Networks:
-            Client UUID: 44563806-56d2-5e99-84a1-95d22a7a69b3, Legislator ID: M000303, Year: 2017, Quarter: 4, Bills Sponsored: 1
+          Client UUID: 44563806-56d2-5e99-84a1-95d22a7a69b3, Legislator ID: M000303, Year: 2017, Quarter: 4, Bills Sponsored: 1
         """
         query_params = []
         if client_uuid:
@@ -891,7 +895,11 @@ class LobbyView:
 
         >>> output = lobbyview.bill_client_networks(congress_number=114, bill_chamber="H", bill_number=1174, client_uuid="44563806-56d2-5e99-84a1-95d22a7a69b3")
         >>> print(output)
-        Bill-Client Network: Bill Number: 1174, Client UUID: 44563806-56d2-5e99-84a1-95d22a7a69b3, Issue Ordi: 2
+        Bill-Client Networks:
+          Bill Number: 1174, Client UUID: 44563806-56d2-5e99-84a1-95d22a7a69b3, Issue Ordi: 2
+          Bill Number: 1174, Client UUID: 44563806-56d2-5e99-84a1-95d22a7a69b3, Issue Ordi: 5
+          Bill Number: 1174, Client UUID: 44563806-56d2-5e99-84a1-95d22a7a69b3, Issue Ordi: 4
+        ...
         """
         query_params = []
         if congress_number:
