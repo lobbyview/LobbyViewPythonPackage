@@ -16,8 +16,10 @@ def test_legislators():
     output = lobbyview.legislators(legislator_first_name="John", legislator_last_name="McCain", page=3)
     print(output.page_info())
 
-    # output = lobbyview.legislators(legislator_first_name="John", page=2)
-    # print(output)
+def test_clients():
+    output = lobbyview.clients(client_name="Microsoft Corporation")
+    assert output.data[0]['client_uuid'] == '44563806-56d2-5e99-84a1-95d22a7a69b3'
 
 if __name__ == "__main__":
-    test_legislators()
+    # test_legislators()
+    test_clients()
