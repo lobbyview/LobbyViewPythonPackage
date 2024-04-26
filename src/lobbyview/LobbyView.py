@@ -443,7 +443,7 @@ class LobbyView:
         >>> for text in lobbyview.paginate(lobbyview.texts, issue_code="HCR", issue_text="covid"):
         ...     print(f"Issue Code: {text['issue_code']}")
         Retrieving page 1...
-        Issue Code: HCR
+        Issue Code: HCRBERUH
         """
         page = 1
 
