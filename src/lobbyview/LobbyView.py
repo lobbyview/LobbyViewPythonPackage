@@ -931,7 +931,7 @@ if __name__ == "__main__":
     LOBBYVIEW_TOKEN = os.environ.get('LOBBYVIEW_TOKEN', "NO TOKEN FOUND")
 
     # run doctests, pass in the LobbyView object with the token
-    results = doctest.testmod(extraglobs={'lobbyview': LobbyView(LOBBYVIEW_TOKEN)})
+    results = doctest.testmod(extraglobs={'lobbyview': LobbyView(LOBBYVIEW_TOKEN)}, optionflags=doctest.ELLIPSIS)
     results_string = f"{results.attempted-results.failed}/{results.attempted} TESTS PASSED"
     if results.failed == 0:
         print(results_string)
