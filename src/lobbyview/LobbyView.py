@@ -429,6 +429,17 @@ class LobbyView:
         ...     print(f"Client: {client['client_name']} - NAICS: {client['primary_naics']}")
         Retrieving page 1...
         Error occurred: InvalidPageNumberError
+
+        >>> lobbyview = LobbyView(LOBBYVIEW_TOKEN)
+        >>> for issue in lobbyview.paginate(lobbyview.issues, issue_code="TRD"):
+        ...     print(f"Report UUID: {issue['report_uuid']}")
+        Retrieving page 1...
+        Report UUID: 00016ab3-2246-5af8-a68d-05af40dfde68
+        Report UUID: 0001f9b9-84d7-5ceb-af03-8987bb76d593
+        Report UUID: 00020868-67be-5975-955d-7ecab8d42e6e
+        Report UUID: 00040172-6cda-5b31-8d83-9c1bcfd4b289
+        Report UUID: 00047fc7-2207-5f3b-951d-692b9f35825b
+        Report UUID: 000759fa-dc93-5849-b1e5-7aa751e86433
         """
         page = 1
 
@@ -712,7 +723,7 @@ class LobbyView:
           TRD (Report UUID: 00040172-6cda-5b31-8d83-9c1bcfd4b289, Issue Ordi: 1)
           TRD (Report UUID: 00047fc7-2207-5f3b-951d-692b9f35825b, Issue Ordi: 1)
           TRD (Report UUID: 000759fa-dc93-5849-b1e5-7aa751e86433, Issue Ordi: 4)
-          ...
+        ...
         """
         query_params = []
         if report_uuid:
