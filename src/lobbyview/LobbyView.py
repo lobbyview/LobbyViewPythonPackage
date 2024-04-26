@@ -39,7 +39,7 @@ class LobbyViewError(Exception):
     """
     def __str__(self):
         """
-        Returns a string representation of the error, which is the name of the class.
+        :return str: Name of the class
         """
         return self.__class__.__name__
 
@@ -120,18 +120,64 @@ class LobbyViewResponse:
     def __str__(self):
         """
         Returns a string representation of the data.
+
+        >>> data = {
+        ...     'data': [{'name': 'Alice'}, {'name': 'Bob'}],
+        ...     'currentPage': 1,
+        ...     'totalPage': 1,
+        ...     'totalNumber': 2
+        ... }
+        >>> response = LobbyViewResponse(data)
+        >>> print(response)
+        {
+          "data": [
+            {
+              "name": "Alice"
+            },
+            {
+              "name": "Bob"
+            }
+          ],
+          "currentPage": 1,
+          "totalPage": 1,
+          "totalNumber": 2
+        }
         """
         return json.dumps(self.data, indent=2)
 
     def __iter__(self):
         """
         Returns an iterator for the data.
+
+        >>> data = {
+        ...     'data': [{'name': 'Alice'}, {'name': 'Bob'}],
+        ...     'currentPage': 1,
+        ...     'totalPage': 1,
+        ...     'totalNumber': 2
+        ... }
+        >>> response = LobbyViewResponse(data)
+        >>> for item in response:
+        ...     print(item)
+        {'name': 'Alice'}
+        {'name': 'Bob'}
         """
         return iter(self.data)
 
     def page_info(self):
         """
         Returns a string representation of the current page information.
+
+        >>> data = {
+        ...     'data': [],
+        ...     'currentPage': 1,
+        ...     'totalPage': 2,
+        ...     'totalNumber': 0
+        ... }
+        >>> response = LobbyViewResponse(data)
+        >>> print(response.page_info())
+        Current Page: 1
+        Total Pages: 2
+        Total Rows: 0
         """
         return f"Current Page: {self.current_page}\nTotal Pages: {self.total_pages}\nTotal Rows: {self.total_rows}"
 
@@ -159,7 +205,8 @@ class BillResponse(LobbyViewResponse):
         Displays the bill number, Congress number, and sponsor ID.
         """
         output = "Bills:\n"
-        for bill in self.data:
+        # uses self because LobbyViewResponse is a parent class with an iter method
+        for bill in self:
             output += f"  {bill['bill_number']} (Congress: {bill['congress_number']}, Sponsor: {bill['legislator_id']})\n"
         return output
 
@@ -439,6 +486,10 @@ class LobbyView:
         >>> output = lobbyview.legislators(legislator_id="M000303")
         >>> output.data[0]['legislator_full_name']
         'John McCain'
+
+        >>> output = lobbyview.legislators(legislator_first_name="John", legislator_last_name="McCain")
+        >>> print(output)
+        Legislator: John McCain (ID: M000303)
         """
         query_params = []
         if legislator_id:
@@ -495,6 +546,10 @@ class LobbyView:
         >>> output = lobbyview.bills(congress_number=111, bill_chamber="H", bill_number=4173)
         >>> output.data[0]['bill_state']
         'ENACTED:SIGNED'
+
+        >>> output = lobbyview.bills(congress_number=111, bill_chamber="H", bill_number=4173)
+        >>> print(output)
+        Bill: 4173 (Congress: 111, Sponsor: M000303)
         """
         query_params = []
         if congress_number:
@@ -542,6 +597,10 @@ class LobbyView:
         >>> output = lobbyview.clients(client_name="Microsoft Corporation")
         >>> output.data[0]['client_uuid']
         '44563806-56d2-5e99-84a1-95d22a7a69b3'
+
+        >>> output = lobbyview.clients(client_name="Microsoft Corporation")
+        >>> print(output)
+        Client: Microsoft Corporation (ID: 44563806-56d2-5e99-84a1-95d22a7a69b3)
         """
         query_params = []
         if client_uuid:
@@ -590,6 +649,10 @@ class LobbyView:
         >>> output = lobbyview.reports(report_year=2020, report_quarter_code="2", is_client_self_filer=True, report_uuid="4b799814-3e94-5ee1-8dd4-b32aead9aca6")
         >>> output.data[0]['amount']
         '$11,680,000.00'
+
+        >>> output = lobbyview.reports(report_year=2020, report_quarter_code="2", is_client_self_filer=True, report_uuid="4b799814-3e94-5ee1-8dd4-b32aead9aca6")
+        >>> print(output)
+        Report: 4b799814-3e94-5ee1-8dd4-b32aead9aca6 (Year: 2020, Quarter: 2)
         """
         query_params = []
         if report_uuid:
@@ -636,6 +699,13 @@ class LobbyView:
 
         >>> lobbyview = LobbyView(LOBBYVIEW_TOKEN)
         >>> output = lobbyview.issues(issue_code="TRD")
+        >>> output.data[0]['report_uuid']
+        '4b799814-3e94-5ee1-8dd4-b32aead9aca6'
+
+        >>> output = lobbyview.issues(issue_code="TRD")
+        >>> print(output)
+        Issue: TRD (Report UUID: 4b799814-3e94-5ee1-8dd4-b32aead9aca6, Issue Ordi: 1)
+        ...
         """
         query_params = []
         if report_uuid:
@@ -676,6 +746,10 @@ class LobbyView:
         >>> output = lobbyview.networks(client_uuid="44563806-56d2-5e99-84a1-95d22a7a69b3", legislator_id="M000303")
         >>> output.data[0]['report_year']
         2006
+
+        >>> output = lobbyview.networks(client_uuid="44563806-56d2-5e99-84a1-95d22a7a69b3", legislator_id="M000303")
+        >>> print(output)
+        Network: Client UUID: 44563806-56d2-5e99-84a1-95d22a7a69b3, Legislator ID: M000303, Year: 2006, Bills Sponsored: 1
         """
         query_params = []
         if client_uuid:
@@ -712,6 +786,12 @@ class LobbyView:
 
         >>> lobbyview = LobbyView(LOBBYVIEW_TOKEN)
         >>> output = lobbyview.texts(issue_code="HCR", issue_text="covid")
+        >>> output.data[0]['issue_ordi']
+        1
+
+        >>> output = lobbyview.texts(issue_code="HCR", issue_text="covid")
+        >>> print(output)
+        Text: Issue Code: HCR, Issue Text: COVID-19
         """
         query_params = []
         if report_uuid:
@@ -752,6 +832,10 @@ class LobbyView:
         >>> output = lobbyview.quarter_level_networks(client_uuid="44563806-56d2-5e99-84a1-95d22a7a69b3", legislator_id="M000303", report_year=2017, report_quarter_code=4)
         >>> output.data[0]['n_bills_sponsored']
         1
+
+        >>> output = lobbyview.quarter_level_networks(client_uuid="44563806-56d2-5e99-84a1-95d22a7a69b3", legislator_id="M000303", report_year=2017, report_quarter_code=4)
+        >>> print(output)
+        Quarter-Level Network: Client UUID: 44563806-56d2-5e99-84a1-95d22a7a69b3, Legislator ID: M000303, Year: 2017, Quarter: 4, Bills Sponsored: 1
         """
         query_params = []
         if client_uuid:
@@ -796,6 +880,10 @@ class LobbyView:
         >>> output = lobbyview.bill_client_networks(congress_number=114, bill_chamber="H", bill_number=1174, client_uuid="44563806-56d2-5e99-84a1-95d22a7a69b3")
         >>> output.data[0]['issue_ordi']
         2
+
+        >>> output = lobbyview.bill_client_networks(congress_number=114, bill_chamber="H", bill_number=1174, client_uuid="44563806-56d2-5e99-84a1-95d22a7a69b3")
+        >>> print(output)
+        Bill-Client Network: Bill Number: 1174, Client UUID: 44563806-56d2-5e99-84a1-95d22a7a69b3, Issue Ordi: 2
         """
         query_params = []
         if congress_number:
