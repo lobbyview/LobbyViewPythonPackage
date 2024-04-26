@@ -188,7 +188,7 @@ class LegislatorResponse(LobbyViewResponse):
         output = "Legislators:\n"
         for legislator in self.data:
             output += f"  {legislator['legislator_full_name']} (ID: {legislator['legislator_id']})\n"
-        return output
+        return output.rstrip()
 
 class BillResponse(LobbyViewResponse):
     """
@@ -203,7 +203,7 @@ class BillResponse(LobbyViewResponse):
         # uses self because LobbyViewResponse is a parent class with an iter method
         for bill in self:
             output += f"  {bill['bill_number']} (Congress: {bill['congress_number']}, Sponsor: {bill['legislator_id']})\n"
-        return output
+        return output.rstrip()
 
 class ClientResponse(LobbyViewResponse):
     """
@@ -217,7 +217,7 @@ class ClientResponse(LobbyViewResponse):
         output = "Clients:\n"
         for client in self.data:
             output += f"  {client['client_name']} (ID: {client['client_uuid']})\n"
-        return output
+        return output.rstrip()
 
 class ReportResponse(LobbyViewResponse):
     """
@@ -231,7 +231,7 @@ class ReportResponse(LobbyViewResponse):
         output = "Reports:\n"
         for report in self.data:
             output += f"  {report['report_uuid']} (Year: {report['report_year']}, Quarter: {report['report_quarter_code']})\n"
-        return output
+        return output.rstrip()
 
 class IssueResponse(LobbyViewResponse):
     """
@@ -245,7 +245,7 @@ class IssueResponse(LobbyViewResponse):
         output = "Issues:\n"
         for issue in self.data:
             output += f"  {issue['issue_code']} (Report UUID: {issue['report_uuid']}, Issue Ordi: {issue['issue_ordi']})\n"
-        return output
+        return output.rstrip()
 
 class NetworkResponse(LobbyViewResponse):
     """
@@ -259,7 +259,7 @@ class NetworkResponse(LobbyViewResponse):
         output = "Networks:\n"
         for network in self.data:
             output += f"  Client UUID: {network['client_uuid']}, Legislator ID: {network['legislator_id']}, Year: {network['report_year']}, Bills Sponsored: {network['n_bills_sponsored']}\n"
-        return output
+        return output.rstrip()
 
 class TextResponse(LobbyViewResponse):
     """
@@ -273,7 +273,7 @@ class TextResponse(LobbyViewResponse):
         output = "Texts:\n"
         for text in self.data:
             output += f"  Issue Code: {text['issue_code']}, Issue Text: {text['issue_text']}\n"
-        return output
+        return output.rstrip()
 
 class QuarterLevelNetworkResponse(LobbyViewResponse):
     """
@@ -288,7 +288,7 @@ class QuarterLevelNetworkResponse(LobbyViewResponse):
         output = "Quarter-Level Networks:\n"
         for network in self.data:
             output += f"  Client UUID: {network['client_uuid']}, Legislator ID: {network['legislator_id']}, Year: {network['report_year']}, Quarter: {network['report_quarter_code']}, Bills Sponsored: {network['n_bills_sponsored']}\n"
-        return output
+        return output.rstrip()
 
 class BillClientNetworkResponse(LobbyViewResponse):
     """
@@ -302,7 +302,7 @@ class BillClientNetworkResponse(LobbyViewResponse):
         output = "Bill-Client Networks:\n"
         for network in self.data:
             output += f"  Bill Number: {network['bill_number']}, Client UUID: {network['client_uuid']}, Issue Ordi: {network['issue_ordi']}\n"
-        return output
+        return output.rstrip()
 
 class LobbyView:
     """
