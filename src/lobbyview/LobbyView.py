@@ -24,7 +24,8 @@ import http.client
 import json
 import os
 import ssl
-import doctest
+# import doctest
+import urllib
 from dotenv import load_dotenv
 
 class LobbyViewError(Exception):
@@ -168,6 +169,7 @@ class LobbyViewResponse:
         Total Pages: 2
         Total Rows: 0
         """
+        # TODO: make this a dictionary instead of a string
         return f"Current Page: {self.current_page}\nTotal Pages: {self.total_pages}\nTotal Rows: {self.total_rows}"
 
 class LegislatorResponse(LobbyViewResponse):
@@ -303,6 +305,7 @@ class LobbyView:
     """
     Main class for interacting with the LobbyView API.
     """
+    # TODO: add a decorator to this function to check if the token is valid
     def __init__(self, lobbyview_token, test_connection=True):
         """
         Initialize the LobbyView class with the provided API token.
@@ -328,6 +331,7 @@ class LobbyView:
             try:
                 self.get_data('/api/legislators')
             except Exception as exc:
+                # TODO: also return/reraise the exception, check how to output error, check login package
                 print(f"Warning: Connection test failed - {str(exc)}")
 
     def get_data(self, query_string):
@@ -344,23 +348,21 @@ class LobbyView:
         :raises UnexpectedStatusCodeError: If the API returns an unexpected status code
         :raises RequestError: If an error occurs during the request
 
-        >>> lobbyview = LobbyView("invalid_token", test_connection=False)
-        >>> lobbyview.get_data('/api/legislators')
-        Traceback (most recent call last):
-        ...
-        UnauthorizedError: UnauthorizedError
-
-        >>> lobbyview = LobbyView(LOBBYVIEW_TOKEN)
         >>> lobbyview.get_data('/api/invalid_endpoint')
         Traceback (most recent call last):
         ...
         UnexpectedStatusCodeError: UnexpectedStatusCodeError
 
-        >>> lobbyview = LobbyView(LOBBYVIEW_TOKEN)
         >>> lobbyview.get_data('/api/legislators?invalid_param=value')
         Traceback (most recent call last):
         ...
         UnexpectedStatusCodeError: UnexpectedStatusCodeError
+
+        >>> lobbyview_invalid = LobbyView("invalid_token", test_connection=False)
+        >>> lobbyview_invalid.get_data('/api/legislators')
+        Traceback (most recent call last):
+        ...
+        UnauthorizedError: UnauthorizedError
         """
         try:
             query_string = query_string.replace(" ", "%20")
@@ -389,7 +391,7 @@ class LobbyView:
     def paginate(self, func, **kwargs):
         """
         Paginates the data retrieval from the LobbyView API using lazy evaluation
-        via a genrator that yields results one at a time.
+        via a generator that yields results one at a time.
 
         :param function func: The API endpoint function to be paginated.
         :param dict kwargs: Additional keyword arguments to be passed to the API endpoint
@@ -409,7 +411,6 @@ class LobbyView:
         for client in lobbyview.paginate(lobbyview.clients, client_name='Microsoft', min_naics=500000):
             print(f'Client: {client['client_name']} - NAICS: {client['primary_naics']}')
 
-        >>> lobbyview = LobbyView(LOBBYVIEW_TOKEN)
         >>> for legislator in lobbyview.paginate(lobbyview.legislators, legislator_first_name="John", legislator_last_name="McCain"):
         ...     print(f"Legislator: {legislator['legislator_full_name']}")
         Retrieving page 1...
@@ -425,7 +426,6 @@ class LobbyView:
         Retrieving page 1...
         Error occurred: InvalidPageNumberError
 
-        >>> lobbyview = LobbyView(LOBBYVIEW_TOKEN)
         >>> for network in lobbyview.paginate(lobbyview.bill_client_networks, congress_number=114, bill_chamber="H", bill_number=1174, client_uuid="44563806-56d2-5e99-84a1-95d22a7a69b3"):
         ...     print(f"Issue Ordi: {network['issue_ordi']}")
         Retrieving page 1...
@@ -434,7 +434,6 @@ class LobbyView:
         Issue Ordi: 4
         ...
 
-        >>> lobbyview = LobbyView(LOBBYVIEW_TOKEN)
         >>> for text in lobbyview.paginate(lobbyview.texts, issue_code="HCR", issue_text="covid"):
         ...     print(f"Issue Code: {text['issue_code']}")
         Retrieving page 1...
@@ -589,7 +588,6 @@ class LobbyView:
         :param int page: Page number of the results, default is 1
         :return: LegislatorResponse object containing the legislator data
 
-        >>> lobbyview = LobbyView(LOBBYVIEW_TOKEN)
         >>> output = lobbyview.legislators(legislator_first_name="John", legislator_last_name="McCain")
         >>> output.data[0]['legislator_id']
         'M000303'
@@ -658,7 +656,6 @@ class LobbyView:
         :param int page: Page number of the results, default is 1
         :return: BillResponse object containing the bill data
 
-        >>> lobbyview = LobbyView(LOBBYVIEW_TOKEN)
         >>> output = lobbyview.bills(congress_number=111, bill_chamber="H", bill_number=4173)
         >>> output.data[0]['bill_state']
         'ENACTED:SIGNED'
@@ -710,7 +707,6 @@ class LobbyView:
         :param int page: Page number of the results, default is 1
         :return: ClientResponse object containing the client data
 
-        >>> lobbyview = LobbyView(LOBBYVIEW_TOKEN)
         >>> output = lobbyview.clients(client_name="Microsoft Corporation")
         >>> output.data[0]['client_uuid']
         '44563806-56d2-5e99-84a1-95d22a7a69b3'
@@ -741,6 +737,7 @@ class LobbyView:
         if page != 1:
             query_params.append(f'page={page}')
 
+        # query_string = '&'.join([urllib.parse.quote(query_param) for query_param in query_params])
         query_string = '&'.join(query_params)
         data = self.get_data(f'/api/clients?{query_string}')
 
@@ -770,7 +767,6 @@ class LobbyView:
         :param int page: Page number of the results, default is 1
         :return: ReportResponse object containing the report data
 
-        >>> lobbyview = LobbyView(LOBBYVIEW_TOKEN)
         >>> output = lobbyview.reports(report_year=2020, report_quarter_code="2", is_client_self_filer=True, report_uuid="4b799814-3e94-5ee1-8dd4-b32aead9aca6")
         >>> output.data[0]['amount']
         '$11,680,000.00'
@@ -823,7 +819,6 @@ class LobbyView:
         :param int page: Page number of the results, default is 1
         :return: IssueResponse object containing the issue data
 
-        >>> lobbyview = LobbyView(LOBBYVIEW_TOKEN)
         >>> output = lobbyview.issues(issue_code="TRD")
         >>> output.data[0]['report_uuid']
         '00016ab3-2246-5af8-a68d-05af40dfde68'
@@ -874,7 +869,6 @@ class LobbyView:
         :param int page: Page number of the results, default is 1
         :return: NetworkResponse object containing the network data
 
-        >>> lobbyview = LobbyView(LOBBYVIEW_TOKEN)
         >>> output = lobbyview.networks(client_uuid="44563806-56d2-5e99-84a1-95d22a7a69b3", legislator_id="M000303")
         >>> output.data[0]['report_year']
         2006
@@ -923,7 +917,6 @@ class LobbyView:
         :param int page: Page number of the results, default is 1
         :return: TextResponse object containing the text data
 
-        >>> lobbyview = LobbyView(LOBBYVIEW_TOKEN)
         >>> output = lobbyview.texts(issue_code="HCR", issue_text="covid")
         >>> output.data[0]['issue_ordi']
         1
@@ -974,7 +967,6 @@ class LobbyView:
         :param int page: Page number of the results, default is 1
         :return: QuarterLevelNetworkResponse object containing the quarter-level network data
 
-        >>> lobbyview = LobbyView(LOBBYVIEW_TOKEN)
         >>> output = lobbyview.quarter_level_networks(client_uuid="44563806-56d2-5e99-84a1-95d22a7a69b3", legislator_id="M000303", report_year=2017, report_quarter_code=4)
         >>> output.data[0]['n_bills_sponsored']
         1
@@ -1029,7 +1021,6 @@ class LobbyView:
         :param int page: Page number of the results, default is 1
         :return: BillClientNetworkResponse object containing the bill-client network data
 
-        >>> lobbyview = LobbyView(LOBBYVIEW_TOKEN)
         >>> output = lobbyview.bill_client_networks(congress_number=114, bill_chamber="H", bill_number=1174, client_uuid="44563806-56d2-5e99-84a1-95d22a7a69b3")
         >>> output.data[0]['issue_ordi']
         2
@@ -1065,22 +1056,23 @@ class LobbyView:
         if page != 1:
             query_params.append(f'page={page}')
 
+        # query_string = '&'.join([urllib.parse.quote(query_param) for query_param in query_params])
         query_string = '&'.join(query_params)
         data = self.get_data(f'/api/bill_client_networks?{query_string}')
 
         return BillClientNetworkResponse(data)
 
-if __name__ == "__main__":
-    # loads token from .env file/environment variable
-    load_dotenv("tests/.env")
-    load_dotenv("../../tests/.env")
-    LOBBYVIEW_TOKEN = os.environ.get('LOBBYVIEW_TOKEN', "NO TOKEN FOUND")
+# if __name__ == "__main__":
+#     # loads token from .env file/environment variable
+#     load_dotenv("tests/.env")
+#     load_dotenv("../../tests/.env")
+#     LOBBYVIEW_TOKEN = os.environ.get('LOBBYVIEW_TOKEN', "NO TOKEN FOUND")
 
-    # run doctests, pass in the LobbyView object with the token
-    results = doctest.testmod(extraglobs={'lobbyview': LobbyView(LOBBYVIEW_TOKEN)},
-                              optionflags=doctest.ELLIPSIS)
-    results_string = f"{results.attempted-results.failed}/{results.attempted} TESTS PASSED"
-    if results.failed == 0:
-        print(results_string)
-    else:
-        raise Exception(results_string)
+#     # run doctests, pass in the LobbyView object with the token
+#     results = doctest.testmod(extraglobs={'lobbyview': LobbyView(LOBBYVIEW_TOKEN)},
+#                               optionflags=doctest.ELLIPSIS)
+#     results_string = f"{results.attempted-results.failed}/{results.attempted} TESTS PASSED"
+#     if results.failed == 0:
+#         print(results_string)
+#     else:
+#         raise Exception(results_string)
