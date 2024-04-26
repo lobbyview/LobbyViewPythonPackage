@@ -431,15 +431,12 @@ class LobbyView:
         Error occurred: InvalidPageNumberError
 
         >>> lobbyview = LobbyView(LOBBYVIEW_TOKEN)
-        >>> for issue in lobbyview.paginate(lobbyview.issues, issue_code="TRD"):
-        ...     print(f"Report UUID: {issue['report_uuid']}")
+        >>> for network in lobbyview.paginate(lobbyview.bill_client_networks, congress_number=114, bill_chamber="H", bill_number=1174, client_uuid="44563806-56d2-5e99-84a1-95d22a7a69b3"):
+        ...     print(f"Issue Ordi: {network['issue_ordi']}")
         Retrieving page 1...
-        Report UUID: 00016ab3-2246-5af8-a68d-05af40dfde68
-        Report UUID: 0001f9b9-84d7-5ceb-af03-8987bb76d593
-        Report UUID: 00020868-67be-5975-955d-7ecab8d42e6e
-        Report UUID: 00040172-6cda-5b31-8d83-9c1bcfd4b289
-        Report UUID: 00047fc7-2207-5f3b-951d-692b9f35825b
-        Report UUID: 000759fa-dc93-5849-b1e5-7aa751e86433
+        Issue Ordi: 2
+        Issue Ordi: 5
+        Issue Ordi: 4
         """
         page = 1
 
