@@ -37,13 +37,18 @@ def parse_docstring(docstring):
 
     return formatted_docstring
 
+def get_markdown_to_documentation(markdown_file_path):
+    with open(markdown_file_path, 'r') as md_file:
+        markdown_content = md_file.read()
+    return markdown_content
+
 def generate_markdown_documentation(file_path, output_file='README.md'):
     with open(file_path, 'r') as file:
         source_code = file.read()
 
     module = ast.parse(source_code)
     module_docstring = ast.get_docstring(module)
-    documentation = "# LobbyView Package Documentation\n\n"
+    documentation = get_markdown_to_documentation('readme_header.md') + "\n\n"
     if module_docstring:
         documentation += f"{module_docstring}\n\n"
 
