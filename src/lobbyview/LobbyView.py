@@ -606,6 +606,11 @@ class LobbyView:
         >>> print(output)
         Legislators:
           John McCain (ID: M000303)
+
+        >>> output = lobbyview.legislators(legislator_govtrack_id=412755, legislator_full_name="TJ Cox", legislator_gender="M", min_birthday="1963-03-14", max_birthday="1963-08-14")
+        >>> print(output)
+        Legislators:
+          TJ Cox (ID: C001124)
         """
         query_params = []
         if legislator_id:
@@ -667,6 +672,11 @@ class LobbyView:
         >>> print(output)
         Bills:
           4173 (Congress: 111, Sponsor: F000339)
+
+        >>> output = lobbyview.bills(bill_resolution_type=, bill_state=, legislator_id=, min_introduced_date=, max_introduced_date=, min_updated_date=, max_updated_date=)
+        >>> print(output)
+        Bills:
+          4173 (Congress: 111, Sponsor: F000339)
         """
         query_params = []
         if congress_number:
@@ -674,21 +684,21 @@ class LobbyView:
         if bill_chamber:
             query_params.append(f'bill_chamber=eq.{bill_chamber}')
         if bill_resolution_type:
-            query_params.append(f'bill_resolution_type=eq.{bill_resolution_type}')
+            query_params.append(f'bill_resolution_type=eq.{bill_resolution_type}') #!?
         if bill_number:
             query_params.append(f'bill_number=eq.{bill_number}')
         if bill_state:
-            query_params.append(f'bill_state=ilike.*{bill_state}*')
+            query_params.append(f'bill_state=ilike.*{bill_state}*') #!?
         if legislator_id:
-            query_params.append(f'legislator_id=eq.{legislator_id}')
+            query_params.append(f'legislator_id=eq.{legislator_id}') #!?
         if min_introduced_date:
-            query_params.append(f'bill_introduced_datetime=gte.{min_introduced_date}')
+            query_params.append(f'bill_introduced_datetime=gte.{min_introduced_date}') #!?
         if max_introduced_date:
-            query_params.append(f'bill_introduced_datetime=lte.{max_introduced_date}')
+            query_params.append(f'bill_introduced_datetime=lte.{max_introduced_date}') #!?
         if min_updated_date:
-            query_params.append(f'bill_date_updated=gte.{min_updated_date}')
+            query_params.append(f'bill_date_updated=gte.{min_updated_date}') #!?
         if max_updated_date:
-            query_params.append(f'bill_date_updated=lte.{max_updated_date}')
+            query_params.append(f'bill_date_updated=lte.{max_updated_date}') #!?
         if page != 1:
             query_params.append(f'page={page}')
 
@@ -715,7 +725,19 @@ class LobbyView:
         >>> output.data[0]['client_uuid']
         '44563806-56d2-5e99-84a1-95d22a7a69b3'
 
+        >>> lobbyview = LobbyView(LOBBYVIEW_TOKEN)
         >>> output = lobbyview.clients(client_name="Microsoft Corporation")
+        >>> output.data[0]
+        '44563806-56d2-5e99-84a1-95d22a7a69b3'
+
+        >>> output = lobbyview.clients(client_name="Microsoft Corporation")
+        >>> print(output)
+        Clients:
+          Microsoft Corporation (ID: 44563806-56d2-5e99-84a1-95d22a7a69b3)
+          PCT Government Relations on behalf of Microsoft Corporation (ID: 62eb98f6-ea3a-542d-abdb-7d2fce94b4f8)
+          Cornerstone Government Affairs obo Microsoft Corporation (ID: d6634602-1d0b-560d-b4ac-e04194782ad3)
+
+        >>> output = lobbyview.clients(client_uuid=1, min_naics=1, max_naics=1, naics_description=1)
         >>> print(output)
         Clients:
           Microsoft Corporation (ID: 44563806-56d2-5e99-84a1-95d22a7a69b3)
@@ -724,15 +746,15 @@ class LobbyView:
         """
         query_params = []
         if client_uuid:
-            query_params.append(f'client_uuid=eq.{client_uuid}')
+            query_params.append(f'client_uuid=eq.{client_uuid}') #!?
         if client_name:
             query_params.append(f'client_name=ilike.*{client_name}*')
         if min_naics:
-            query_params.append(f'primary_naics=gte.{min_naics}')
+            query_params.append(f'primary_naics=gte.{min_naics}') #!?
         if max_naics:
-            query_params.append(f'primary_naics=lte.{max_naics}')
+            query_params.append(f'primary_naics=lte.{max_naics}') #!?
         if naics_description:
-            query_params.append(f'naics_description=ilike.*{naics_description}*')
+            query_params.append(f'naics_description=ilike.*{naics_description}*') #!?
         if page != 1:
             query_params.append(f'page={page}')
 
@@ -774,30 +796,35 @@ class LobbyView:
         >>> print(output)
         Reports:
           4b799814-3e94-5ee1-8dd4-b32aead9aca6 (Year: 2020, Quarter: 2)
+
+        >>> output = lobbyview.reports(client_uuid=, registrant_uuid=10057, registrant_name=, min_amount=100, max_amount=1000, is_no_activity=, is_amendment=)
+        >>> print(output)
+        Reports:
+          4b799814-3e94-5ee1-8dd4-b32aead9aca6 (Year: 2020, Quarter: 2)
         """
         query_params = []
         if report_uuid:
             query_params.append(f'report_uuid=eq.{report_uuid}')
         if client_uuid:
-            query_params.append(f'client_uuid=eq.{client_uuid}')
+            query_params.append(f'client_uuid=eq.{client_uuid}') #!?
         if registrant_uuid:
-            query_params.append(f'registrant_uuid=eq.{registrant_uuid}')
+            query_params.append(f'registrant_uuid=eq.{registrant_uuid}') #!?
         if registrant_name:
-            query_params.append(f'registrant_name=ilike.*{registrant_name}*')
+            query_params.append(f'registrant_name=ilike.*{registrant_name}*') #!?
         if report_year:
             query_params.append(f'report_year=eq.{report_year}')
         if report_quarter_code:
             query_params.append(f'report_quarter_code=eq.{report_quarter_code}')
         if min_amount:
-            query_params.append(f'amount=gte.{min_amount}')
+            query_params.append(f'amount=gte.{min_amount}') #!?
         if max_amount:
-            query_params.append(f'amount=lte.{max_amount}')
+            query_params.append(f'amount=lte.{max_amount}') #!?
         if is_no_activity is not None:
-            query_params.append(f'is_no_activity=eq.{is_no_activity}')
+            query_params.append(f'is_no_activity=eq.{is_no_activity}') #!?
         if is_client_self_filer is not None:
             query_params.append(f'is_client_self_filer=eq.{is_client_self_filer}')
         if is_amendment is not None:
-            query_params.append(f'is_amendment=eq.{is_amendment}')
+            query_params.append(f'is_amendment=eq.{is_amendment}') #!?
         if page != 1:
             query_params.append(f'page={page}')
 
@@ -833,6 +860,12 @@ class LobbyView:
           TRD (Report UUID: 00047fc7-2207-5f3b-951d-692b9f35825b, Issue Ordi: 1)
           TRD (Report UUID: 000759fa-dc93-5849-b1e5-7aa751e86433, Issue Ordi: 4)
         ...
+
+        >>> lobbyview = LobbyView(LOBBYVIEW_TOKEN)
+        >>> output = lobbyview.issues(report_uuid="00016ab3-2246-5af8-a68d-05af40dfde68", issue_ordi=2, gov_entity="House")
+        >>> print(output)
+        Issues:
+          TRD (Report UUID: 00016ab3-2246-5af8-a68d-05af40dfde68, Issue Ordi: 2)
         """
         query_params = []
         if report_uuid:
@@ -879,6 +912,12 @@ class LobbyView:
         Networks:
           Client UUID: 44563806-56d2-5e99-84a1-95d22a7a69b3, Legislator ID: M000303, Year: 2006, Bills Sponsored: 1
           Client UUID: 44563806-56d2-5e99-84a1-95d22a7a69b3, Legislator ID: M000303, Year: 2017, Bills Sponsored: 1
+
+        >>> output = lobbyview.networks(min_report_year=2016, max_report_year=2018, min_bills_sponsored=0, max_bills_sponsored=2, client_uuid="44563806-56d2-5e99-84a1-95d22a7a69b3", legislator_id="M000303")
+        >>> print(output)
+        Networks:
+          Client UUID: 44563806-56d2-5e99-84a1-95d22a7a69b3, Legislator ID: M000303, Year: 2006, Bills Sponsored: 1
+          Client UUID: 44563806-56d2-5e99-84a1-95d22a7a69b3, Legislator ID: M000303, Year: 2017, Bills Sponsored: 1
         """
         query_params = []
         if client_uuid:
@@ -886,13 +925,13 @@ class LobbyView:
         if legislator_id:
             query_params.append(f'legislator_id=eq.{legislator_id}')
         if min_report_year:
-            query_params.append(f'report_year=gte.{min_report_year}')
+            query_params.append(f'report_year=gte.{min_report_year}') #!?
         if max_report_year:
-            query_params.append(f'report_year=lte.{max_report_year}')
+            query_params.append(f'report_year=lte.{max_report_year}') #!?
         if min_bills_sponsored:
-            query_params.append(f'n_bills_sponsored=gte.{min_bills_sponsored}')
+            query_params.append(f'n_bills_sponsored=gte.{min_bills_sponsored}') #!?
         if max_bills_sponsored:
-            query_params.append(f'n_bills_sponsored=lte.{max_bills_sponsored}')
+            query_params.append(f'n_bills_sponsored=lte.{max_bills_sponsored}') #!?
         if page != 1:
             query_params.append(f'page={page}')
 
@@ -918,7 +957,18 @@ class LobbyView:
         >>> output.data[0]['issue_ordi']
         1
 
+        >>> lobbyview = LobbyView(LOBBYVIEW_TOKEN)
         >>> output = lobbyview.texts(issue_code="HCR", issue_text="covid")
+        >>> output.data[0]
+        1
+
+        >>> output = lobbyview.texts(issue_code="HCR", issue_text="covid")
+        >>> print(output)
+        Texts:
+          Issue Code: HCR, Issue Text: HR 748 CARES Act - Issues related to COVID-19 relief
+        ...
+
+        >>> output = lobbyview.texts(report_uuid=, issdue_ordi=)
         >>> print(output)
         Texts:
           Issue Code: HCR, Issue Text: HR 748 CARES Act - Issues related to COVID-19 relief
@@ -926,9 +976,9 @@ class LobbyView:
         """
         query_params = []
         if report_uuid:
-            query_params.append(f'report_uuid=eq.{report_uuid}')
+            query_params.append(f'report_uuid=eq.{report_uuid}') #!?
         if issue_ordi:
-            query_params.append(f'issue_ordi=eq.{issue_ordi}')
+            query_params.append(f'issue_ordi=eq.{issue_ordi}') #!?
         if issue_code:
             query_params.append(f'issue_code=eq.{issue_code}')
         if issue_text:
@@ -968,6 +1018,11 @@ class LobbyView:
         >>> print(output)
         Quarter-Level Networks:
           Client UUID: 44563806-56d2-5e99-84a1-95d22a7a69b3, Legislator ID: M000303, Year: 2017, Quarter: 4, Bills Sponsored: 1
+
+        >>> output = lobbyview.quarter_level_networks(min_bills_sponsored=0, max_bills_sponsored=2, client_uuid="44563806-56d2-5e99-84a1-95d22a7a69b3", legislator_id="M000303")
+        >>> print(output)
+        Quarter-Level Networks:
+          Client UUID: 44563806-56d2-5e99-84a1-95d22a7a69b3, Legislator ID: M000303, Year: 2017, Quarter: 4, Bills Sponsored: 1
         """
         query_params = []
         if client_uuid:
@@ -979,9 +1034,9 @@ class LobbyView:
         if report_quarter_code:
             query_params.append(f'report_quarter_code=eq.{report_quarter_code}')
         if min_bills_sponsored:
-            query_params.append(f'n_bills_sponsored=gte.{min_bills_sponsored}')
+            query_params.append(f'n_bills_sponsored=gte.{min_bills_sponsored}') #!?
         if max_bills_sponsored:
-            query_params.append(f'n_bills_sponsored=lte.{max_bills_sponsored}')
+            query_params.append(f'n_bills_sponsored=lte.{max_bills_sponsored}') #!?
         if page != 1:
             query_params.append(f'page={page}')
 
@@ -1013,7 +1068,20 @@ class LobbyView:
         >>> output.data[0]['issue_ordi']
         2
 
+        >>> lobbyview = LobbyView(LOBBYVIEW_TOKEN)
         >>> output = lobbyview.bill_client_networks(congress_number=114, bill_chamber="H", bill_number=1174, client_uuid="44563806-56d2-5e99-84a1-95d22a7a69b3")
+        >>> output.data[0]
+        2
+
+        >>> output = lobbyview.bill_client_networks(congress_number=114, bill_chamber="H", bill_number=1174, client_uuid="44563806-56d2-5e99-84a1-95d22a7a69b3")
+        >>> print(output)
+        Bill-Client Networks:
+          Bill Number: 1174, Client UUID: 44563806-56d2-5e99-84a1-95d22a7a69b3, Issue Ordi: 2
+          Bill Number: 1174, Client UUID: 44563806-56d2-5e99-84a1-95d22a7a69b3, Issue Ordi: 5
+          Bill Number: 1174, Client UUID: 44563806-56d2-5e99-84a1-95d22a7a69b3, Issue Ordi: 4
+        ...
+
+        >>> output = lobbyview.bill_client_networks(bill_resolution_type=, report_uuid=, issue_ordi=)
         >>> print(output)
         Bill-Client Networks:
           Bill Number: 1174, Client UUID: 44563806-56d2-5e99-84a1-95d22a7a69b3, Issue Ordi: 2
@@ -1027,13 +1095,13 @@ class LobbyView:
         if bill_chamber:
             query_params.append(f'bill_chamber=eq.{bill_chamber}')
         if bill_resolution_type:
-            query_params.append(f'bill_resolution_type=eq.{bill_resolution_type}')
+            query_params.append(f'bill_resolution_type=eq.{bill_resolution_type}') #!?
         if bill_number:
             query_params.append(f'bill_number=eq.{bill_number}')
         if report_uuid:
-            query_params.append(f'report_uuid=eq.{report_uuid}')
+            query_params.append(f'report_uuid=eq.{report_uuid}') #!?
         if issue_ordi:
-            query_params.append(f'issue_ordi=eq.{issue_ordi}')
+            query_params.append(f'issue_ordi=eq.{issue_ordi}') #!?
         if client_uuid:
             query_params.append(f'client_uuid=eq.{client_uuid}')
         if page != 1:
