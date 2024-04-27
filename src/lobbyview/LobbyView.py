@@ -22,14 +22,14 @@ interacting with the LobbyView API.
 '''
 import http.client
 import json
-import os
 import ssl
 import inspect
-# import doctest
 from urllib.parse import quote
-from dotenv import load_dotenv
 
 def url_quote(func):
+    """
+    Decorator function to quote string arguments in the function call.
+    """
     def wrapper(*args, **kwargs):
         # Check if the function is a method
         if inspect.ismethod(func) or inspect.isbuiltin(func):
@@ -183,7 +183,7 @@ class LobbyViewResponse:
         Total Rows: 0
         """
         # TODO: make this a dictionary instead of a string
-        return f"Current Page: {self.current_page}\nTotal Pages: {self.total_pages}\nTotal Rows: {self.total_rows}"
+        return {"current_page": self.current_page, "total_pages": self.total_pages, "total_rows": self.total_rows}
 
 class LegislatorResponse(LobbyViewResponse):
     """
@@ -1081,18 +1081,3 @@ class LobbyView:
         data = self.get_data(f'/api/bill_client_networks?{query_string}')
 
         return BillClientNetworkResponse(data)
-
-# if __name__ == "__main__":
-#     # loads token from .env file/environment variable
-#     load_dotenv("tests/.env")
-#     load_dotenv("../../tests/.env")
-#     LOBBYVIEW_TOKEN = os.environ.get('LOBBYVIEW_TOKEN', "NO TOKEN FOUND")
-
-#     # run doctests, pass in the LobbyView object with the token
-#     results = doctest.testmod(extraglobs={'lobbyview': LobbyView(LOBBYVIEW_TOKEN)},
-#                               optionflags=doctest.ELLIPSIS)
-#     results_string = f"{results.attempted-results.failed}/{results.attempted} TESTS PASSED"
-#     if results.failed == 0:
-#         print(results_string)
-#     else:
-#         raise Exception(results_string)

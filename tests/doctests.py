@@ -21,9 +21,15 @@ def import_module(name, path):
 
 if __name__ == "__main__":
     # run doctests, pass in the LobbyView object with the token
-    results = doctest.testmod(import_module("src.lobbyview.LobbyView", "./src/lobbyview/LobbyView.py"), 
-                            extraglobs={'lobbyview': LobbyView(LOBBYVIEW_TOKEN)},
-                            optionflags=doctest.ELLIPSIS)
+    try:
+        results = doctest.testmod(import_module("src.lobbyview.LobbyView", "../src/lobbyview/LobbyView.py"), 
+                                extraglobs={'lobbyview': LobbyView(LOBBYVIEW_TOKEN)},
+                                optionflags=doctest.ELLIPSIS)
+    except:
+        results = doctest.testmod(import_module("src.lobbyview.LobbyView", "./src/lobbyview/LobbyView.py"), 
+                                extraglobs={'lobbyview': LobbyView(LOBBYVIEW_TOKEN)},
+                                optionflags=doctest.ELLIPSIS)
+    
     results_string = f"{results.attempted-results.failed}/{results.attempted} TESTS PASSED"
     if results.failed == 0:
         print(results_string)
