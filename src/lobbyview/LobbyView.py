@@ -25,6 +25,8 @@ import json
 import ssl
 import inspect
 from urllib.parse import quote
+from .exceptions import UnauthorizedError, TooManyRequestsError, PartialContentError
+from .exceptions import UnexpectedStatusCodeError, InvalidPageNumberError, RequestError
 
 def url_quote(func):
     """
@@ -33,7 +35,8 @@ def url_quote(func):
     def wrapper(*args, **kwargs):
         # Check if the function is a method
         if inspect.ismethod(func) or inspect.isbuiltin(func):
-            quoted_args = [quote(arg) if isinstance(arg, str) else arg for arg in args[1:]]  # Skip the first argument (self)
+            # Skip the first argument (self)
+            quoted_args = [quote(arg) if isinstance(arg, str) else arg for arg in args[1:]]
             quoted_args.insert(0, args[0])  # Add the self argument back to the start of the list
         else:
             quoted_args = [quote(arg) if isinstance(arg, str) else arg for arg in args]
@@ -50,48 +53,6 @@ class LobbyViewError(Exception):
         :return str: Name of the class
         """
         return self.__class__.__name__
-
-class UnauthorizedError(LobbyViewError):
-    """
-    Raised when the API token is invalid or unauthorized.
-    """
-    def __init__(self):
-        super().__init__()
-
-class TooManyRequestsError(LobbyViewError):
-    """
-    Raised when the API rate limit is exceeded.
-    """
-    def __init__(self):
-        super().__init__()
-
-class PartialContentError(LobbyViewError):
-    """
-    Raised when the API returns a partial response.
-    """
-    def __init__(self):
-        super().__init__()
-
-class UnexpectedStatusCodeError(LobbyViewError):
-    """
-    Raised when the API returns an unexpected status code.
-    """
-    def __init__(self):
-        super().__init__()
-
-class InvalidPageNumberError(LobbyViewError):
-    """
-    Raised when the current page number is greater than the total number of pages.
-    """
-    def __init__(self):
-        super().__init__()
-
-class RequestError(LobbyViewError):
-    """
-    Raised when an error occurs during the request to the LobbyView API.
-    """
-    def __init__(self):
-        super().__init__()
 
 class LobbyViewResponse:
     """
@@ -123,7 +84,8 @@ class LobbyViewResponse:
                                                      # of rows in the response)
 
         if self.current_page > self.total_pages:
-            raise InvalidPageNumberError()
+            raise InvalidPageNumberError(current_page=self.current_page,
+                                         total_pages=self.total_pages)
 
     def __str__(self):
         """
@@ -326,6 +288,8 @@ class LobbyView:
         :param str lobbyview_token: API token for the LobbyView API
         :param bool test_connection: Whether to test the connection to the API
         """
+        if not isinstance(lobbyview_token, str) or len(lobbyview_token) == 0:
+            raise UnauthorizedError()
         self.lobbyview_token = lobbyview_token
         # self.connection = http.client.HTTPSConnection('rest-api.lobbyview.org')
 
@@ -387,12 +351,12 @@ class LobbyView:
                 # use json.loads to convert the string to a dictionary
                 return json.loads(data_string)
             if status_code == 401:
-                raise UnauthorizedError()
+                raise UnauthorizedError(status_code=status_code)
             if status_code == 429:
-                raise TooManyRequestsError()
+                raise TooManyRequestsError(status_code=status_code)
             if status_code == 206:
-                raise PartialContentError()
-            raise UnexpectedStatusCodeError()
+                raise PartialContentError(status_code=status_code)
+            raise UnexpectedStatusCodeError(status_code=status_code)
         except (UnauthorizedError, TooManyRequestsError,
                 PartialContentError, UnexpectedStatusCodeError):
             raise
@@ -451,107 +415,9 @@ class LobbyView:
         Retrieving page 1...
         Issue Code: HCR
         Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
-        Issue Code: HCR
+        ...
         Issue Code: HCR
         Retrieving page 2...
-        Issue Code: HCR
-        Issue Code: HCR
         Issue Code: HCR
         Issue Code: HCR
         ...
@@ -584,7 +450,7 @@ class LobbyView:
     def legislators(self, legislator_id=None, legislator_govtrack_id=None,
                         legislator_first_name=None, legislator_last_name=None,
                         legislator_full_name=None, legislator_gender=None,
-                        min_birthday=None, max_birthday=None, page=1):
+                        exact_birthday=None, min_birthday=None, max_birthday=None, page=1):
         """
         Gets legislator information from the LobbyView API based on the provided
         parameters.
@@ -596,6 +462,7 @@ class LobbyView:
         :param str legislator_last_name: Last name of the legislator
         :param str legislator_full_name: Full name of the legislator
         :param str legislator_gender: Gender of the legislator
+        :param str exact_birthday: Exact birthday of the legislator (YYYY-MM-DD)
         :param str min_birthday: Minimum birthday of the legislator (YYYY-MM-DD)
         :param str max_birthday: Maximum birthday of the legislator (YYYY-MM-DD)
         :param int page: Page number of the results, default is 1
@@ -631,9 +498,11 @@ class LobbyView:
             query_params.append(f'legislator_full_name=ilike.*{legislator_full_name}*')
         if legislator_gender:
             query_params.append(f'legislator_gender=eq.{legislator_gender}')
-        if min_birthday:
+        if exact_birthday:
+            query_params.append(f'legislator_birthday=eq.{exact_birthday}')
+        if min_birthday and (exact_birthday is None):
             query_params.append(f'legislator_birthday=gte.{min_birthday}')
-        if max_birthday:
+        if max_birthday and (exact_birthday is None):
             query_params.append(f'legislator_birthday=lte.{max_birthday}')
         if page != 1:
             query_params.append(f'page={page}')
@@ -760,7 +629,8 @@ class LobbyView:
 
     @url_quote
     def reports(self, report_uuid=None, client_uuid=None, registrant_uuid=None,
-            registrant_name=None, report_year=None, report_quarter_code=None,
+            registrant_name=None, report_year=None, min_report_year=None,
+            max_report_year=None, report_quarter_code=None,
             min_amount=None, max_amount=None, is_no_activity=None,
             is_client_self_filer=None, is_amendment=None, page=1):
         """
@@ -771,6 +641,8 @@ class LobbyView:
         :param str registrant_uuid: Unique identifier of the registrant
         :param str registrant_name: Name of the registrant
         :param int report_year: Year of the report
+        :param int min_report_year: Minimum year of the report
+        :param int max_report_year: Maximum year of the report
         :param str report_quarter_code: Quarter period of the report
         :param str min_amount: Minimum lobbying firm income or lobbying expense
             (in-house)
@@ -803,6 +675,10 @@ class LobbyView:
             query_params.append(f'registrant_name=ilike.*{registrant_name}*') #!?
         if report_year:
             query_params.append(f'report_year=eq.{report_year}')
+        if min_report_year and (report_year is None):
+            query_params.append(f'report_year=gte.{min_report_year}')
+        if max_report_year and (report_year is None):
+            query_params.append(f'report_year=lte.{max_report_year}')
         if report_quarter_code:
             query_params.append(f'report_quarter_code=eq.{report_quarter_code}')
         if min_amount:
