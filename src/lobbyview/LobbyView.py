@@ -462,8 +462,17 @@ class LobbyView:
         >>> output = lobbyview.legislators(legislator_first_name="John", legislator_last_name="McCain")
         >>> output.data[0]['legislator_id']
         'M000303'
+
+        >>> output = lobbyview.legislators(legislator_first_name="John", legislator_last_name="McCain")
+        >>> output.data
+        'M000303'
+
         >>> output = lobbyview.legislators(legislator_id="M000303")
         >>> output.data[0]['legislator_full_name']
+        'John McCain'
+
+        >>> output = lobbyview.legislators(legislator_id="M000303")
+        >>> output.data
         'John McCain'
 
         >>> output = lobbyview.legislators(legislator_first_name="John", legislator_last_name="McCain")
@@ -535,6 +544,10 @@ class LobbyView:
         'ENACTED:SIGNED'
 
         >>> output = lobbyview.bills(congress_number=111, bill_chamber="H", bill_number=4173)
+        >>> output.data
+        'ENACTED:SIGNED'
+
+        >>> output = lobbyview.bills(congress_number=111, bill_chamber="H", bill_number=4173)
         >>> print(output)
         Bills:
           4173 (Congress: 111, Sponsor: F000339)
@@ -584,6 +597,10 @@ class LobbyView:
 
         >>> output = lobbyview.clients(client_name="Microsoft Corporation")
         >>> output.data[0]['client_uuid']
+        '44563806-56d2-5e99-84a1-95d22a7a69b3'
+
+        >>> output = lobbyview.clients(client_name="Microsoft Corporation")
+        >>> output.data
         '44563806-56d2-5e99-84a1-95d22a7a69b3'
 
         >>> output = lobbyview.clients(client_name="Microsoft Corporation")
@@ -651,6 +668,10 @@ class LobbyView:
         '$11,680,000.00'
 
         >>> output = lobbyview.reports(report_year=2020, report_quarter_code="2", is_client_self_filer=True, report_uuid="4b799814-3e94-5ee1-8dd4-b32aead9aca6")
+        >>> output.data
+        '$11,680,000.00'
+
+        >>> output = lobbyview.reports(report_year=2020, report_quarter_code="2", is_client_self_filer=True, report_uuid="4b799814-3e94-5ee1-8dd4-b32aead9aca6")
         >>> print(output)
         Reports:
           4b799814-3e94-5ee1-8dd4-b32aead9aca6 (Year: 2020, Quarter: 2)
@@ -708,6 +729,10 @@ class LobbyView:
         '00016ab3-2246-5af8-a68d-05af40dfde68'
 
         >>> output = lobbyview.issues(issue_code="TRD")
+        >>> output.data
+        '00016ab3-2246-5af8-a68d-05af40dfde68'
+
+        >>> output = lobbyview.issues(issue_code="TRD")
         >>> print(output)
         Issues:
           TRD (Report UUID: 00016ab3-2246-5af8-a68d-05af40dfde68, Issue Ordi: 2)
@@ -755,6 +780,10 @@ class LobbyView:
 
         >>> output = lobbyview.networks(client_uuid="44563806-56d2-5e99-84a1-95d22a7a69b3", legislator_id="M000303")
         >>> output.data[0]['report_year']
+        2006
+
+        >>> output = lobbyview.networks(client_uuid="44563806-56d2-5e99-84a1-95d22a7a69b3", legislator_id="M000303")
+        >>> output.data
         2006
 
         >>> output = lobbyview.networks(client_uuid="44563806-56d2-5e99-84a1-95d22a7a69b3", legislator_id="M000303")
@@ -807,6 +836,10 @@ class LobbyView:
         1
 
         >>> output = lobbyview.texts(issue_code="HCR", issue_text="covid")
+        >>> output.data
+        1
+
+        >>> output = lobbyview.texts(issue_code="HCR", issue_text="covid")
         >>> print(output)
         Texts:
           Issue Code: HCR, Issue Text: HR 748 CARES Act - Issues related to COVID-19 relief
@@ -855,6 +888,10 @@ class LobbyView:
 
         >>> output = lobbyview.quarter_level_networks(client_uuid="44563806-56d2-5e99-84a1-95d22a7a69b3", legislator_id="M000303", report_year=2017, report_quarter_code=4)
         >>> output.data[0]['n_bills_sponsored']
+        1
+
+        >>> output = lobbyview.quarter_level_networks(client_uuid="44563806-56d2-5e99-84a1-95d22a7a69b3", legislator_id="M000303", report_year=2017, report_quarter_code=4)
+        >>> output.data
         1
 
         >>> output = lobbyview.quarter_level_networks(client_uuid="44563806-56d2-5e99-84a1-95d22a7a69b3", legislator_id="M000303", report_year=2017, report_quarter_code=4)
@@ -910,6 +947,10 @@ class LobbyView:
 
         >>> output = lobbyview.bill_client_networks(congress_number=114, bill_chamber="H", bill_number=1174, client_uuid="44563806-56d2-5e99-84a1-95d22a7a69b3")
         >>> output.data[0]['issue_ordi']
+        2
+
+        >>> output = lobbyview.bill_client_networks(congress_number=114, bill_chamber="H", bill_number=1174, client_uuid="44563806-56d2-5e99-84a1-95d22a7a69b3")
+        >>> output.data
         2
 
         >>> output = lobbyview.bill_client_networks(congress_number=114, bill_chamber="H", bill_number=1174, client_uuid="44563806-56d2-5e99-84a1-95d22a7a69b3")
