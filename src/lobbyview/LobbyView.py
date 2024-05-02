@@ -24,8 +24,8 @@ import json
 import ssl
 import inspect
 from urllib.parse import quote
-from .exceptions import UnauthorizedError, TooManyRequestsError, PartialContentError
-from .exceptions import UnexpectedStatusCodeError, InvalidPageNumberError, RequestError
+from exceptions import LobbyViewError, UnauthorizedError, TooManyRequestsError, PartialContentError
+from exceptions import UnexpectedStatusCodeError, InvalidPageNumberError, RequestError
 
 # for doctest at end
 import doctest
@@ -57,16 +57,6 @@ def url_quote(func):
         quoted_kwargs = {k: quote(v) if isinstance(v, str) else v for k, v in kwargs.items()}
         return func(*quoted_args, **quoted_kwargs)
     return wrapper
-
-class LobbyViewError(Exception):
-    """
-    Base class for LobbyView API errors.
-    """
-    def __str__(self):
-        """
-        :return str: Name of the class
-        """
-        return self.__class__.__name__
 
 class LobbyViewResponse:
     """
