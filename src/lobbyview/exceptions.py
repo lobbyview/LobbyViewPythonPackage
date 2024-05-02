@@ -1,7 +1,16 @@
 """
-Subclasses of LobbyViewError that represent different types of errors.
+(Sub)classes of LobbyViewError that represent different types of errors.
 """
-from .LobbyView import LobbyViewError
+
+class LobbyViewError(Exception):
+    """
+    Base class for LobbyView API errors.
+    """
+    def __str__(self):
+        """
+        :return str: Name of the class
+        """
+        return self.__class__.__name__
 
 class UnauthorizedError(LobbyViewError):
     """
