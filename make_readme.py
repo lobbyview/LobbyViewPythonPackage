@@ -48,12 +48,23 @@ def generate_markdown_documentation(file_path, output_file='README.md'):
 
     module = ast.parse(source_code)
     module_docstring = ast.get_docstring(module)
+    # documentation header
     documentation = get_markdown_to_documentation('readme_header.md') + "\n\n"
+    
+    # module docstring
     if module_docstring:
         documentation += f"{module_docstring}\n\n"
 
+    # instructions
+    documentation += get_markdown_to_documentation('readme_instructions.md') + "\n\n"
+
+    # class and method docstrings
+    documentation += "# Classes and Methods\n\n"
+
     for node in ast.iter_child_nodes(module):
         if isinstance(node, ast.ClassDef):
+            if node.name != "LobbyView":
+                continue
             class_docstring = ast.get_docstring(node)
             documentation += f"## Class: {node.name}\n\n"
             if class_docstring:

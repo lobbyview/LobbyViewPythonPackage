@@ -1,8 +1,7 @@
 # LobbyView Package Documentation
 
 This module provides a Python interface to the LobbyView REST API. It uses the same endpoints
-and
-parameter names as outlined in the LobbyView REST API Documentation
+and parameter names as outlined in the LobbyView REST API Documentation
 (https://rest-api.lobbyview.org/).
 
 The LobbyView API provides comprehensive data on lobbying activities in the United States.
@@ -21,241 +20,23 @@ This includes information on:
 This module also defines several custom exceptions to handle errors that may occur when
 interacting with the LobbyView API.
 
-## Class: LobbyViewError
+# Instructions
 
-Base class for LobbyView API errors.
+Import a lobbyview token using os and dotenv
 
+    import os
+    from dotenv import load_dotenv
+    load_dotenv(".env")
+    LOBBYVIEW_TOKEN = os.environ.get('LOBBYVIEW_TOKEN')
 
-### Method: __str__
+Initialize a LobbyView object instance
 
-:return str: Name of the class
+    from LobbyView import LobbyView
+    lobbyview = LobbyView(LOBBYVIEW_TOKEN)
 
+Note that ```quarter_level_networks``` and ```bill_client_networks``` API endpoints are not available to all users.
 
-## Class: UnauthorizedError
-
-Raised when the API token is invalid or unauthorized.
-
-
-## Class: TooManyRequestsError
-
-Raised when the API rate limit is exceeded.
-
-
-## Class: PartialContentError
-
-Raised when the API returns a partial response.
-
-
-## Class: UnexpectedStatusCodeError
-
-Raised when the API returns an unexpected status code.
-
-
-## Class: InvalidPageNumberError
-
-Raised when the current page number is greater than the total number of pages.
-
-
-## Class: RequestError
-
-Raised when an error occurs during the request to the LobbyView API.
-
-
-## Class: LobbyViewResponse
-
-Base class for LobbyView API responses.
-
-
-### Method: __init__
-
-Initializes the LobbyViewResponse object with the provided JSON data.
-
-
-#### Parameters:
-- dict data: JSON data from the LobbyView API response
-:raises InvalidPageNumberError: If the current page number is greater than the total number
-    of pages
-
-
-#### Example:
-```python
->>> data = {
-...     'data': [],
-...     'currentPage': 2,
-...     'totalPage': 1,
-...     'totalNumber': 0
-... }
->>> response = LobbyViewResponse(data)
-Traceback (most recent call last):
-...
-InvalidPageNumberError: InvalidPageNumberError
-```
-
-### Method: __str__
-
-:return str: JSON data formatted with indentation
-
-
-#### Example:
-```python
->>> data = {
-...     'data': [{'name': 'Alice'}, {'name': 'Bob'}],
-...     'currentPage': 1,
-...     'totalPage': 1,
-...     'totalNumber': 2
-... }
->>> response = LobbyViewResponse(data)
->>> print(response)
-[
-  {
-    "name": "Alice"
-  },
-  {
-    "name": "Bob"
-  }
-]
-```
-
-### Method: __iter__
-
-#### Returns:
-- Iterator for the data
-
-
-#### Example:
-```python
->>> data = {
-...     'data': [{'name': 'Alice'}, {'name': 'Bob'}],
-...     'currentPage': 1,
-...     'totalPage': 1,
-...     'totalNumber': 2
-... }
->>> response = LobbyViewResponse(data)
->>> for item in response:
-...     print(item)
-{'name': 'Alice'}
-{'name': 'Bob'}
-```
-
-### Method: page_info
-
-:return str: Current page number, total pages, and total rows
-
-
-#### Example:
-```python
->>> data = {
-...     'data': [],
-...     'currentPage': 1,
-...     'totalPage': 2,
-...     'totalNumber': 0
-... }
->>> response = LobbyViewResponse(data)
->>> print(response.page_info())
-Current Page: 1
-Total Pages: 2
-Total Rows: 0
-```
-
-## Class: LegislatorResponse
-
-Response class for legislator data.
-
-
-### Method: __str__
-
-:return str: representation of the legislator data
-    which includes the legislator's full name and ID
-
-
-## Class: BillResponse
-
-Response class for bill data.
-
-
-### Method: __str__
-
-:return str: representation of the bill data
-    which includes the bill number, Congress number, and sponsor ID
-
-
-## Class: ClientResponse
-
-Response class for client data.
-
-
-### Method: __str__
-
-:return str: representation of the client data
-    which includes the client name and ID
-
-
-## Class: ReportResponse
-
-Response class for report data.
-
-
-### Method: __str__
-
-:return str: representation of the report data
-    which includes the report UUID, year, and quarter
-
-
-## Class: IssueResponse
-
-Response class for issue data.
-
-
-### Method: __str__
-
-:return str: representation of the issue data
-    which includes the issue code, report UUID, and issue ordi
-
-
-## Class: NetworkResponse
-
-Response class for network data.
-
-
-### Method: __str__
-
-:returnstr : representation of the network data
-    which includes the client UUID, legislator ID, year, and number of bills sponsored
-
-
-## Class: TextResponse
-
-Response class for text data.
-
-
-### Method: __str__
-
-:return str: representation of the text data
-    which includes the issue code and text
-
-
-## Class: QuarterLevelNetworkResponse
-
-Response class for quarter-level network data.
-
-
-### Method: __str__
-
-:return str: representation of the quarter-level network data
-    which includes the client UUID, legislator ID, year, quarter, and 
-    number of bills sponsored
-
-
-## Class: BillClientNetworkResponse
-
-Response class for bill-client network data.
-
-
-### Method: __str__
-
-:return str: representation of the bill-client network data
-    which includes the bill number, client UUID, and issue ordi
-
+# Classes and Methods
 
 ## Class: LobbyView
 
@@ -291,29 +72,27 @@ Returns the JSON response data.
 
 #### Example:
 ```python
->>> lobbyview = LobbyView("invalid_token", test_connection=False)
->>> lobbyview.get_data('/api/legislators')
-Traceback (most recent call last):
-...
-UnauthorizedError: UnauthorizedError
-
->>> lobbyview = LobbyView(LOBBYVIEW_TOKEN)
 >>> lobbyview.get_data('/api/invalid_endpoint')
 Traceback (most recent call last):
 ...
 UnexpectedStatusCodeError: UnexpectedStatusCodeError
 
->>> lobbyview = LobbyView(LOBBYVIEW_TOKEN)
 >>> lobbyview.get_data('/api/legislators?invalid_param=value')
 Traceback (most recent call last):
 ...
 UnexpectedStatusCodeError: UnexpectedStatusCodeError
+
+>>> lobbyview_invalid = LobbyView("invalid_token", test_connection=False)
+>>> lobbyview_invalid.get_data('/api/legislators')
+Traceback (most recent call last):
+...
+UnauthorizedError: UnauthorizedError
 ```
 
 ### Method: paginate
 
 Paginates the data retrieval from the LobbyView API using lazy evaluation
-via a genrator that yields results one at a time.
+via a generator that yields results one at a time.
 
 
 #### Parameters:
@@ -326,21 +105,9 @@ via a genrator that yields results one at a time.
 :raises PartialContentError: If the API returns a 206 Partial Content status code
 :raises LobbyViewError: If a different error occurs during pagination
 
-example usage:
-
-for legislator in lobbyview.paginate(lobbyview.legislators, legislator_state='CA'):
-    print(f'Legislator: {legislator['legislator_full_name']}')
-
-for bill in lobbyview.paginate(lobbyview.bills, congress_number=117, bill_resolution_type='hr'):
-    print(f'Bill: {bill['bill_number']} - {bill['bill_title']}')
-
-for client in lobbyview.paginate(lobbyview.clients, client_name='Microsoft', min_naics=500000):
-    print(f'Client: {client['client_name']} - NAICS: {client['primary_naics']}')
-
 
 #### Example:
 ```python
->>> lobbyview = LobbyView(LOBBYVIEW_TOKEN)
 >>> for legislator in lobbyview.paginate(lobbyview.legislators, legislator_first_name="John", legislator_last_name="McCain"):
 ...     print(f"Legislator: {legislator['legislator_full_name']}")
 Retrieving page 1...
@@ -356,7 +123,6 @@ Bill: 4173 - H
 Retrieving page 1...
 Error occurred: InvalidPageNumberError
 
->>> lobbyview = LobbyView(LOBBYVIEW_TOKEN)
 >>> for network in lobbyview.paginate(lobbyview.bill_client_networks, congress_number=114, bill_chamber="H", bill_number=1174, client_uuid="44563806-56d2-5e99-84a1-95d22a7a69b3"):
 ...     print(f"Issue Ordi: {network['issue_ordi']}")
 Retrieving page 1...
@@ -365,113 +131,14 @@ Issue Ordi: 5
 Issue Ordi: 4
 ...
 
->>> lobbyview = LobbyView(LOBBYVIEW_TOKEN)
 >>> for text in lobbyview.paginate(lobbyview.texts, issue_code="HCR", issue_text="covid"):
 ...     print(f"Issue Code: {text['issue_code']}")
 Retrieving page 1...
 Issue Code: HCR
 Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
-Issue Code: HCR
+...
 Issue Code: HCR
 Retrieving page 2...
-Issue Code: HCR
-Issue Code: HCR
 Issue Code: HCR
 Issue Code: HCR
 ...
@@ -491,6 +158,7 @@ parameters.
 - str legislator_last_name: Last name of the legislator
 - str legislator_full_name: Full name of the legislator
 - str legislator_gender: Gender of the legislator
+- str exact_birthday: Exact birthday of the legislator (YYYY-MM-DD)
 - str min_birthday: Minimum birthday of the legislator (YYYY-MM-DD)
 - str max_birthday: Maximum birthday of the legislator (YYYY-MM-DD)
 - int page: Page number of the results, default is 1
@@ -501,7 +169,6 @@ parameters.
 
 #### Example:
 ```python
->>> lobbyview = LobbyView(LOBBYVIEW_TOKEN)
 >>> output = lobbyview.legislators(legislator_first_name="John", legislator_last_name="McCain")
 >>> output.data[0]['legislator_id']
 'M000303'
@@ -550,7 +217,6 @@ Gets bill information from the LobbyView API based on the provided parameters.
 
 #### Example:
 ```python
->>> lobbyview = LobbyView(LOBBYVIEW_TOKEN)
 >>> output = lobbyview.bills(congress_number=111, bill_chamber="H", bill_number=4173)
 >>> output.data[0]['bill_state']
 'ENACTED:SIGNED'
@@ -580,7 +246,6 @@ Gets client information from the LobbyView API based on the provided parameters.
 
 #### Example:
 ```python
->>> lobbyview = LobbyView(LOBBYVIEW_TOKEN)
 >>> output = lobbyview.clients(client_name="Microsoft Corporation")
 >>> output.data[0]['client_uuid']
 '44563806-56d2-5e99-84a1-95d22a7a69b3'
@@ -609,6 +274,8 @@ Gets report information from the LobbyView API based on the provided parameters.
 - str registrant_uuid: Unique identifier of the registrant
 - str registrant_name: Name of the registrant
 - int report_year: Year of the report
+- int min_report_year: Minimum year of the report
+- int max_report_year: Maximum year of the report
 - str report_quarter_code: Quarter period of the report
 - str min_amount: Minimum lobbying firm income or lobbying expense
     (in-house)
@@ -626,7 +293,6 @@ Gets report information from the LobbyView API based on the provided parameters.
 
 #### Example:
 ```python
->>> lobbyview = LobbyView(LOBBYVIEW_TOKEN)
 >>> output = lobbyview.reports(report_year=2020, report_quarter_code="2", is_client_self_filer=True, report_uuid="4b799814-3e94-5ee1-8dd4-b32aead9aca6")
 >>> output.data[0]['amount']
 '$11,680,000.00'
@@ -655,7 +321,6 @@ Gets issue information from the LobbyView API based on the provided parameters.
 
 #### Example:
 ```python
->>> lobbyview = LobbyView(LOBBYVIEW_TOKEN)
 >>> output = lobbyview.issues(issue_code="TRD")
 >>> output.data[0]['report_uuid']
 '00016ab3-2246-5af8-a68d-05af40dfde68'
@@ -694,7 +359,6 @@ Gets network information from the LobbyView API based on the provided parameters
 
 #### Example:
 ```python
->>> lobbyview = LobbyView(LOBBYVIEW_TOKEN)
 >>> output = lobbyview.networks(client_uuid="44563806-56d2-5e99-84a1-95d22a7a69b3", legislator_id="M000303")
 >>> output.data[0]['report_year']
 2006
@@ -729,7 +393,6 @@ Gets issue text data from the LobbyView API based on the provided parameters.
 
 #### Example:
 ```python
->>> lobbyview = LobbyView(LOBBYVIEW_TOKEN)
 >>> output = lobbyview.texts(issue_code="HCR", issue_text="covid")
 >>> output.data[0]['issue_ordi']
 1
@@ -769,7 +432,6 @@ parameters.
 
 #### Example:
 ```python
->>> lobbyview = LobbyView(LOBBYVIEW_TOKEN)
 >>> output = lobbyview.quarter_level_networks(client_uuid="44563806-56d2-5e99-84a1-95d22a7a69b3", legislator_id="M000303", report_year=2017, report_quarter_code=4)
 >>> output.data[0]['n_bills_sponsored']
 1
@@ -809,7 +471,6 @@ parameters.
 
 #### Example:
 ```python
->>> lobbyview = LobbyView(LOBBYVIEW_TOKEN)
 >>> output = lobbyview.bill_client_networks(congress_number=114, bill_chamber="H", bill_number=1174, client_uuid="44563806-56d2-5e99-84a1-95d22a7a69b3")
 >>> output.data[0]['issue_ordi']
 2

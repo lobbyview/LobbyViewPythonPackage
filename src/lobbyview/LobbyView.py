@@ -1,7 +1,6 @@
 '''
 This module provides a Python interface to the LobbyView REST API. It uses the same endpoints
-and
-parameter names as outlined in the LobbyView REST API Documentation
+and parameter names as outlined in the LobbyView REST API Documentation
 (https://rest-api.lobbyview.org/).
 
 The LobbyView API provides comprehensive data on lobbying activities in the United States.
@@ -27,6 +26,21 @@ import inspect
 from urllib.parse import quote
 from .exceptions import UnauthorizedError, TooManyRequestsError, PartialContentError
 from .exceptions import UnexpectedStatusCodeError, InvalidPageNumberError, RequestError
+
+# for doctest at end
+import doctest
+import os
+from dotenv import load_dotenv
+
+def validate_token(func):
+    """
+    Decorator function to validate the LobbyView token.
+    """
+    def wrapper(self, lobbyview_token, *args, **kwargs):
+        if not isinstance(lobbyview_token, str) or len(lobbyview_token) == 0:
+            raise UnauthorizedError()
+        return func(self, lobbyview_token, *args, **kwargs)
+    return wrapper
 
 def url_quote(func):
     """
@@ -280,7 +294,7 @@ class LobbyView:
     """
     Main class for interacting with the LobbyView API.
     """
-    # TODO: add a decorator to this function to check if the token is valid
+    @validate_token
     def __init__(self, lobbyview_token, test_connection=True):
         """
         Initialize the LobbyView class with the provided API token.
@@ -375,17 +389,6 @@ class LobbyView:
         :return: A generator object that yields paginated results one item at a time.
         :raises PartialContentError: If the API returns a 206 Partial Content status code
         :raises LobbyViewError: If a different error occurs during pagination
-
-        example usage:
-
-        for legislator in lobbyview.paginate(lobbyview.legislators, legislator_state='CA'):
-            print(f'Legislator: {legislator['legislator_full_name']}')
-
-        for bill in lobbyview.paginate(lobbyview.bills, congress_number=117, bill_resolution_type='hr'):
-            print(f'Bill: {bill['bill_number']} - {bill['bill_title']}')
-
-        for client in lobbyview.paginate(lobbyview.clients, client_name='Microsoft', min_naics=500000):
-            print(f'Client: {client['client_name']} - NAICS: {client['primary_naics']}')
 
         >>> for legislator in lobbyview.paginate(lobbyview.legislators, legislator_first_name="John", legislator_last_name="McCain"):
         ...     print(f"Legislator: {legislator['legislator_full_name']}")
@@ -957,3 +960,18 @@ class LobbyView:
         data = self.get_data(f'/api/bill_client_networks?{query_string}')
 
         return BillClientNetworkResponse(data)
+
+if __name__ == "__main__":
+    # loads token from .env file/environment variable
+    load_dotenv("tests/.env")
+    load_dotenv("../../tests/.env")
+    LOBBYVIEW_TOKEN = os.environ.get('LOBBYVIEW_TOKEN', "NO TOKEN FOUND")
+
+    # run doctests, pass in the LobbyView object with the token
+    results = doctest.testmod(extraglobs={'lobbyview': LobbyView(LOBBYVIEW_TOKEN)},
+                              optionflags=doctest.ELLIPSIS)
+    results_string = f"{results.attempted-results.failed}/{results.attempted} TESTS PASSED"
+    if results.failed == 0:
+        print(results_string)
+    else:
+        raise Exception(results_string)
