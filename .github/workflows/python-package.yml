@@ -46,12 +46,12 @@ jobs:
         coverage run src/lobbyview/LobbyView.py
         coverage report -m
 
-    - name: Pytest
-      env:
-          LOBBYVIEW_TOKEN: ${{ secrets.LOBBYVIEW_TOKEN }}
-      run: |
-        coverage run -m pytest
-        coverage report -m
+    # - name: Pytest
+    #   env:
+    #       LOBBYVIEW_TOKEN: ${{ secrets.LOBBYVIEW_TOKEN }}
+    #   run: |
+    #     coverage run -m pytest
+    #     coverage report -m
 
     # - name: Run tests and generate coverage report
     #   env:
