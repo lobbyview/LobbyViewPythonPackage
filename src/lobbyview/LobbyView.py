@@ -79,7 +79,7 @@ class LobbyViewResponse:
         >>> response = LobbyViewResponse(data)
         Traceback (most recent call last):
         ...
-        InvalidPageNumberError: InvalidPageNumberError
+        exceptions.InvalidPageNumberError: Invalid page number: 2, total pages: 1
         """
         self.data = data['data']                     # the actual data
         self.current_page = int(data['currentPage']) # current page number
@@ -144,9 +144,7 @@ class LobbyViewResponse:
         ... }
         >>> response = LobbyViewResponse(data)
         >>> print(response.page_info())
-        Current Page: 1
-        Total Pages: 2
-        Total Rows: 0
+        {'current_page': 1, 'total_pages': 2, 'total_rows': 0}
         """
         # TODO: make this a dictionary instead of a string
         return {"current_page": self.current_page, "total_pages": self.total_pages, "total_rows": self.total_rows}
@@ -332,18 +330,18 @@ class LobbyView:
         >>> lobbyview.get_data('/api/invalid_endpoint')
         Traceback (most recent call last):
         ...
-        UnexpectedStatusCodeError: UnexpectedStatusCodeError
+        exceptions.UnexpectedStatusCodeError: Unexpected status code: 404
 
         >>> lobbyview.get_data('/api/legislators?invalid_param=value')
         Traceback (most recent call last):
         ...
-        UnexpectedStatusCodeError: UnexpectedStatusCodeError
+        exceptions.RequestError: RequestError
 
         >>> lobbyview_invalid = LobbyView("invalid_token", test_connection=False)
         >>> lobbyview_invalid.get_data('/api/legislators')
         Traceback (most recent call last):
         ...
-        UnauthorizedError: UnauthorizedError
+        exceptions.UnauthorizedError: Unauthorized, status code: 401. Please check your API token and permissions.
         """
         try:
             self.connection.request('GET', query_string, None, self.headers)
