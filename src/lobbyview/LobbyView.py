@@ -468,7 +468,7 @@ class LobbyView:
         >>> output.data[0]['legislator_id']
         'M000303'
         
-        >>> output = lobbyview.legislators(legislator_id="M000303")
+        >>> output = lobbyview.legislators(legislator_id="M000303", exact_birthday="1936-08-29", min_birthday="1950-08-28")
         >>> output.data[0]['legislator_full_name']
         'John McCain'
         
@@ -677,7 +677,7 @@ class LobbyView:
         '$11,680,000.00'
 
 
-        >>> output = lobbyview.reports(client_uuid="cdf5a171-6aab-50ea-912c-68c054decdce", registrant_uuid="323adb44-3062-5a5f-98ea-6d4ca51e6f43", registrant_name="NATIONAL ASSOCIATION OF REALTORS", min_amount="$11,679,999.99", max_amount="$11,680,000.01", is_no_activity=False, is_amendment=False)
+        >>> output = lobbyview.reports(client_uuid="cdf5a171-6aab-50ea-912c-68c054decdce", registrant_uuid="323adb44-3062-5a5f-98ea-6d4ca51e6f43", registrant_name="NATIONAL ASSOCIATION OF REALTORS", min_amount="$11,679,999.99", max_amount="$11,680,000.01", is_no_activity=False, is_amendment=False, min_report_year=2017, max_report_year=2023)
         >>> output.data[0]['report_year']
         2020
         
@@ -734,7 +734,7 @@ class LobbyView:
         :param int page: Page number of the results, default is 1
         :return: IssueResponse object containing the issue data
 
-        >>> output = lobbyview.issues(issue_code="TRD", report_uuid="00016ab3-2246-5af8-a68d-05af40dfde68")
+        >>> output = lobbyview.issues(issue_code="TRD", report_uuid="00016ab3-2246-5af8-a68d-05af40dfde68", issue_ordi=2)
         >>> output.data
         [{'report_uuid': '00016ab3-2246-5af8-a68d-05af40dfde68', 'issue_ordi': 2, 'issue_code': 'TRD', 'gov_entity': ['HOUSE OF REPRESENTATIVES', 'SENATE']}]
 
@@ -761,7 +761,7 @@ class LobbyView:
         if issue_code:
             query_params.append(f'issue_code=eq.{issue_code}')
         if gov_entity:
-            query_params.append(f'gov_entity=ilike.*{gov_entity}*')
+            query_params.append(f'gov_entity=ilike.*{gov_entity}*') # !? - too slow to search
         if page != 1:
             query_params.append(f'page={page}')
 
@@ -975,7 +975,7 @@ class LobbyView:
         >>> output.data[0]['issue_ordi']
         2
 
-        >>> output = lobbyview.bill_client_networks(report_uuid="006bd48b-59cf-5cbc-99b8-fc213e509a86", bill_resolution_type=None, issue_ordi=2)
+        >>> output = lobbyview.bill_client_networks(report_uuid="006bd48b-59cf-5cbc-99b8-fc213e509a86", issue_ordi=2)
         >>> output.data[0]['bill_number']
         1174
         
@@ -987,7 +987,7 @@ class LobbyView:
           Bill Number: 1174, Client UUID: 44563806-56d2-5e99-84a1-95d22a7a69b3, Issue Ordi: 4
         ...
 
-        >>> output = lobbyview.bill_client_networks(bill_resolution_type=None, report_uuid='006bd48b-59cf-5cbc-99b8-fc213e509a86', issue_ordi=2)
+        >>> output = lobbyview.bill_client_networks(report_uuid='006bd48b-59cf-5cbc-99b8-fc213e509a86', issue_ordi=2)
         >>> print(output)
         Bill-Client Networks:
           Bill Number: 1174, Client UUID: 44563806-56d2-5e99-84a1-95d22a7a69b3, Issue Ordi: 2
@@ -999,7 +999,7 @@ class LobbyView:
         if bill_chamber:
             query_params.append(f'bill_chamber=eq.{bill_chamber}')
         if bill_resolution_type:
-            query_params.append(f'bill_resolution_type=eq.{bill_resolution_type}')
+            query_params.append(f'bill_resolution_type=eq.{bill_resolution_type}') # !? find a bill to use with a non None value for this
         if bill_number:
             query_params.append(f'bill_number=eq.{bill_number}')
         if report_uuid:
@@ -1027,7 +1027,7 @@ if __name__ == "__main__":
 
     # runner = doctest.DocTestRunner(optionflags=doctest.ELLIPSIS)
     # finder = doctest.DocTestFinder()
-    # for test in finder.find(LobbyView.issues, globs={'lobbyview': LobbyView(LOBBYVIEW_TOKEN)}):
+    # for test in finder.find(LobbyView.texts, globs={'lobbyview': LobbyView(LOBBYVIEW_TOKEN)}):
     #     runner.run(test)
     # result = runner.summarize()
     # results_string = f"{result.attempted - result.failed}/{result.attempted} TESTS PASSED"
