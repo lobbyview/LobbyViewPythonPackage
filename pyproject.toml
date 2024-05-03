@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "lobbyview"
-version = "0.0.2"
+version = "0.0.3"
 description = "LobbyView Rest API Wrapper"
 readme = "README.md"
 authors = [{ name = "lobbyview", email = "lobbydata@gmail.com" }]
