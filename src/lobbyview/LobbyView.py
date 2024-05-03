@@ -365,7 +365,7 @@ class LobbyView:
             raise
         except Exception as exc:
             # error occurred during the request
-            raise RequestError() from exc
+            raise RequestError()
 
     def paginate(self, func, **kwargs):
         """
@@ -392,7 +392,7 @@ class LobbyView:
         >>> for client in lobbyview.paginate(lobbyview.clients, client_name='InvalidClientName'):
         ...     print(f"Client: {client['client_name']} - NAICS: {client['primary_naics']}")
         Retrieving page 1...
-        Error occurred: InvalidPageNumberError
+        Error occurred: Invalid page number: 1, total pages: 0
 
         >>> for network in lobbyview.paginate(lobbyview.bill_client_networks, congress_number=114, bill_chamber="H", bill_number=1174, client_uuid="44563806-56d2-5e99-84a1-95d22a7a69b3"):
         ...     print(f"Issue Ordi: {network['issue_ordi']}")
@@ -460,22 +460,18 @@ class LobbyView:
         :param int page: Page number of the results, default is 1
         :return: LegislatorResponse object containing the legislator data
 
+        >>> output = lobbyview.legislators(legislator_id="M000303")
+        >>> output.data
+        [{'legislator_id': 'M000303', 'legislator_govtrack_id': '300071', 'legislator_other_ids': {'fec': ['S6AZ00019', 'P80002801'], 'lis': 'S197', 'cspan': 7476, 'icpsr': 15039, 'thomas': '00754', 'bioguide': 'M000303', 'govtrack': 300071, 'maplight': 592, 'wikidata': 'Q10390', 'votesmart': 53270, 'wikipedia': 'John McCain', 'ballotpedia': 'John McCain', 'opensecrets': 'N00006424', 'house_history': 17696, 'google_entity_id': 'kg:/m/0bymv'}, 'legislator_first_name': 'John', 'legislator_last_name': 'McCain', 'legislator_full_name': 'John McCain', 'legislator_other_names': {'last': 'McCain', 'first': 'John', 'middle': 'S.', 'official_full': 'John McCain'}, 'legislator_birthday': '1936-08-29', 'legislator_gender': 'M'}]
+
         >>> output = lobbyview.legislators(legislator_first_name="John", legislator_last_name="McCain")
         >>> output.data[0]['legislator_id']
         'M000303'
-
-        >>> output = lobbyview.legislators(legislator_first_name="John", legislator_last_name="McCain")
-        >>> output.data
-        'M000303'
-
+        
         >>> output = lobbyview.legislators(legislator_id="M000303")
         >>> output.data[0]['legislator_full_name']
         'John McCain'
-
-        >>> output = lobbyview.legislators(legislator_id="M000303")
-        >>> output.data
-        'John McCain'
-
+        
         >>> output = lobbyview.legislators(legislator_first_name="John", legislator_last_name="McCain")
         >>> print(output)
         Legislators:
@@ -541,11 +537,11 @@ class LobbyView:
         :return: BillResponse object containing the bill data
 
         >>> output = lobbyview.bills(congress_number=111, bill_chamber="H", bill_number=4173)
-        >>> output.data[0]['bill_state']
-        'ENACTED:SIGNED'
+        >>> output.data
+        [{'congress_number': 111, 'bill_chamber': 'H', 'bill_resolution_type': None, 'bill_number': 4173, 'bill_introduced_datetime': '2009-12-02', 'bill_date_updated': '2016-06-29', 'bill_state': 'ENACTED:SIGNED', 'legislator_id': 'F000339', 'bill_url': 'https://congress.gov/bill/111th-congress/house-bill/4173'}]
 
         >>> output = lobbyview.bills(congress_number=111, bill_chamber="H", bill_number=4173)
-        >>> output.data
+        >>> output.data[0]['bill_state']
         'ENACTED:SIGNED'
 
         >>> output = lobbyview.bills(congress_number=111, bill_chamber="H", bill_number=4173)
@@ -596,12 +592,12 @@ class LobbyView:
         :param int page: Page number of the results, default is 1
         :return: ClientResponse object containing the client data
 
-        >>> output = lobbyview.clients(client_name="Microsoft Corporation")
-        >>> output.data[0]['client_uuid']
-        '44563806-56d2-5e99-84a1-95d22a7a69b3'
+        >>> output = lobbyview.clients(client_name="Microsoft Corporation", min_naics=500000)
+        >>> output.data
+        [{'client_uuid': '44563806-56d2-5e99-84a1-95d22a7a69b3', 'client_name': 'Microsoft Corporation', 'primary_naics': '511210', 'naics_description': ['Applications development and publishing, except on a custom basis', 'Applications software, computer, packaged', 'Computer software publishers, packaged', 'Computer software publishing and reproduction', 'Games, computer software, publishing', 'Operating systems software, computer, packaged', 'Packaged computer software publishers', 'Programming language and compiler software publishers, packaged', 'Publishers, packaged computer software', 'Software computer, packaged, publishers', 'Software publishers', 'Software publishers, packaged', 'Utility software, computer, packaged']}]
 
         >>> output = lobbyview.clients(client_name="Microsoft Corporation")
-        >>> output.data
+        >>> output.data[0]['client_uuid']
         '44563806-56d2-5e99-84a1-95d22a7a69b3'
 
         >>> output = lobbyview.clients(client_name="Microsoft Corporation")
@@ -665,13 +661,13 @@ class LobbyView:
         :return: ReportResponse object containing the report data
 
         >>> output = lobbyview.reports(report_year=2020, report_quarter_code="2", is_client_self_filer=True, report_uuid="4b799814-3e94-5ee1-8dd4-b32aead9aca6")
-        >>> output.data[0]['amount']
-        '$11,680,000.00'
+        >>> output.data
+        [{'report_uuid': '4b799814-3e94-5ee1-8dd4-b32aead9aca6', 'client_uuid': 'cdf5a171-6aab-50ea-912c-68c054decdce', 'registrant_uuid': '323adb44-3062-5a5f-98ea-6d4ca51e6f43', 'registrant_name': 'NATIONAL ASSOCIATION OF REALTORS', 'report_year': 2020, 'report_quarter_code': '2', 'amount': '$11,680,000.00', 'is_no_activity': False, 'is_client_self_filer': True, 'is_amendment': False}]
 
         >>> output = lobbyview.reports(report_year=2020, report_quarter_code="2", is_client_self_filer=True, report_uuid="4b799814-3e94-5ee1-8dd4-b32aead9aca6")
-        >>> output.data
+        >>> output.data[0]['amount']
         '$11,680,000.00'
-
+        
         >>> output = lobbyview.reports(report_year=2020, report_quarter_code="2", is_client_self_filer=True, report_uuid="4b799814-3e94-5ee1-8dd4-b32aead9aca6")
         >>> print(output)
         Reports:
@@ -725,12 +721,12 @@ class LobbyView:
         :param int page: Page number of the results, default is 1
         :return: IssueResponse object containing the issue data
 
-        >>> output = lobbyview.issues(issue_code="TRD")
-        >>> output.data[0]['report_uuid']
-        '00016ab3-2246-5af8-a68d-05af40dfde68'
+        >>> output = lobbyview.issues(issue_code="TRD", report_uuid="00016ab3-2246-5af8-a68d-05af40dfde68")
+        >>> output.data
+        [{'report_uuid': '00016ab3-2246-5af8-a68d-05af40dfde68', 'issue_ordi': 2, 'issue_code': 'TRD', 'gov_entity': ['HOUSE OF REPRESENTATIVES', 'SENATE']}]
 
         >>> output = lobbyview.issues(issue_code="TRD")
-        >>> output.data
+        >>> output.data[0]['report_uuid']
         '00016ab3-2246-5af8-a68d-05af40dfde68'
 
         >>> output = lobbyview.issues(issue_code="TRD")
@@ -780,11 +776,11 @@ class LobbyView:
         :return: NetworkResponse object containing the network data
 
         >>> output = lobbyview.networks(client_uuid="44563806-56d2-5e99-84a1-95d22a7a69b3", legislator_id="M000303")
-        >>> output.data[0]['report_year']
-        2006
+        >>> output.data
+        [{'client_uuid': '44563806-56d2-5e99-84a1-95d22a7a69b3', 'legislator_id': 'M000303', 'report_year': 2006, 'n_bills_sponsored': 1}, {'client_uuid': '44563806-56d2-5e99-84a1-95d22a7a69b3', 'legislator_id': 'M000303', 'report_year': 2017, 'n_bills_sponsored': 1}]
 
         >>> output = lobbyview.networks(client_uuid="44563806-56d2-5e99-84a1-95d22a7a69b3", legislator_id="M000303")
-        >>> output.data
+        >>> output.data[0]['report_year']
         2006
 
         >>> output = lobbyview.networks(client_uuid="44563806-56d2-5e99-84a1-95d22a7a69b3", legislator_id="M000303")
@@ -832,21 +828,21 @@ class LobbyView:
         :param int page: Page number of the results, default is 1
         :return: TextResponse object containing the text data
 
+        >>> output = lobbyview.texts(issue_code="HCR", issue_text="covid", report_uuid="000bef17-9f0a-5d7c-8660-edca16e1dfce")
+        >>> output.data
+        [{'report_uuid': '000bef17-9f0a-5d7c-8660-edca16e1dfce', 'issue_ordi': 1, 'issue_code': 'HCR', 'issue_text': 'HR 748 CARES Act - Issues related to COVID-19 relief'}]
+
         >>> output = lobbyview.texts(issue_code="HCR", issue_text="covid")
         >>> output.data[0]['issue_ordi']
         1
-
-        >>> output = lobbyview.texts(issue_code="HCR", issue_text="covid")
-        >>> output.data
-        1
-
-        >>> output = lobbyview.texts(issue_code="HCR", issue_text="covid")
+        
+         >>> output = lobbyview.texts(issue_code="HCR", issue_text="covid")
         >>> print(output)
         Texts:
           Issue Code: HCR, Issue Text: HR 748 CARES Act - Issues related to COVID-19 relief
         ...
 
-        >>> output = lobbyview.texts(report_uuid='000bef17-9f0a-5d7c-8660-edca16e1dfce', issdue_ordi=1)
+        >>> output = lobbyview.texts(report_uuid='000bef17-9f0a-5d7c-8660-edca16e1dfce', issue_ordi=1)
         >>> print(output)
         Texts:
           Issue Code: HCR, Issue Text: HR 748 CARES Act - Issues related to COVID-19 relief
@@ -888,13 +884,13 @@ class LobbyView:
         :return: QuarterLevelNetworkResponse object containing the quarter-level network data
 
         >>> output = lobbyview.quarter_level_networks(client_uuid="44563806-56d2-5e99-84a1-95d22a7a69b3", legislator_id="M000303", report_year=2017, report_quarter_code=4)
-        >>> output.data[0]['n_bills_sponsored']
-        1
+        >>> output.data
+        [{'client_uuid': '44563806-56d2-5e99-84a1-95d22a7a69b3', 'legislator_id': 'M000303', 'report_year': 2017, 'report_quarter_code': '4', 'n_bills_sponsored': 1}]
 
         >>> output = lobbyview.quarter_level_networks(client_uuid="44563806-56d2-5e99-84a1-95d22a7a69b3", legislator_id="M000303", report_year=2017, report_quarter_code=4)
-        >>> output.data
+        >>> output.data[0]['n_bills_sponsored']
         1
-
+        
         >>> output = lobbyview.quarter_level_networks(client_uuid="44563806-56d2-5e99-84a1-95d22a7a69b3", legislator_id="M000303", report_year=2017, report_quarter_code=4)
         >>> print(output)
         Quarter-Level Networks:
@@ -946,14 +942,14 @@ class LobbyView:
         :param int page: Page number of the results, default is 1
         :return: BillClientNetworkResponse object containing the bill-client network data
 
-        >>> output = lobbyview.bill_client_networks(congress_number=114, bill_chamber="H", bill_number=1174, client_uuid="44563806-56d2-5e99-84a1-95d22a7a69b3")
+        >>> output = lobbyview.bill_client_networks(congress_number=114, bill_chamber="H", bill_number=1174, client_uuid="44563806-56d2-5e99-84a1-95d22a7a69b3", report_uuid="006bd48b-59cf-5cbc-99b8-fc213e509a86")
+        >>> output.data
+        [{'congress_number': 114, 'bill_chamber': 'H', 'bill_resolution_type': None, 'bill_number': 1174, 'report_uuid': '006bd48b-59cf-5cbc-99b8-fc213e509a86', 'issue_ordi': 2, 'client_uuid': '44563806-56d2-5e99-84a1-95d22a7a69b3'}]
+
+        >>> output = lobbyview.bill_client_networks(congress_number=114, bill_chamber="H", bill_number=1174, client_uuid="44563806-56d2-5e99-84a1-95d22a7a69b3", report_uuid="006bd48b-59cf-5cbc-99b8-fc213e509a86")
         >>> output.data[0]['issue_ordi']
         2
-
-        >>> output = lobbyview.bill_client_networks(congress_number=114, bill_chamber="H", bill_number=1174, client_uuid="44563806-56d2-5e99-84a1-95d22a7a69b3")
-        >>> output.data
-        2
-
+        
         >>> output = lobbyview.bill_client_networks(congress_number=114, bill_chamber="H", bill_number=1174, client_uuid="44563806-56d2-5e99-84a1-95d22a7a69b3")
         >>> print(output)
         Bill-Client Networks:
@@ -966,6 +962,7 @@ class LobbyView:
         >>> print(output)
         Bill-Client Networks:
           Bill Number: 1174, Client UUID: 44563806-56d2-5e99-84a1-95d22a7a69b3, Issue Ordi: 2
+          Bill Number: 512, Client UUID: 44563806-56d2-5e99-84a1-95d22a7a69b3, Issue Ordi: 2
         """
         query_params = []
         if congress_number:
@@ -996,6 +993,19 @@ if __name__ == "__main__":
     load_dotenv("tests/.env")
     load_dotenv("../../tests/.env")
     LOBBYVIEW_TOKEN = os.environ.get('LOBBYVIEW_TOKEN', "NO TOKEN FOUND")
+
+    # code commented out below will allow for running individual method doctests
+
+    # runner = doctest.DocTestRunner(optionflags=doctest.ELLIPSIS)
+    # finder = doctest.DocTestFinder()
+    # for test in finder.find(LobbyView.get_data, globs={'lobbyview': LobbyView(LOBBYVIEW_TOKEN)}):
+    #     runner.run(test)
+    # result = runner.summarize()
+    # results_string = f"{result.attempted - result.failed}/{result.attempted} TESTS PASSED"
+    # if result.failed == 0:
+    #     print(results_string)
+    # else:
+    #     raise Exception(results_string)
 
     # run doctests, pass in the LobbyView object with the token
     results = doctest.testmod(extraglobs={'lobbyview': LobbyView(LOBBYVIEW_TOKEN)},
