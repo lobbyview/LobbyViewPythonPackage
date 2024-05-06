@@ -23,6 +23,7 @@ import http.client
 import json
 import ssl
 import inspect
+import functools
 from urllib.parse import quote
 from exceptions import LobbyViewError, UnauthorizedError, TooManyRequestsError, PartialContentError
 from exceptions import UnexpectedStatusCodeError, InvalidPageNumberError, RequestError
@@ -36,27 +37,29 @@ def validate_token(func):
     """
     Decorator function to validate the LobbyView token.
     """
+    @functools.wraps(func)
     def wrapper(self, lobbyview_token, *args, **kwargs):
         if not isinstance(lobbyview_token, str) or len(lobbyview_token) == 0:
             raise UnauthorizedError()
         return func(self, lobbyview_token, *args, **kwargs)
     return wrapper
 
-# def url_quote(func):
-#     """
-#     Decorator function to quote string arguments in the function call.
-#     """
-#     def wrapper(*args, **kwargs):
-#         # Check if the function is a method
-#         if inspect.ismethod(func) or inspect.isbuiltin(func):
-#             # Skip the first argument (self)
-#             quoted_args = [quote(arg) if isinstance(arg, str) else arg for arg in args[1:]]
-#             quoted_args.insert(0, args[0])  # Add the self argument back to the start of the list
-#         else:
-#             quoted_args = [quote(arg) if isinstance(arg, str) else arg for arg in args]
-#         quoted_kwargs = {k: quote(v) if isinstance(v, str) else v for k, v in kwargs.items()}
-#         return func(*quoted_args, **quoted_kwargs)
-#     return wrapper
+def url_quote(func):
+    """
+    Decorator function to quote string arguments in the function call.
+    """
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        # Check if the function is a method
+        if inspect.ismethod(func) or inspect.isbuiltin(func):
+            # Skip the first argument (self)
+            quoted_args = [quote(arg) if isinstance(arg, str) else arg for arg in args[1:]]
+            quoted_args.insert(0, args[0])  # Add the self argument back to the start of the list
+        else:
+            quoted_args = [quote(arg) if isinstance(arg, str) else arg for arg in args]
+        quoted_kwargs = {k: quote(v) if isinstance(v, str) else v for k, v in kwargs.items()}
+        return func(*quoted_args, **quoted_kwargs)
+    return wrapper
 
 class LobbyViewResponse:
     """
@@ -344,7 +347,7 @@ class LobbyView:
         exceptions.UnauthorizedError: Unauthorized, status code: 401. Please check your API token and permissions.
         """
         try:
-            query_string = query_string.replace(' ', '%20')
+            # query_string = query_string.replace(' ', '%20') # temp fix, should use urllib.parse.quote
             self.connection.request('GET', query_string, None, self.headers)
             response = self.connection.getresponse()
             status_code = response.status
@@ -438,7 +441,7 @@ class LobbyView:
                 print(f"Error occurred: {str(exc)}")
                 break
 
-    # @url_quote
+    @url_quote
     def legislators(self, legislator_id=None, legislator_govtrack_id=None,
                         legislator_first_name=None, legislator_last_name=None,
                         legislator_full_name=None, legislator_gender=None,
@@ -509,7 +512,7 @@ class LobbyView:
 
         return LegislatorResponse(data)
 
-    # @url_quote
+    @url_quote
     def bills(self, congress_number=None, bill_chamber=None,
               bill_resolution_type=None, bill_number=None, bill_state=None,
               legislator_id=None, min_introduced_date=None, max_introduced_date=None,
@@ -582,7 +585,7 @@ class LobbyView:
 
         return BillResponse(data)
 
-    # @url_quote
+    @url_quote
     def clients(self, client_uuid=None, client_name=None,
                     min_naics=None, max_naics=None, naics_description=None, page=1):
         """
@@ -640,7 +643,7 @@ class LobbyView:
 
         return ClientResponse(data)
 
-    # @url_quote
+    @url_quote
     def reports(self, report_uuid=None, client_uuid=None, registrant_uuid=None,
             registrant_name=None, report_year=None, min_report_year=None,
             max_report_year=None, report_quarter_code=None,
@@ -721,7 +724,7 @@ class LobbyView:
 
         return ReportResponse(data)
 
-    # @url_quote
+    @url_quote
     def issues(self, report_uuid=None, issue_ordi=None, issue_code=None, gov_entity=None,
                page=1):
         """
@@ -770,7 +773,7 @@ class LobbyView:
 
         return IssueResponse(data)
 
-    # @url_quote
+    @url_quote
     def networks(self, client_uuid=None, legislator_id=None, min_report_year=None,
                  max_report_year=None, min_bills_sponsored=None, max_bills_sponsored=None,
                  page=1):
@@ -832,7 +835,7 @@ class LobbyView:
 
         return NetworkResponse(data)
 
-    # @url_quote
+    @url_quote
     def texts(self, report_uuid=None, issue_ordi=None, issue_code=None, issue_text=None,
               page=1):
         """
@@ -885,7 +888,7 @@ class LobbyView:
 
         return TextResponse(data)
 
-    # @url_quote
+    @url_quote
     def quarter_level_networks(self, client_uuid=None, legislator_id=None, report_year=None,
                                report_quarter_code=None, min_bills_sponsored=None,
                                max_bills_sponsored=None, page=1):
@@ -948,7 +951,7 @@ class LobbyView:
 
         return QuarterLevelNetworkResponse(data)
 
-    # @url_quote
+    @url_quote
     def bill_client_networks(self, congress_number=None, bill_chamber=None,
                         bill_resolution_type=None, bill_number=None,
                         report_uuid=None, issue_ordi=None, client_uuid=None, page=1):

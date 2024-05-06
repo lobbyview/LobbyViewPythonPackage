@@ -10,7 +10,7 @@ sys_path.append('../src/lobbyview/')
 from LobbyView import LobbyView
 
 # Load environment variables from .env files
-env_paths = ["tests/.env", "../../tests/.env"]
+env_paths = [".env", "tests/.env", "../../tests/.env"]
 for env_path in env_paths:
     load_dotenv(env_path)
 
@@ -40,8 +40,8 @@ def run_doctests(module_name, module_path):
         print(f"Failed to import {module_name} from {module_path}: {e}")
 
 if __name__ == "__main__":
-    # Define paths to the module
-    module_paths = ["../src/lobbyview/LobbyView.py", "./src/lobbyview/LobbyView.py"]
-    
-    for path in module_paths:
-        run_doctests("src.lobbyview.LobbyView", path)
+    current_folder = os.path.basename(os.getcwd())
+    if current_folder == "tests":
+        run_doctests("src.lobbyview.LobbyView", "../src/lobbyview/LobbyView.py")
+    else:
+        run_doctests("lobbyview.LobbyView", "./src/lobbyview/LobbyView.py")
