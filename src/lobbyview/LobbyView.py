@@ -155,7 +155,6 @@ class LobbyViewResponse:
         >>> print(response.page_info())
         {'current_page': 1, 'total_pages': 2, 'total_rows': 0}
         """
-        # TODO: make this a dictionary instead of a string
         return {"current_page": self.current_page, "total_pages": self.total_pages, "total_rows": self.total_rows}
 
 class LegislatorResponse(LobbyViewResponse):
@@ -1095,9 +1094,9 @@ class LobbyView:
         if bill_number:
             query_params.append(f'bill_number=eq.{bill_number}')
         if report_uuid:
-            query_params.append(f'report_uuid=eq.{report_uuid}') 
+            query_params.append(f'report_uuid=eq.{report_uuid}')
         if issue_ordi:
-            query_params.append(f'issue_ordi=eq.{issue_ordi}') 
+            query_params.append(f'issue_ordi=eq.{issue_ordi}')
         if client_uuid:
             query_params.append(f'client_uuid=eq.{client_uuid}')
         if page != 1:
