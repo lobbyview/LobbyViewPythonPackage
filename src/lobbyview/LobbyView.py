@@ -462,12 +462,12 @@ class LobbyView:
         Gets legislator information from the LobbyView API based on the provided
         parameters.
 
-        :param str legislator_id: Unique identifier of the legislator from LobbyView
+        :param str legislator_id: Unique identifier of the legislator from LobbyView (Bioguide ID)
         :param str legislator_govtrack_id: Unique identifier of the legislator from
             GovTrack
         :param str legislator_first_name: First name of the legislator
         :param str legislator_last_name: Last name of the legislator
-        :param str legislator_full_name: Full name of the legislator
+        :param str legislator_full_name: Full name of the legislator (First Middle Last)
         :param str legislator_gender: Gender of the legislator
         :param str exact_birthday: Exact birthday of the legislator (YYYY-MM-DD)
         :param str min_birthday: Minimum birthday of the legislator (YYYY-MM-DD)
@@ -658,9 +658,9 @@ class LobbyView:
     @url_quote
     def reports(self, report_uuid=None, client_uuid=None, registrant_uuid=None,
             registrant_name=None, report_year=None, min_report_year=None,
-            max_report_year=None, report_quarter_code=None,
-            min_amount=None, max_amount=None, is_no_activity=None,
-            is_client_self_filer=None, is_amendment=None, page=1):
+            max_report_year=None, report_quarter_code=None, min_report_quarter_code=None,
+            max_report_quarter_code=None, min_amount=None, max_amount=None,
+            is_no_activity=None, is_client_self_filer=None, is_amendment=None, page=1):
         """
         Gets report information from the LobbyView API based on the provided parameters.
 
@@ -671,7 +671,9 @@ class LobbyView:
         :param int report_year: Year of the report
         :param int min_report_year: Minimum year of the report
         :param int max_report_year: Maximum year of the report
-        :param str report_quarter_code: Quarter period of the report
+        :param int report_quarter_code: Quarter period of the report (returns quarter as string)
+        :param int min_report_quarter_code: Minimum quarter period of the report (returns quarter as string)
+        :param int max_report_quarter_code: Maximum quarter period of the report (returns quarter as string)
         :param str min_amount: Minimum lobbying firm income or lobbying expense
             (in-house)
         :param str max_amount: Maximum lobbying firm income or lobbying expense
@@ -683,20 +685,27 @@ class LobbyView:
         :param int page: Page number of the results, default is 1
         :return: ReportResponse object containing the report data
 
-        >>> output = lobbyview.reports(report_year=2020, report_quarter_code="2", is_client_self_filer=True, report_uuid="4b799814-3e94-5ee1-8dd4-b32aead9aca6")
+        >>> output = lobbyview.reports(report_year=2020, report_quarter_code=2, is_client_self_filer=True, report_uuid="4b799814-3e94-5ee1-8dd4-b32aead9aca6")
         >>> output.data
         [{'report_uuid': '4b799814-3e94-5ee1-8dd4-b32aead9aca6', 'client_uuid': 'cdf5a171-6aab-50ea-912c-68c054decdce', 'registrant_uuid': '323adb44-3062-5a5f-98ea-6d4ca51e6f43', 'registrant_name': 'NATIONAL ASSOCIATION OF REALTORS', 'report_year': 2020, 'report_quarter_code': '2', 'amount': '$11,680,000.00', 'is_no_activity': False, 'is_client_self_filer': True, 'is_amendment': False}]
 
-        >>> output = lobbyview.reports(report_year=2020, report_quarter_code="2", is_client_self_filer=True, report_uuid="4b799814-3e94-5ee1-8dd4-b32aead9aca6")
+        >>> output = lobbyview.reports(report_year=2020, report_quarter_code=2, is_client_self_filer=True, report_uuid="4b799814-3e94-5ee1-8dd4-b32aead9aca6")
         >>> output.data[0]['amount']
         '$11,680,000.00'
 
+        >>> output = lobbyview.reports(report_year=2020, report_quarter_code=2, is_client_self_filer=True, report_uuid="4b799814-3e94-5ee1-8dd4-b32aead9aca6", min_report_quarter_code=5, max_report_quarter_code=0)
+        >>> output.data[0]['amount']
+        '$11,680,000.00'
 
         >>> output = lobbyview.reports(client_uuid="cdf5a171-6aab-50ea-912c-68c054decdce", registrant_uuid="323adb44-3062-5a5f-98ea-6d4ca51e6f43", registrant_name="NATIONAL ASSOCIATION OF REALTORS", min_amount="$11,679,999.99", max_amount="$11,680,000.01", is_no_activity=False, is_amendment=False, min_report_year=2017, max_report_year=2023)
         >>> output.data[0]['report_year']
         2020
+
+        >>> output = lobbyview.reports(client_uuid="cdf5a171-6aab-50ea-912c-68c054decdce", registrant_uuid="323adb44-3062-5a5f-98ea-6d4ca51e6f43", registrant_name="NATIONAL ASSOCIATION OF REALTORS", min_amount="$11,679,999.99", max_amount="$11,680,000.01", is_no_activity=False, is_amendment=False, report_year=2020, min_report_year=2040, max_report_year=1800)
+        >>> output.data[0]['report_year']
+        2020
         
-        >>> output = lobbyview.reports(report_year=2020, report_quarter_code="2", is_client_self_filer=True, report_uuid="4b799814-3e94-5ee1-8dd4-b32aead9aca6")
+        >>> output = lobbyview.reports(report_year=2020, report_quarter_code=2, is_client_self_filer=True, report_uuid="4b799814-3e94-5ee1-8dd4-b32aead9aca6")
         >>> print(output)
         Reports:
           4b799814-3e94-5ee1-8dd4-b32aead9aca6 (Year: 2020, Quarter: 2)
@@ -718,6 +727,10 @@ class LobbyView:
             query_params.append(f'report_year=lte.{max_report_year}')
         if report_quarter_code:
             query_params.append(f'report_quarter_code=eq.{report_quarter_code}')
+        if min_report_quarter_code and (report_quarter_code is None):
+            query_params.append(f'report_quarter_code=gte.{min_report_quarter_code}')
+        if max_report_quarter_code and (report_quarter_code is None):
+            query_params.append(f'report_quarter_code=lte.{max_report_quarter_code}')
         if min_amount:
             query_params.append(f'amount=gte.{min_amount}')
         if max_amount:
@@ -902,8 +915,9 @@ class LobbyView:
 
     @url_quote
     def quarter_level_networks(self, client_uuid=None, legislator_id=None, report_year=None,
-                               report_quarter_code=None, min_bills_sponsored=None,
-                               max_bills_sponsored=None, page=1):
+                               min_report_year=None, max_report_year=None,
+                               report_quarter_code=None, min_report_quarter_code=None, max_report_quarter_code=None,
+                               min_bills_sponsored=None, max_bills_sponsored=None, page=1):
         """
         Gets quarter-level network information from the LobbyView API based on the provided
         parameters.
@@ -911,7 +925,11 @@ class LobbyView:
         :param str client_uuid: Unique identifier of the client
         :param str legislator_id: Unique identifier of the legislator
         :param int report_year: Year of the report
-        :param str report_quarter_code: Quarter period of the report
+        :param int min_report_year: Minimum year of the report
+        :param int max_report_year: Maximum year of the report
+        :param int report_quarter_code: Quarter period of the report (returns quarter as string)
+        :param int min_report_quarter_code: Minimum quarter period of the report (returns quarter as string)
+        :param int max_report_quarter_code: Maximum quarter period of the report (returns quarter as string)
         :param int min_bills_sponsored: Minimum number of bills sponsored by the legislator
             in a specific quarter lobbied by the client
         :param int max_bills_sponsored: Maximum number of bills sponsored by the legislator
@@ -924,6 +942,22 @@ class LobbyView:
         [{'client_uuid': '44563806-56d2-5e99-84a1-95d22a7a69b3', 'legislator_id': 'M000303', 'report_year': 2017, 'report_quarter_code': '4', 'n_bills_sponsored': 1}]
 
         >>> output = lobbyview.quarter_level_networks(client_uuid="44563806-56d2-5e99-84a1-95d22a7a69b3", legislator_id="M000303", report_year=2017, report_quarter_code=4)
+        >>> output.data[0]['n_bills_sponsored']
+        1
+
+        >>> output = lobbyview.quarter_level_networks(client_uuid="44563806-56d2-5e99-84a1-95d22a7a69b3", legislator_id="M000303", report_year=2017, report_quarter_code=4, min_report_quarter_code=9, max_report_quarter_code=-2)
+        >>> output.data[0]['n_bills_sponsored']
+        1
+
+        >>> output = lobbyview.quarter_level_networks(client_uuid="44563806-56d2-5e99-84a1-95d22a7a69b3", legislator_id="M000303", report_year=2017, min_report_quarter_code=3, max_report_quarter_code=5)
+        >>> output.data[0]['n_bills_sponsored']
+        1
+
+        >>> output = lobbyview.quarter_level_networks(client_uuid="44563806-56d2-5e99-84a1-95d22a7a69b3", legislator_id="M000303", report_year=2017, min_report_year=2030, max_report_year=2000)
+        >>> output.data[0]['n_bills_sponsored']
+        1
+
+        >>> output = lobbyview.quarter_level_networks(client_uuid="44563806-56d2-5e99-84a1-95d22a7a69b3", legislator_id="M000303", min_report_year=2016, max_report_year=2018)
         >>> output.data[0]['n_bills_sponsored']
         1
 
@@ -949,8 +983,16 @@ class LobbyView:
             query_params.append(f'legislator_id=eq.{legislator_id}')
         if report_year:
             query_params.append(f'report_year=eq.{report_year}')
+        if min_report_year and (report_year is None):
+            query_params.append(f'report_year=gte.{min_report_year}')
+        if max_report_year and (report_year is None):
+            query_params.append(f'report_year=lte.{max_report_year}')
         if report_quarter_code:
             query_params.append(f'report_quarter_code=eq.{report_quarter_code}')
+        if min_report_quarter_code and (report_quarter_code is None):
+            query_params.append(f'report_quarter_code=gte.{min_report_quarter_code}')
+        if max_report_quarter_code and (report_quarter_code is None):
+            query_params.append(f'report_quarter_code=lte.{max_report_quarter_code}')
         if min_bills_sponsored:
             query_params.append(f'n_bills_sponsored=gte.{min_bills_sponsored}')
         if max_bills_sponsored:
@@ -986,6 +1028,10 @@ class LobbyView:
         >>> output.data
         [{'congress_number': 114, 'bill_chamber': 'H', 'bill_resolution_type': None, 'bill_number': 1174, 'report_uuid': '006bd48b-59cf-5cbc-99b8-fc213e509a86', 'issue_ordi': 2, 'client_uuid': '44563806-56d2-5e99-84a1-95d22a7a69b3'}]
 
+        >>> output = lobbyview.bill_client_networks(congress_number=114, bill_chamber="H", bill_resolution_type='C', report_uuid="00043607-ec6d-53a8-85b4-d418a64b423e")
+        >>> output.data[0]['bill_number']
+        125
+
         >>> output = lobbyview.bill_client_networks(congress_number=114, bill_chamber="H", bill_number=1174, client_uuid="44563806-56d2-5e99-84a1-95d22a7a69b3", report_uuid="006bd48b-59cf-5cbc-99b8-fc213e509a86")
         >>> output.data[0]['issue_ordi']
         2
@@ -1014,7 +1060,7 @@ class LobbyView:
         if bill_chamber:
             query_params.append(f'bill_chamber=eq.{bill_chamber}')
         if bill_resolution_type:
-            query_params.append(f'bill_resolution_type=eq.{bill_resolution_type}') # !? find a bill to use with a non None value for this
+            query_params.append(f'bill_resolution_type=eq.{bill_resolution_type}')
         if bill_number:
             query_params.append(f'bill_number=eq.{bill_number}')
         if report_uuid:
@@ -1042,7 +1088,7 @@ if __name__ == "__main__":
 
     # runner = doctest.DocTestRunner(optionflags=doctest.ELLIPSIS)
     # finder = doctest.DocTestFinder()
-    # for test in finder.find(TextResponse, globs={'lobbyview': LobbyView(LOBBYVIEW_TOKEN)}):
+    # for test in finder.find(LobbyView.quarter_level_networks, globs={'lobbyview': LobbyView(LOBBYVIEW_TOKEN)}):
     #     runner.run(test)
     # result = runner.summarize()
     # results_string = f"{result.attempted - result.failed}/{result.attempted} TESTS PASSED"
