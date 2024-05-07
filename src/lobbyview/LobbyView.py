@@ -25,6 +25,7 @@ import ssl
 import inspect
 import functools
 from urllib.parse import quote
+from textwrap import fill
 from exceptions import LobbyViewError, UnauthorizedError, TooManyRequestsError, PartialContentError
 from exceptions import UnexpectedStatusCodeError, InvalidPageNumberError, RequestError
 
@@ -246,10 +247,21 @@ class TextResponse(LobbyViewResponse):
         """
         :return str: representation of the text data
             which includes the issue code and text
+
+        >>> output = lobbyview.texts(issue_code="HCR", issue_text="covid", report_uuid="113f0964-33f7-5263-8037-d33c03408756")
+        >>> print(output)
+        Texts:
+          Issue Code: HCR
+          Issue Text: Health Insurance Tax, Pharmacy Benefit Managers (PBMs), COVID-19 Relief Efforts,
+          Medicare Advantage, CARES Act Implementation, General Industry Issues, Drug
+          Pricing and Transparency
         """
         output = "Texts:\n"
         for text in self:
-            output += f"  Issue Code: {text['issue_code']}, Issue Text: {text['issue_text']}\n"
+            issue_code = text['issue_code']
+            issue_text = text['issue_text']
+            wrapped_text = fill(issue_text, width=80, subsequent_indent='  ')
+            output += f"  Issue Code: {issue_code}\n  Issue Text: {wrapped_text}\n\n"
         return output.rstrip()
 
 class QuarterLevelNetworkResponse(LobbyViewResponse):
@@ -1030,7 +1042,7 @@ if __name__ == "__main__":
 
     # runner = doctest.DocTestRunner(optionflags=doctest.ELLIPSIS)
     # finder = doctest.DocTestFinder()
-    # for test in finder.find(LobbyView.texts, globs={'lobbyview': LobbyView(LOBBYVIEW_TOKEN)}):
+    # for test in finder.find(TextResponse, globs={'lobbyview': LobbyView(LOBBYVIEW_TOKEN)}):
     #     runner.run(test)
     # result = runner.summarize()
     # results_string = f"{result.attempted - result.failed}/{result.attempted} TESTS PASSED"
