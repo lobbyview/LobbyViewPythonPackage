@@ -546,7 +546,8 @@ class LobbyView:
         :param str bill_resolution_type: Bill type (Component of the bill_id composite 
             key)
         :param int bill_number: Bill number (Component of the bill_id composite key)
-        :param str bill_state: Bill status - using partial match with ilike operator (PostgreSQL)
+        :param str bill_state: Bill status - using partial match with ilike operator (PostgreSQL).
+            Examples: `REFERRED`, `PASSED:SIMPLERES`, `REPORTED`, `ENACTED:SIGNED`, `PASS_OVER:HOUSE`
         :param str legislator_id: Sponsor of the bill
         :param str min_introduced_date: Minimum date of introduction to Congress
             (YYYY-MM-DD)
@@ -877,7 +878,9 @@ class LobbyView:
         :param str report_uuid: Unique identifier of the report
         :param int issue_ordi: An integer given to the issue
         :param str issue_code: General Issue Area Code (Section 15)
-        :param str issue_text: Specific lobbying issues (Section 16) - using partial match with ilike operator (PostgreSQL)
+        :param str issue_text: Specific lobbying issues (Section 16) - using partial match with ilike operator (PostgreSQL).
+            Examples: `Appropriations`, `House and Senate Defense Appropriations Bills`,
+            `House and Senate Defense Authorization Bills`, `No lobbying activity.`, `Health care funding and appropriations`
         :param int page: Page number of the results, default is 1
         :return: TextResponse object containing the text data
 
