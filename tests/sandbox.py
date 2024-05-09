@@ -7,12 +7,13 @@ sys.path.append('../src/lobbyview/')
 from LobbyView import LobbyView
 
 
-env_paths = ["tests/.env", "../../tests/.env"]
-for env_path in env_paths:
-    load_dotenv(env_path)
+# env_paths = ["tests/.env", "../../tests/.env"]
+# for env_path in env_paths:
+#     load_dotenv(env_path)
 
 LOBBYVIEW_TOKEN = os.environ.get('LOBBYVIEW_TOKEN', "NO TOKEN FOUND")
 
+# LOBBYVIEW_TOKEN = "fail"
 lobbyview = LobbyView(LOBBYVIEW_TOKEN)
 
 def test_legislators():

@@ -40,7 +40,7 @@ def validate_token(func):
     """
     @functools.wraps(func)
     def wrapper(self, lobbyview_token, *args, **kwargs):
-        if not isinstance(lobbyview_token, str) or len(lobbyview_token) == 0:
+        if not isinstance(lobbyview_token, str) or len(lobbyview_token) < 20:
             raise UnauthorizedError()
         return func(self, lobbyview_token, *args, **kwargs)
     return wrapper
@@ -305,8 +305,6 @@ class LobbyView:
         :param str lobbyview_token: API token for the LobbyView API
         :param bool test_connection: Whether to test the connection to the API
         """
-        if not isinstance(lobbyview_token, str) or len(lobbyview_token) == 0:
-            raise UnauthorizedError()
         self.lobbyview_token = lobbyview_token
         # self.connection = http.client.HTTPSConnection('rest-api.lobbyview.org')
 
