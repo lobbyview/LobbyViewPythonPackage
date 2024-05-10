@@ -1,3 +1,4 @@
+# pylint: disable=E0401, C0411, W1203, C0301
 '''
 This module provides a Python interface to the LobbyView REST API. It uses the same endpoints
 and parameter names as outlined in the LobbyView REST API Documentation
@@ -22,15 +23,15 @@ interacting with the LobbyView API.
 import http.client
 import json
 import ssl
-import inspect
-import functools
 import logging
+import functools
+import inspect
 from urllib.parse import quote
 from textwrap import fill
 from exceptions import LobbyViewError, UnauthorizedError, TooManyRequestsError, PartialContentError
 from exceptions import UnexpectedStatusCodeError, InvalidPageNumberError, RequestError
 
-# for doctest at end
+# for doctest at end, will remove in the future
 import doctest
 import os
 from dotenv import load_dotenv
@@ -310,15 +311,6 @@ class LobbyView:
         :param bool test_connection: Whether to test the connection to the API
         """
         self.lobbyview_token = lobbyview_token
-        # self.connection = http.client.HTTPSConnection('rest-api.lobbyview.org')
-
-        context = ssl._create_unverified_context()
-        # temporary connection to test API with unlimited token
-        self.connection = http.client.HTTPSConnection(
-            "lobbyview-rest-api-test.eba-witbq7ed.us-east-1.elasticbeanstalk.com", 
-            context=context
-            )
-
         self.headers = {
             'token': self.lobbyview_token,
         }
@@ -327,7 +319,7 @@ class LobbyView:
             try:
                 self.get_data('/api/legislators')
             except Exception as exc:
-                raise
+                raise RequestError() from exc
 
     def get_data(self, query_string):
         """
@@ -351,18 +343,31 @@ class LobbyView:
         >>> lobbyview.get_data('/api/legislators?invalid_param=value')
         Traceback (most recent call last):
         ...
-        exceptions.RequestError: RequestError
+        exceptions.UnexpectedStatusCodeError: Unexpected status code: 504
 
         >>> lobbyview_invalid = LobbyView("invalid_token", test_connection=False)
+        Traceback (most recent call last):
+        ...
+        exceptions.UnauthorizedError: Unauthorized. Please check your API token and permissions.
+
+        >>> lobbyview_invalid = LobbyView("invalid_token_alsd2kjfa44hsd3feawol", test_connection=False)
         >>> lobbyview_invalid.get_data('/api/legislators')
         Traceback (most recent call last):
         ...
         exceptions.UnauthorizedError: Unauthorized, status code: 401. Please check your API token and permissions.
         """
+        # connection = http.client.HTTPSConnection('rest-api.lobbyview.org')
+
+        # temporary connection to test API with unlimited token
+        context = ssl._create_unverified_context()
+        connection = http.client.HTTPSConnection(
+            "lobbyview-rest-api-test.eba-witbq7ed.us-east-1.elasticbeanstalk.com", 
+            context=context
+            )
+        
         try:
-            # query_string = query_string.replace(' ', '%20') # temp fix, should use urllib.parse.quote
-            self.connection.request('GET', query_string, None, self.headers)
-            response = self.connection.getresponse()
+            connection.request('GET', query_string, None, self.headers)
+            response = connection.getresponse()
             status_code = response.status
 
             if status_code == 200:
@@ -411,8 +416,9 @@ class LobbyView:
 
         >>> for client in lobbyview.paginate(lobbyview.clients, client_name='InvalidClientName'):
         ...     print(f"Client: {client['client_name']} - NAICS: {client['primary_naics']}")
-        Retrieving page 1...
-        Error occurred: Invalid page number: 1, total pages: 0
+        Traceback (most recent call last):
+        ...
+        exceptions.InvalidPageNumberError: Invalid page number: 1, total pages: 0
 
         >>> for network in lobbyview.paginate(lobbyview.bill_client_networks, congress_number=114, bill_chamber="H", bill_number=1174, client_uuid="44563806-56d2-5e99-84a1-95d22a7a69b3"):
         ...     print(f"Issue Ordinal number (position) of the issue within the report: {network['issue_ordi']}")
@@ -912,13 +918,15 @@ class LobbyView:
          >>> output = lobbyview.texts(issue_code="HCR", issue_text="covid")
         >>> print(output)
         Texts:
-          Issue Code: HCR, Issue Text: HR 748 CARES Act - Issues related to COVID-19 relief
+          Issue Code: HCR
+          Issue Text: HR 748 CARES Act - Issues related to COVID-19 relief
         ...
 
         >>> output = lobbyview.texts(report_uuid='000bef17-9f0a-5d7c-8660-edca16e1dfce', issue_ordi=1)
         >>> print(output)
         Texts:
-          Issue Code: HCR, Issue Text: HR 748 CARES Act - Issues related to COVID-19 relief
+          Issue Code: HCR
+          Issue Text: HR 748 CARES Act - Issues related to COVID-19 relief
         """
         query_params = []
         if report_uuid:
