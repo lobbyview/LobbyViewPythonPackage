@@ -222,11 +222,11 @@ class IssueResponse(LobbyViewResponse):
     def __str__(self):
         """
         :return str: representation of the issue data
-            which includes the issue code, report UUID, and issue ordi
+            which includes the issue code, report UUID, and issue ordinal number
         """
         output = "Issues:\n"
         for issue in self:
-            output += f"  {issue['issue_code']} (Report UUID: {issue['report_uuid']}, Issue Ordi: {issue['issue_ordi']})\n"
+            output += f"  {issue['issue_code']} (Report UUID: {issue['report_uuid']}, Issue Ordinal number (position) of the issue within the report: {issue['issue_ordi']})\n"
         return output.rstrip()
 
 class NetworkResponse(LobbyViewResponse):
@@ -290,11 +290,11 @@ class BillClientNetworkResponse(LobbyViewResponse):
     def __str__(self):
         """
         :return str: representation of the bill-client network data
-            which includes the bill number, client UUID, and issue ordi
+            which includes the bill number, client UUID, and issue ordinal number
         """
         output = "Bill-Client Networks:\n"
         for network in self:
-            output += f"  Bill Number: {network['bill_number']}, Client UUID: {network['client_uuid']}, Issue Ordi: {network['issue_ordi']}\n"
+            output += f"  Bill Number: {network['bill_number']}, Client UUID: {network['client_uuid']}, Issue Ordinal number (position) of the issue within the report: {network['issue_ordi']}\n"
         return output.rstrip()
 
 class LobbyView:
@@ -415,11 +415,11 @@ class LobbyView:
         Error occurred: Invalid page number: 1, total pages: 0
 
         >>> for network in lobbyview.paginate(lobbyview.bill_client_networks, congress_number=114, bill_chamber="H", bill_number=1174, client_uuid="44563806-56d2-5e99-84a1-95d22a7a69b3"):
-        ...     print(f"Issue Ordi: {network['issue_ordi']}")
+        ...     print(f"Issue Ordinal number (position) of the issue within the report: {network['issue_ordi']}")
         Retrieving page 1...
-        Issue Ordi: 2
-        Issue Ordi: 5
-        Issue Ordi: 4
+        Issue Ordinal number (position) of the issue within the report: 2
+        Issue Ordinal number (position) of the issue within the report: 5
+        Issue Ordinal number (position) of the issue within the report: 4
         ...
 
         >>> for text in lobbyview.paginate(lobbyview.texts, issue_code="HCR", issue_text="covid"):
@@ -605,19 +605,29 @@ class LobbyView:
 
     @url_quote
     def clients(self, client_uuid=None, client_name=None,
-                    min_naics=None, max_naics=None, naics_description=None, page=1):
+                min_naics=None, max_naics=None, naics_description=None, page=1):
         """
         Gets client information from the LobbyView API based on the provided parameters.
 
+        NAICS (North American Industry Classification System) codes are hierarchical, with the
+        first few digits representing the industry and subindustry. For example, NAICS codes
+        starting with the same first 3 digits belong to the same industry, and codes starting
+        with the same first 4 digits belong to the same subindustry.
+
+        When specifying the `min_naics` and `max_naics` parameters, keep in mind the hierarchical
+        nature of NAICS codes. For instance, setting `min_naics` to '41' and `max_naics` to '42'
+        will include all NAICS codes starting with '41' and '42', such as '412', '413', etc.
+        **NOT FULLY IMPLEMENTED YET**
+
         :param str client_uuid: Unique identifier of the client
         :param str client_name: Name of the client - using partial match with ilike operator (PostgreSQL)
-        :param str min_naics: Minimum NAICS code to which the client belongs
-        :param str max_naics: Maximum NAICS code to which the client belongs
+        :param str min_naics: Minimum NAICS code to which the client belongs (e.g., '41' for industry-level filtering)
+        :param str max_naics: Maximum NAICS code to which the client belongs (e.g., '42' for industry-level filtering)
         :param str naics_description: Descriptions of the NAICS code - using partial match with ilike operator (PostgreSQL)
         :param int page: Page number of the results, default is 1
         :return: ClientResponse object containing the client data
 
-        >>> output = lobbyview.clients(client_name="Microsoft Corporation", min_naics=500000)
+        >>> output = lobbyview.clients(client_name="Microsoft Corporation", min_naics='51')
         >>> output.data
         [{'client_uuid': '44563806-56d2-5e99-84a1-95d22a7a69b3', 'client_name': 'Microsoft Corporation', 'primary_naics': '511210', 'naics_description': ['Applications development and publishing, except on a custom basis', 'Applications software, computer, packaged', 'Computer software publishers, packaged', 'Computer software publishing and reproduction', 'Games, computer software, publishing', 'Operating systems software, computer, packaged', 'Packaged computer software publishers', 'Programming language and compiler software publishers, packaged', 'Publishers, packaged computer software', 'Software computer, packaged, publishers', 'Software publishers', 'Software publishers, packaged', 'Utility software, computer, packaged']}]
 
@@ -625,7 +635,7 @@ class LobbyView:
         >>> output.data[0]['client_uuid']
         '44563806-56d2-5e99-84a1-95d22a7a69b3'
 
-        >>> output = lobbyview.clients(client_uuid="44563806-56d2-5e99-84a1-95d22a7a69b3", min_naics=500000, max_naics=511211)
+        >>> output = lobbyview.clients(client_uuid="44563806-56d2-5e99-84a1-95d22a7a69b3", min_naics='5112', max_naics='5113')
         >>> output.data[0]['client_name']
         'Microsoft Corporation'
 
@@ -636,7 +646,7 @@ class LobbyView:
           PCT Government Relations on behalf of Microsoft Corporation (ID: 62eb98f6-ea3a-542d-abdb-7d2fce94b4f8)
           Cornerstone Government Affairs obo Microsoft Corporation (ID: d6634602-1d0b-560d-b4ac-e04194782ad3)
 
-        >>> output = lobbyview.clients(client_uuid='44563806-56d2-5e99-84a1-95d22a7a69b3', min_naics=511209, max_naics=511211)
+        >>> output = lobbyview.clients(client_uuid='44563806-56d2-5e99-84a1-95d22a7a69b3', min_naics='5112', max_naics='5113')
         >>> print(output)
         Clients:
           Microsoft Corporation (ID: 44563806-56d2-5e99-84a1-95d22a7a69b3)
@@ -762,7 +772,10 @@ class LobbyView:
         Gets issue information from the LobbyView API based on the provided parameters.
 
         :param str report_uuid: Unique identifier of the report
-        :param int issue_ordi: An integer given to the issue
+        :param int issue_ordi: The ordinal number (position) of the issue within the report.
+            This is an integer value that represents the order in which the issue appears in
+            the report. For example, if an issue has issue_ordi=2, it means it is the second
+            issue mentioned in the report.
         :param str issue_code: General Issue Area Code (Section 15)
         :param str gov_entity: House(s) of Congress and Federal agencies (Section 17) - using partial match with ilike operator (PostgreSQL)
         :param int page: Page number of the results, default is 1
@@ -779,12 +792,12 @@ class LobbyView:
         >>> output = lobbyview.issues(issue_code="TRD")
         >>> print(output)
         Issues:
-          TRD (Report UUID: 00016ab3-2246-5af8-a68d-05af40dfde68, Issue Ordi: 2)
-          TRD (Report UUID: 0001f9b9-84d7-5ceb-af03-8987bb76d593, Issue Ordi: 1)
-          TRD (Report UUID: 00020868-67be-5975-955d-7ecab8d42e6e, Issue Ordi: 2)
-          TRD (Report UUID: 00040172-6cda-5b31-8d83-9c1bcfd4b289, Issue Ordi: 1)
-          TRD (Report UUID: 00047fc7-2207-5f3b-951d-692b9f35825b, Issue Ordi: 1)
-          TRD (Report UUID: 000759fa-dc93-5849-b1e5-7aa751e86433, Issue Ordi: 4)
+          TRD (Report UUID: 00016ab3-2246-5af8-a68d-05af40dfde68, Issue Ordinal number (position) of the issue within the report: 2)
+          TRD (Report UUID: 0001f9b9-84d7-5ceb-af03-8987bb76d593, Issue Ordinal number (position) of the issue within the report: 1)
+          TRD (Report UUID: 00020868-67be-5975-955d-7ecab8d42e6e, Issue Ordinal number (position) of the issue within the report: 2)
+          TRD (Report UUID: 00040172-6cda-5b31-8d83-9c1bcfd4b289, Issue Ordinal number (position) of the issue within the report: 1)
+          TRD (Report UUID: 00047fc7-2207-5f3b-951d-692b9f35825b, Issue Ordinal number (position) of the issue within the report: 1)
+          TRD (Report UUID: 000759fa-dc93-5849-b1e5-7aa751e86433, Issue Ordinal number (position) of the issue within the report: 4)
         ...
         """
         query_params = []
@@ -873,7 +886,10 @@ class LobbyView:
         Gets issue text data from the LobbyView API based on the provided parameters.
 
         :param str report_uuid: Unique identifier of the report
-        :param int issue_ordi: An integer given to the issue
+        :param int issue_ordi: The ordinal number (position) of the issue within the report.
+            This is an integer value that represents the order in which the issue appears in
+            the report. For example, if an issue has issue_ordi=2, it means it is the second
+            issue mentioned in the report.
         :param str issue_code: General Issue Area Code (Section 15)
         :param str issue_text: Specific lobbying issues (Section 16) - using partial match with ilike operator (PostgreSQL).
             Examples: `Appropriations`, `House and Senate Defense Appropriations Bills`,
@@ -1035,7 +1051,10 @@ class LobbyView:
         :param str bill_resolution_type: Bill type (Component of the bill_id composite key)
         :param int bill_number: Bill number (Component of the bill_id composite key)
         :param str report_uuid: Unique identifier of the report
-        :param int issue_ordi: An integer given to the issue
+        :param int issue_ordi: The ordinal number (position) of the issue within the report.
+            This is an integer value that represents the order in which the issue appears in
+            the report. For example, if an issue has issue_ordi=2, it means it is the second
+            issue mentioned in the report.
         :param str client_uuid: Unique identifier of the client
         :param int page: Page number of the results, default is 1
         :return: BillClientNetworkResponse object containing the bill-client network data
@@ -1059,16 +1078,16 @@ class LobbyView:
         >>> output = lobbyview.bill_client_networks(congress_number=114, bill_chamber="H", bill_number=1174, client_uuid="44563806-56d2-5e99-84a1-95d22a7a69b3")
         >>> print(output)
         Bill-Client Networks:
-          Bill Number: 1174, Client UUID: 44563806-56d2-5e99-84a1-95d22a7a69b3, Issue Ordi: 2
-          Bill Number: 1174, Client UUID: 44563806-56d2-5e99-84a1-95d22a7a69b3, Issue Ordi: 5
-          Bill Number: 1174, Client UUID: 44563806-56d2-5e99-84a1-95d22a7a69b3, Issue Ordi: 4
+          Bill Number: 1174, Client UUID: 44563806-56d2-5e99-84a1-95d22a7a69b3, Issue Ordinal number (position) of the issue within the report: 2
+          Bill Number: 1174, Client UUID: 44563806-56d2-5e99-84a1-95d22a7a69b3, Issue Ordinal number (position) of the issue within the report: 5
+          Bill Number: 1174, Client UUID: 44563806-56d2-5e99-84a1-95d22a7a69b3, Issue Ordinal number (position) of the issue within the report: 4
         ...
 
         >>> output = lobbyview.bill_client_networks(report_uuid='006bd48b-59cf-5cbc-99b8-fc213e509a86', issue_ordi=2)
         >>> print(output)
         Bill-Client Networks:
-          Bill Number: 1174, Client UUID: 44563806-56d2-5e99-84a1-95d22a7a69b3, Issue Ordi: 2
-          Bill Number: 512, Client UUID: 44563806-56d2-5e99-84a1-95d22a7a69b3, Issue Ordi: 2
+          Bill Number: 1174, Client UUID: 44563806-56d2-5e99-84a1-95d22a7a69b3, Issue Ordinal number (position) of the issue within the report: 2
+          Bill Number: 512, Client UUID: 44563806-56d2-5e99-84a1-95d22a7a69b3, Issue Ordinal number (position) of the issue within the report: 2
         """
         query_params = []
         if congress_number:
@@ -1118,7 +1137,7 @@ if __name__ == "__main__":
 
     # runner = doctest.DocTestRunner(optionflags=doctest.ELLIPSIS)
     # finder = doctest.DocTestFinder()
-    # for test in finder.find(LobbyViewResponse, globs={'lobbyview': LobbyView(LOBBYVIEW_TOKEN)}):
+    # for test in finder.find(LobbyView.issues, globs={'lobbyview': LobbyView(LOBBYVIEW_TOKEN)}):
     #     runner.run(test)
     # result = runner.summarize()
     # results_string = f"{result.attempted - result.failed}/{result.attempted} TESTS PASSED"
