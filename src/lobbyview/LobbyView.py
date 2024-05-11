@@ -45,7 +45,7 @@ def validate_token(func):
     @functools.wraps(func)
     def wrapper(self, lobbyview_token, *args, **kwargs):
         if not isinstance(lobbyview_token, str) or len(lobbyview_token) < 20:
-            logging.error("Unauthorized. Please check your API token and permissions.")
+            logging.error("Unauthorized. Please check your API token.")
             raise UnauthorizedError()
         return func(self, lobbyview_token, *args, **kwargs)
     return wrapper
@@ -457,11 +457,10 @@ class LobbyView:
                 page += 1
 
             except PartialContentError as exc:
-                logging.error(f"Error occurred: {str(exc)}")
-                logging.warning("Partial results retrieved. Please wait for more quota.")
+                logging.error(f"{str(exc)} - Partial results retrieved. Please wait for more quota.")
                 raise
             except LobbyViewError as exc:
-                logging.error(f"Error occurred: {str(exc)}")
+                logging.error(str(exc))
                 raise
 
     @url_quote
@@ -1145,7 +1144,7 @@ if __name__ == "__main__":
 
     # runner = doctest.DocTestRunner(optionflags=doctest.ELLIPSIS)
     # finder = doctest.DocTestFinder()
-    # for test in finder.find(LobbyView.issues, globs={'lobbyview': LobbyView(LOBBYVIEW_TOKEN)}):
+    # for test in finder.find(LobbyViewResponse, globs={'lobbyview': LobbyView(LOBBYVIEW_TOKEN)}):
     #     runner.run(test)
     # result = runner.summarize()
     # results_string = f"{result.attempted - result.failed}/{result.attempted} TESTS PASSED"
