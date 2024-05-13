@@ -43,7 +43,7 @@ jobs:
       env:
           LOBBYVIEW_TOKEN: ${{ secrets.LOBBYVIEW_TOKEN }}
       run: |
-        coverage run src/lobbyview/LobbyView.py
+        coverage run tests/doctests.py
         coverage report -m
 
     # - name: Pytest
