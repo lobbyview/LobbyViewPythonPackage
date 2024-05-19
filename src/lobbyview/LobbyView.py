@@ -1133,33 +1133,3 @@ class LobbyView:
         data = self.get_data(f'/api/bill_client_networks?{query_string}')
 
         return BillClientNetworkResponse(data)
-
-if __name__ == "__main__":
-    # loads token from .env file/environment variable
-    load_dotenv("tests/.env")
-    load_dotenv("../../tests/.env")
-    LOBBYVIEW_TOKEN = os.environ.get('LOBBYVIEW_TOKEN', "NO TOKEN FOUND")
-
-    # code commented out below will allow for running individual method doctests
-
-    # runner = doctest.DocTestRunner(optionflags=doctest.ELLIPSIS)
-    # finder = doctest.DocTestFinder()
-    # for test in finder.find(LobbyViewResponse, globs={'lobbyview': LobbyView(LOBBYVIEW_TOKEN)}):
-    #     runner.run(test)
-    # result = runner.summarize()
-    # results_string = f"{result.attempted - result.failed}/{result.attempted} TESTS PASSED"
-    # if result.failed == 0:
-    #     print(results_string)
-    # else:
-    #     raise Exception(results_string)
-
-    # original code below will run all doctests
-
-    # run doctests, pass in the LobbyView object with the token
-    results = doctest.testmod(extraglobs={'lobbyview': LobbyView(LOBBYVIEW_TOKEN)},
-                              optionflags=doctest.ELLIPSIS)
-    results_string = f"{results.attempted-results.failed}/{results.attempted} TESTS PASSED"
-    if results.failed == 0:
-        print(results_string)
-    else:
-        raise Exception(results_string)
