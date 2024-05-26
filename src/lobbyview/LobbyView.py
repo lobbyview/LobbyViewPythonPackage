@@ -31,11 +31,6 @@ from textwrap import fill
 from exceptions import LobbyViewError, UnauthorizedError, TooManyRequestsError, PartialContentError
 from exceptions import UnexpectedStatusCodeError, InvalidPageNumberError, RequestError
 
-# for doctest at end, will remove in the future
-import doctest
-import os
-from dotenv import load_dotenv
-
 logging.basicConfig(level=logging.ERROR, format='%(asctime)s - %(levelname)s - %(message)s')
 
 def validate_token(func):
