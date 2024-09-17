@@ -20,6 +20,8 @@ This includes information on:
 This module also defines several custom exceptions to handle errors that may occur when
 interacting with the LobbyView API.
 
+Note: This repo is pre-release and our expected time table is November 2024 for a release that's ready for widespread public use.
+
 # Instructions
 
 Import a lobbyview token using os and dotenv
