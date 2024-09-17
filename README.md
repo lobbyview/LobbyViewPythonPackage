@@ -4,6 +4,8 @@ This module provides a Python interface to the LobbyView REST API. It uses the s
 and parameter names as outlined in the LobbyView REST API Documentation
 (https://rest-api.lobbyview.org/).
 
+The full documentation for the package is linked here: http://lobbyview.readthedocs.io/
+
 The LobbyView API provides comprehensive data on lobbying activities in the United States.
 This includes information on:
 
