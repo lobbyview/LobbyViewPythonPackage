@@ -1,0 +1,387 @@
+Detailed Parameter Values
+=========================
+
+This page provides detailed descriptions and examples of parameter values used in various methods of the package.
+
+Issue Code Parameters
+---------------------
+The `issue_code` parameter in the `issues` method and the `texts` method can take several values. Each value corresponds to a specific type of issue.
+
+**Possible Values:**
+
+- ``ACC`` : Accounting
+- ``ADV`` : Advertising
+- ``AER`` : Aerospace
+- ``AGR`` : Agriculture
+- ``ALC`` : Alcohol and Drug Abuse
+- ``ANI`` : Animals
+- ``APP`` : Apparel/Clothing Industry/Textiles
+- ``ART`` : Arts/Entertainment
+- ``AUT`` : Automotive Industry
+- ``AVI`` : Aviation/Airlines/Airports
+- ``BAN`` : Banking
+- ``BNK`` : Bankruptcy
+- ``BEV`` : Beverage Industry
+- ``BUD`` : Budget/Appropriations
+- ``CIV`` : Civil Rights/Civil Liberties
+- ``CHM`` : Chemicals/Chemical Industry
+- ``CAW`` : Clean Air and Water (quality)
+- ``CDT`` : Commodities (big ticket)
+- ``COM`` : Communications/Broadcasting/Radio/TV
+- ``CPI`` : Computer Industry
+- ``CON`` : Constitution
+- ``CSP`` : Consumer Issues/Safety/Products
+- ``CPT`` : Copyright/Patent/Trademark
+- ``DEF`` : Defense
+- ``DIS`` : Disaster Planning/Emergencies
+- ``DOC`` : District of Columbia
+- ``ECN`` : Economics/Economic Development
+- ``EDU`` : Education
+- ``ENG`` : Energy/Nuclear
+- ``ENV`` : Environment/Superfund
+- ``FAM`` : Family issues/Abortion/Adoption
+- ``FIN`` : Financial Institutions/Investments/Securities
+- ``FIR`` : Firearms/Guns/Ammunition
+- ``FOO`` : Food Industry (safety, labeling, etc.)
+- ``FOR`` : Foreign Relations
+- ``FUE`` : Fuel/Gas/Oil
+- ``GAM`` : Gaming/Gambling/Casino
+- ``GOV`` : Government Issues
+- ``HCR`` : Health Issues
+- ``HOM`` : Homeland Security
+- ``HOU`` : Housing
+- ``IMM`` : Immigration
+- ``IND`` : Indian/Native American Affairs
+- ``INS`` : Insurance
+- ``INT`` : Intelligence
+- ``LBR`` : Labor Issues/Antitrust/Workplace
+- ``LAW`` : Law Enforcement/Crime/Criminal Justice
+- ``MAN`` : Manufacturing
+- ``MAR`` : Marine/Maritime/Boating/Fisheries
+- ``MIA`` : Media (information/publishing)
+- ``MED`` : Medical/Disease Research/Clinical Labs
+- ``MMM`` : Medicare/Medicaid
+- ``MON`` : Minting/Money/Gold Standard
+- ``NAT`` : Natural Resources
+- ``PHA`` : Pharmacy
+- ``POS`` : Postal
+- ``RRR`` : Railroads
+- ``RES`` : Real Estate/Land Use/Conservation
+- ``REL`` : Religion
+- ``RET`` : Retirement
+- ``ROD`` : Roads/Highway
+- ``SCI`` : Science/Technology
+- ``SMB`` : Small Business
+- ``SPO`` : Sports/Athletics
+- ``TAR`` : Tariff (miscellaneous tariff bills)
+- ``TAX`` : Taxation/Internal Revenue Code
+- ``TEC`` : Telecommunications
+- ``TOB`` : Tobacco
+- ``TOR`` : Torts
+- ``TRD`` : Trade (domestic/foreign)
+- ``TRA`` : Transportation
+- ``TOU`` : Travel/Tourism
+- ``TRU`` : Trucking/Shipping
+- ``URB`` : Urban Development/Municipalities
+- ``UNM`` : Unemployment
+- ``UTI`` : Utilities
+- ``VET`` : Veterans
+- ``WAS`` : Waste (hazardous/solid/interstate/nuclear)
+- ``WEL`` : Welfare
+
+Government Entity Parameters
+----------------------------
+The `gov_entity` parameter in the `issues` method specifies the government entity involved. Here are a couple of examples:
+
+**Possible Values:**
+
+- ``SENATE``
+- ``HOUSE OF REPRESENTATIVES``
+- ``Architect of the Capitol (AOC)``
+- ``U.S. Botanic Garden``
+- ``Government Accountability Office (GAO)``
+- ``Government Printing Office (GPO)``
+- ``Library of Congress (LOC)``
+- ``Congressional Budget Office (CBO)``
+- ``President of the U.S.``
+- ``Vice President of the U.S.``
+- ``Executive Office of the President (EOP)``
+- ``White House Office``
+- ``Office of the Vice President of the United States``
+- ``Council of Economic Advisers (CEA)``
+- ``Council on Environmental Quality (CEQ)``
+- ``Natl Security Council (NSC)``
+- ``Office of Administration``
+- ``Office of Management & Budget (OMB)``
+- ``Office of Natl Drug Control Policy (NDCP)``
+- ``Office of Policy Development``
+- ``Office of Science & Technology Policy (OSTP)``
+- ``U.S. Trade Representative (USTR)``
+- ``Agriculture, Dept of (USDA)``
+- ``Commerce, Dept of (DOC)``
+- ``Defense, Dept of (DOD)``
+- ``Office of the Secretary of Defense``
+- ``Joint Chiefs of Staff``
+- ``Defense Department Field Activities``
+- ``Air Force, Dept of``
+- ``Army, Dept of (Other)``
+- ``Navy, Dept of``
+- ``Education, Dept of``
+- ``Energy, Dept of``
+- ``Health & Human Services, Dept of (HHS)``
+- ``Housing & Urban Development, Dept of (HUD)``
+- ``Interior, Dept of (DOI)``
+- ``Justice, Dept of (DOJ)``
+- ``Labor, Dept of (DOL)``
+- ``State, Dept of (DOS)``
+- ``Transportation, Dept of (DOT)``
+- ``Treasury, Dept of``
+- ``Veterans Affairs, Dept of (VA)``
+- ``African Development Foundation``
+- ``Central Intelligence Agency (CIA)``
+- ``Commodity Futures Trading Commission (CFTC)``
+- ``Consumer Product Safety Commission (CPSC)``
+- ``Corporation for Natl & Community Service``
+- ``Corporation for Natl & Community Service``
+- ``Defense Nuclear Facilities Safety Board``
+- ``Environmental Protection Agency (EPA)``
+- ``Equal Employment Opportunity Commission (EEOC)``
+- ``Export-Import Bank of the United States (EXIM Bank)``
+- ``Farm Credit Administration``
+- ``Federal Communications Commission (FCC)``
+- ``Federal Deposit Insurance Corporation (FDIC)``
+- ``Federal Election Commission (FEC)``
+- ``Federal Emergency Management Agency (FEMA)``
+- ``Federal Housing Finance Agency (FHFA)``
+- ``Federal Labor Relations Authority (FLRA)``
+- ``Federal Maritime Commission``
+- ``Federal Mediation & Conciliation Service``
+- ``Mine Safety & Health Review Commission``
+- ``Federal Reserve System``
+- ``Federal Retirement Thrift Investment Board``
+- ``Federal Trade Commission (FTC)``
+- ``General Services Administration (GSA)``
+- ``Inter-American Foundation``
+- ``Merit Systems Protection Board``
+- ``Natl Aeronautics & Space Administration (NASA)``
+- ``Natl Archives & Records Administration (NARA)``
+- ``Natl Capital Planning Commission (NCPC)``
+- ``Natl Credit Union Administration (NCUA)``
+- ``Natl Foundation on the Arts & Humanities``
+- ``Natl Labor Relations Board (NLRB)``
+- ``Natl Mediation Board``
+- ``AMTRAK - Natl Railroad Passenger Corporation``
+- ``Natl Science Foundation (NSF)``
+- ``Natl Transportation Safety Board (NTSB)``
+- ``Nuclear Regulatory Commission (NRC)``
+- ``Occupational Safety & Health Review Commission``
+- ``Office of Government Ethics (OGE)``
+- ``Office of Personnel Management (OPM)``
+- ``Office of Special Counsel``
+- ``Panama Canal Commission``
+- ``Peace Corps``
+- ``Pension Benefit Guaranty Corporation (PBGC)``
+- ``Postal Rate Commission``
+- ``Railroad Retirement Board``
+- ``Securities & Exchange Commission (SEC)``
+- ``Selective Service System``
+- ``Small Business Administration (SBA)``
+- ``Social Security Administration (SSA)``
+- ``Tennessee Valley Authority (TVA)``
+- ``U.S. Trade & Development Agency (USTDA)``
+- ``U.S. Arms Control & Disarmament Agency``
+- ``U.S. Commission on Civil Rights``
+- ``U.S. Information Agency (USIA)``
+- ``U.S. International Development Cooperation Agency``
+- ``U.S. International Trade Commission (ITC)``
+- ``U.S. Postal Service (USPS)``
+- ``Legal Services Corporation``
+- ``Smithsonian Institution``
+- ``State Justice Institute``
+- ``U.S. Institute of Peace``
+- ``Alternative Agricultural Research & Commercialization Center``
+- ``Bureau of the Census``
+- ``Bureau of Economic Analysis``
+- ``Bureau of Industry and Security (BIS)``
+- ``Economic Development Administration``
+- ``Intl Trade Administration (ITA)``
+- ``Minority Business Development Agency``
+- ``Natl Oceanic & Atmospheric Administration (NOAA)``
+- ``Natl Telecommunications & Information Administration (NTIA)``
+- ``Patent & Trademark Office (PTO)``
+- ``Technology Administration``
+- ``Ballistic Missile Defense Organization``
+- ``Defense Advanced Research Projects Agency (DARPA)``
+- ``Defense Commissary Agency``
+- ``Defense Contract Audit Agency (DCAA)``
+- ``Defense Information Systems Agency``
+- ``Defense Intelligence Agency (DIA)``
+- ``Defense Investigative Service (DIS)``
+- ``Defense Legal Services Agency``
+- ``Defense Logistics Agency``
+- ``Defense Security Assistance Agency``
+- ``Defense Special Weapons Agency``
+- ``Natl Geospatial Intelligence Agency``
+- ``Natl Security Agency (NSA)``
+- ``On-Site Inspection Agency``
+- ``Joint Service Schools``
+- ``Administration on Aging``
+- ``Administration for Children & Families (ACF)``
+- ``Agency for Healthcare Research & Quality (AHRQ)``
+- ``Agency for Toxic Substances & Disease Registry``
+- ``Centers For Disease Control & Prevention (CDC)``
+- ``Food & Drug Administration (FDA)``
+- ``Centers For Medicare and Medicaid Services (CMS)``
+- ``Health Resources & Services Administration (HRSA)``
+- ``Indian Health Service``
+- ``Natl Institutes of Health (NIH)``
+- ``Program Support Center``
+- ``Substance Abuse & Mental Health Services Administration (SAMHSA)``
+- ``U.S. Fish & Wildlife Service (USFWS)``
+- ``Natl Park Service (NPS)``
+- ``U.S. Geological Survey (USGS)``
+- ``Office of Surface Mining Reclamation & Enforcement``
+- ``Bureau of Indian Affairs (BIA)``
+- ``Minerals Management Service``
+- ``Bureau of Land Management``
+- ``Bureau of Reclamation``
+- ``Federal Bureau of Investigation (FBI)``
+- ``Bureau of Prisons (BOP)``
+- ``U.S. Marshals Service``
+- ``U.S. Natl Central Bureau - Intl Criminal Police Organization``
+- ``Bureau of Citizenship``
+- ``Immigration Services (BCIS)``
+- ``Drug Enforcement Administration (DEA)``
+- ``Office of Justice Program``
+- ``Bureau of Justice Assistance``
+- ``Bureau of Justice Statistics``
+- ``Natl Institute of Justice``
+- ``Office of Juvenile Justice & Delinquency Prevention``
+- ``Office for Victims of Crime``
+- ``Office on Violence Against Women``
+- ``Drug Court Program Office``
+- ``Corrections Program Office``
+- ``Pension & Welfare Benefits Administration``
+- ``Employment Standards Administration``
+- ``Occupational Safety & Health Administration (OSHA)``
+- ``Mine Safety & Health Administration (MSHA)``
+- ``Bureau of Labor Statistics (BLS)``
+- ``Veterans Employment & Training Service``
+- ``U.S. Coast Guard (USCG)``
+- ``Federal Aviation Administration (FAA)``
+- ``Federal Highway Administration (FHA)``
+- ``Federal Railroad Administration``
+- ``Natl Highway Traffic Safety Administration (NHTSA)``
+- ``Federal Transit Administration (FTA)``
+- ``Maritime Administration (MARAD)``
+- ``St. Lawrence Seaway Development Corporation``
+- ``Research & Special Programs Administration``
+- ``Bureau of Transportation Statistics``
+- ``Surface Transportation Board (STB)``
+- ``Bureau of Alcohol Tobacco Firearms & Explosives``
+- ``Office of the Comptroller of the Currency (OCC)``
+- ``U.S. Customs & Border Protection``
+- ``Bureau of Engraving & Printing``
+- ``Federal Law Enforcement Training Center``
+- ``Federal Management Service``
+- ``Internal Revenue Service (IRS)``
+- ``U.S. Mint``
+- ``Bureau of the Public Debt``
+- ``U.S. Secret Service``
+- ``Office of Thrift Supervision (OTS)``
+- ``Natl Institute on Alcohol Abuse & Alcoholism (NIAA)``
+- ``U.S. Agency for International Development (USAID)``
+- ``Federal Energy Regulatory Commission (FERC)``
+- ``Natl Economic Council (NEC)``
+- ``U.S. Architectural & Transportation Barriers Compliance Board (ACCESS)``
+- ``Army, Dept of (Corps of Engineers)``
+- ``Homeland Security, Dept of (DHS)``
+- ``Office of Faith-Based & Community Initiatives``
+- ``Overseas Private Investment Corp (OPIC)``
+- ``Transportation Security Administration (TSA)``
+- ``Corporation for Public Broadcasting``
+- ``Natl Endowment for the Arts``
+- ``U.S. Copyright Office``
+- ``Natl Indian Gaming Commission``
+- ``Institute of Museum and Library Services (IMLS)``
+- ``U.S. Marines``
+- ``Access Board``
+- ``U.S. Forest Service``
+- ``Postal Regulatory Commission``
+- ``Advisory Council on Historic Preservation (ACHP)``
+- ``Director of National Intelligence (ODNI)``
+- ``Marine Mammal Commission``
+- ``Election Assistance Commission (EAC)``
+- ``Federal Motor Carrier Safety Administration``
+- ``Natl Institute of Standards & Technology (NIST)``
+- ``U.S. Commission on International Religious Freedom``
+- ``U.S. Chemical Safety & Hazard Investigation Board``
+- ``Natl Council on Disability``
+- ``Natl Endowment for the Humanities``
+- ``American Battle Monuments Commission``
+- ``Alcohol & Tobacco Tax & Trade Bureau (TTB)``
+- ``Appalachian Regional Commission``
+- ``Architectural & Transportation Barriers Compliance Board``
+- ``Bureau of Arms Control``
+- ``Defense Business Transformation Agency (BTA)``
+- ``Defense Finance & Accounting Service (DFAS)``
+- ``Defense Security Cooperation Agency (DSCA)``
+- ``Employment & Training Administration``
+- ``Federal Accounting Standards Advisory Board (FASAB)``
+- ``Federal Mine Safety Health Review Commission (FMSHRC)``
+- ``Financial Crimes Enforcement Network (FinCEN)``
+- ``Defense Threat Reduction Agency (DTRA)``
+- ``Financial Management Service (FMS)``
+- ``Ginnie Mae``
+- ``Job Corps``
+- ``Natl Bioethics Advisory Commission``
+- ``Natl Guard``
+- ``Natl Institute of Mental Health (NIMH)``
+- ``Natl Technical Information Service``
+- ``Office of Natl AIDS Policy``
+- ``Pentagon Force Protection Agency``
+- ``Pipeline & Hazardous Materials Safety Administration``
+- ``Risk Management Agency``
+- ``USA Freedom Corps``
+- ``U.S. Commission of Fine Arts``
+- ``U.S. Immigration & Customs Enforcement (ICE)``
+- ``Voice of America``
+- ``Medicare Payment Advisory Commission (MedPAC)``
+- ``Consumer Financial Protection Bureau (CFPB)``
+- ``Office of Technology Policy (OTP)``
+- ``UNDETERMINED``
+
+Bill State Parameters
+---------------------
+The `bill_state` parameter in the `bills` method indicates the current state of a bill. Different states of a bill represent its stage in the legislative process.
+
+**Example Values:**
+
+- ``REFERRED``
+- ``PASSED:SIMPLERES``
+- ``REPORTED``
+- ``ENACTED:SIGNED``
+- ``PASS_OVER:HOUSE``
+- ``INTRODUCED``
+- ``PASS_OVER:SENATE``
+- ``PASSED:CONCURRENTRES``
+- ``PASS_BACK:SENATE``
+- ``PASSED:BILL``
+- ``PROV_KILL:VETO``
+- ``PROV_KILL:SUSPENSIONFAILED``
+- ``FAIL:ORIGINATING:HOUSE``
+- ``PROV_KILL:CLOTUREFAILED``
+- ``PASS_BACK:HOUSE``
+- ``VETOED:POCKET``
+- ``FAIL:ORIGINATING:SENATE``
+- ``VETOED:OVERRIDE_FAIL_ORIGINATING:HOUSE``
+- ``ENACTED:VETO_OVERRIDE``
+- ``CONFERENCE:PASSED:HOUSE``
+- ``VETOED:OVERRIDE_FAIL_ORIGINATING:SENATE``
+- ``CONFERENCE:PASSED:SENATE``
+- ``VETOED:OVERRIDE_FAIL_SECOND:SENATE``
+- ``FAIL:SECOND:SENATE``
+- ``VETOED:OVERRIDE_FAIL_SECOND:HOUSE``
+- ``FAIL:SECOND:HOUSE``
+- ``VETOED:OVERRIDE_PASS_OVER:HOUSE``
+- ``ENACTED:TENDAYRULE``
