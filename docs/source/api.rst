@@ -1,7 +1,18 @@
 API Documentation
 =================
 
-.. automodule:: lobbyview.LobbyView
+LobbyView
+---------
+
+.. automodule:: LobbyView
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Exceptions
+----------
+
+.. automodule:: exceptions
    :members:
    :undoc-members:
    :show-inheritance:
