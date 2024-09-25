@@ -92,7 +92,10 @@ class LobbyViewResponse:
                                                      # of rows in the response)
 
         if self.current_page > self.total_pages:
-            logging.error(f"Invalid page number: {self.current_page}, total pages: {self.total_pages}")
+            if self.total_pages == 0:
+                logging.error(f"No matching data available, total pages: {self.total_pages}")
+            else:
+                logging.error(f"Invalid page number: {self.current_page}, total pages: {self.total_pages}")
             raise InvalidPageNumberError(current_page=self.current_page,
                                          total_pages=self.total_pages)
 
@@ -304,6 +307,11 @@ class LobbyView:
 
         :param str lobbyview_token: API token for the LobbyView API
         :param bool test_connection: Whether to test the connection to the API
+
+        >>> LobbyViewInit = LobbyView(lobbyview_token="fake_token")
+        Traceback (most recent call last):
+        ...
+        exceptions.UnauthorizedError: Unauthorized. Please check your API token and permissions.
         """
         self.lobbyview_token = lobbyview_token
         self.headers = {
@@ -452,7 +460,7 @@ class LobbyView:
                 page += 1
 
             except PartialContentError as exc:
-                logging.error(f"{str(exc)} - Partial results retrieved. Please wait for more quota.")
+                logging.error(f"{str(exc)} - Partial results retrieved. Please wait for more quota.") ## needs coverage ##
                 raise
             except LobbyViewError as exc:
                 logging.error(str(exc))
@@ -526,7 +534,7 @@ class LobbyView:
         if max_birthday and (exact_birthday is None):
             query_params.append(f'legislator_birthday=lte.{max_birthday}')
         if page != 1:
-            query_params.append(f'page={page}') ## needs coverage ##
+            query_params.append(f'page={page}')
 
         query_string = '&'.join(query_params)
         data = self.get_data(f'/api/legislators?{query_string}')
@@ -593,7 +601,7 @@ class LobbyView:
         if bill_chamber:
             query_params.append(f'bill_chamber=eq.{bill_chamber}')
         if bill_resolution_type:
-            query_params.append(f'bill_resolution_type=eq.{bill_resolution_type}') ## needs coverage ##
+            query_params.append(f'bill_resolution_type=eq.{bill_resolution_type}')
         if bill_number:
             query_params.append(f'bill_number=eq.{bill_number}')
         if bill_state:
@@ -609,7 +617,7 @@ class LobbyView:
         if max_updated_date:
             query_params.append(f'bill_date_updated=lte.{max_updated_date}')
         if page != 1:
-            query_params.append(f'page={page}') ## needs coverage ##
+            query_params.append(f'page={page}')
 
         query_string = '&'.join(query_params)
         data = self.get_data(f'/api/bills?{query_string}')
@@ -680,7 +688,7 @@ class LobbyView:
         if naics_description:
             query_params.append(f'naics_description=ilike.*{naics_description}*') #!? - is too slow to search ## needs coverage ##
         if page != 1:
-            query_params.append(f'page={page}') ## needs coverage ##
+            query_params.append(f'page={page}')
 
         # query_string = '&'.join([urllib.parse.quote(query_param) for query_param in query_params])
         query_string = '&'.join(query_params)
@@ -770,9 +778,9 @@ class LobbyView:
         if report_quarter_code:
             query_params.append(f'report_quarter_code=eq.{report_quarter_code}')
         if min_report_quarter_code and (report_quarter_code is None):
-            query_params.append(f'report_quarter_code=gte.{min_report_quarter_code}') ## needs coverage ##
+            query_params.append(f'report_quarter_code=gte.{min_report_quarter_code}')
         if max_report_quarter_code and (report_quarter_code is None):
-            query_params.append(f'report_quarter_code=lte.{max_report_quarter_code}') ## needs coverage ##
+            query_params.append(f'report_quarter_code=lte.{max_report_quarter_code}')
         if min_amount:
             query_params.append(f'amount=gte.{min_amount}')
         if max_amount:
@@ -784,7 +792,7 @@ class LobbyView:
         if is_amendment is not None:
             query_params.append(f'is_amendment=eq.{is_amendment}')
         if page != 1:
-            query_params.append(f'page={page}') ## needs coverage ##
+            query_params.append(f'page={page}')
 
         query_string = '&'.join(query_params)
         data = self.get_data(f'/api/reports?{query_string}')
@@ -840,7 +848,7 @@ class LobbyView:
         if gov_entity:
             query_params.append(f'gov_entity=ilike.*{gov_entity}*') # !? - too slow to search ## needs coverage ##
         if page != 1:
-            query_params.append(f'page={page}') ## needs coverage ##
+            query_params.append(f'page={page}')
 
         query_string = '&'.join(query_params)
         data = self.get_data(f'/api/issues?{query_string}')
@@ -902,11 +910,11 @@ class LobbyView:
         if max_report_year:
             query_params.append(f'report_year=lte.{max_report_year}')
         if min_bills_sponsored:
-            query_params.append(f'n_bills_sponsored=gte.{min_bills_sponsored}') ## needs coverage ##
+            query_params.append(f'n_bills_sponsored=gte.{min_bills_sponsored}')
         if max_bills_sponsored:
             query_params.append(f'n_bills_sponsored=lte.{max_bills_sponsored}')
         if page != 1:
-            query_params.append(f'page={page}') ## needs coverage ##
+            query_params.append(f'page={page}')
 
         query_string = '&'.join(query_params)
         data = self.get_data(f'/api/networks?{query_string}')
@@ -1061,11 +1069,11 @@ class LobbyView:
         if max_report_quarter_code and (report_quarter_code is None):
             query_params.append(f'report_quarter_code=lte.{max_report_quarter_code}')
         if min_bills_sponsored:
-            query_params.append(f'n_bills_sponsored=gte.{min_bills_sponsored}') ## needs coverage ##
+            query_params.append(f'n_bills_sponsored=gte.{min_bills_sponsored}')
         if max_bills_sponsored:
             query_params.append(f'n_bills_sponsored=lte.{max_bills_sponsored}')
         if page != 1:
-            query_params.append(f'page={page}') ## needs coverage ##
+            query_params.append(f'page={page}')
 
         query_string = '&'.join(query_params)
         data = self.get_data(f'/api/quarter_level_networks?{query_string}')
@@ -1140,7 +1148,7 @@ class LobbyView:
         if congress_number:
             query_params.append(f'congress_number=eq.{congress_number}')
         if bill_id:
-            bill_parts = bill_id.split("-") ## needs coverage ##
+            bill_parts = bill_id.split("-")
             if len(bill_parts) == 2: # H.R.1174-114
                 congress_number = bill_parts[1].strip() # 114
                 bill_parts = bill_parts[0].strip()
@@ -1164,7 +1172,7 @@ class LobbyView:
         if client_uuid:
             query_params.append(f'client_uuid=eq.{client_uuid}')
         if page != 1:
-            query_params.append(f'page={page}') ## needs coverage ##
+            query_params.append(f'page={page}')
 
         # query_string = '&'.join([urllib.parse.quote(query_param) for query_param in query_params])
         query_string = '&'.join(query_params)
