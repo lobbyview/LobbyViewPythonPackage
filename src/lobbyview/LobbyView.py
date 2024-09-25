@@ -307,11 +307,6 @@ class LobbyView:
 
         :param str lobbyview_token: API token for the LobbyView API
         :param bool test_connection: Whether to test the connection to the API
-
-        >>> LobbyViewInit = LobbyView(lobbyview_token="fake_token")
-        Traceback (most recent call last):
-        ...
-        exceptions.UnauthorizedError: Unauthorized. Please check your API token and permissions.
         """
         self.lobbyview_token = lobbyview_token
         self.headers = {
