@@ -10,7 +10,7 @@ class LobbyViewError(Exception):
         """
         :return str: Name of the class
         """
-        return self.__class__.__name__
+        return self.__class__.__name__ ## needs coverage ##
 
 class UnauthorizedError(LobbyViewError):
     """
@@ -29,20 +29,20 @@ class TooManyRequestsError(LobbyViewError):
     Raised when the API rate limit is exceeded.
     """
     def __init__(self, status_code):
-        super().__init__()
+        super().__init__() ## needs coverage ##
         self.status_code = status_code
     def __str__(self):
-        return f"Rate limit exceeded, status code: {self.status_code}"
+        return f"Rate limit exceeded, status code: {self.status_code}" ## needs coverage ##
 
 class PartialContentError(LobbyViewError):
     """
     Raised when the API returns a partial response.
     """
     def __init__(self, status_code):
-        super().__init__()
+        super().__init__() ## needs coverage ##
         self.status_code = status_code
     def __str__(self):
-        return f"Partial content returned, status code: {self.status_code}"
+        return f"Partial content returned, status code: {self.status_code}" ## needs coverage ##
 
 class UnexpectedStatusCodeError(LobbyViewError):
     """
@@ -70,4 +70,4 @@ class RequestError(LobbyViewError):
     Raised when an error occurs during the request to the LobbyView API.
     """
     def __init__(self):
-        super().__init__()
+        super().__init__() ## needs coverage ##

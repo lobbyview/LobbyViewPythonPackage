@@ -54,7 +54,7 @@ def url_quote(func):
         # Check if the function is a method
         if inspect.ismethod(func) or inspect.isbuiltin(func):
             # Skip the first argument (self)
-            quoted_args = [quote(arg) if isinstance(arg, str) else arg for arg in args[1:]]
+            quoted_args = [quote(arg) if isinstance(arg, str) else arg for arg in args[1:]] ## needs coverage ##
             quoted_args.insert(0, args[0])  # Add the self argument back to the start of the list
         else:
             quoted_args = [quote(arg) if isinstance(arg, str) else arg for arg in args]
@@ -313,7 +313,7 @@ class LobbyView:
         if test_connection:
             try:
                 self.get_data('/api/legislators')
-            except Exception as exc:
+            except Exception as exc: ## needs coverage ##
                 raise RequestError() from exc
 
     def get_data(self, query_string):
@@ -359,7 +359,7 @@ class LobbyView:
             "lobbyview-rest-api-test.eba-witbq7ed.us-east-1.elasticbeanstalk.com", 
             context=context
             )
-        
+
         try:
             connection.request('GET', query_string, None, self.headers)
             response = connection.getresponse()
@@ -373,16 +373,16 @@ class LobbyView:
                 logging.error(f"Unauthorized, status code: {status_code}. Please check your API token and permissions.")
                 raise UnauthorizedError(status_code=status_code)
             if status_code == 429:
-                logging.error(f"Rate limit exceeded, status code: {status_code}")
+                logging.error(f"Rate limit exceeded, status code: {status_code}") ## needs coverage ##
                 raise TooManyRequestsError(status_code=status_code)
             if status_code == 206:
-                logging.error(f"Partial content returned, status code: {status_code}")
+                logging.error(f"Partial content returned, status code: {status_code}") ## needs coverage ##
                 raise PartialContentError(status_code=status_code)
             raise UnexpectedStatusCodeError(status_code=status_code)
         except (UnauthorizedError, TooManyRequestsError,
                 PartialContentError, UnexpectedStatusCodeError):
             raise
-        except Exception as exc:
+        except Exception as exc: ## needs coverage ##
             # error occurred during the request
             logging.error(f"Request error during API call: {str(exc)}")
             raise RequestError() from exc
@@ -501,6 +501,10 @@ class LobbyView:
         >>> print(output)
         Legislators:
           TJ Cox (ID: C001124)
+
+        >>> output = lobbyview.legislators(legislator_first_name="John", page=2)
+        >>> print(output.page_info()['current_page'])
+        2
         """
         query_params = []
         if legislator_id:
@@ -522,7 +526,7 @@ class LobbyView:
         if max_birthday and (exact_birthday is None):
             query_params.append(f'legislator_birthday=lte.{max_birthday}')
         if page != 1:
-            query_params.append(f'page={page}')
+            query_params.append(f'page={page}') ## needs coverage ##
 
         query_string = '&'.join(query_params)
         data = self.get_data(f'/api/legislators?{query_string}')
@@ -573,6 +577,15 @@ class LobbyView:
         >>> print(output)
         Bills:
           4173 (Congress: 111, Sponsor: F000339)
+
+        >>> output = lobbyview.bills(congress_number=116, bill_resolution_type="R", bill_number=400, legislator_id="R000595")
+        >>> print(output)
+        Bills:
+          400 (Congress: 116, Sponsor: R000595)
+
+        >>> output = lobbyview.bills(min_introduced_date="2020-01-01", page=10)
+        >>> print(output.page_info()['current_page'])
+        10
         """
         query_params = []
         if congress_number:
@@ -580,7 +593,7 @@ class LobbyView:
         if bill_chamber:
             query_params.append(f'bill_chamber=eq.{bill_chamber}')
         if bill_resolution_type:
-            query_params.append(f'bill_resolution_type=eq.{bill_resolution_type}')
+            query_params.append(f'bill_resolution_type=eq.{bill_resolution_type}') ## needs coverage ##
         if bill_number:
             query_params.append(f'bill_number=eq.{bill_number}')
         if bill_state:
@@ -596,7 +609,7 @@ class LobbyView:
         if max_updated_date:
             query_params.append(f'bill_date_updated=lte.{max_updated_date}')
         if page != 1:
-            query_params.append(f'page={page}')
+            query_params.append(f'page={page}') ## needs coverage ##
 
         query_string = '&'.join(query_params)
         data = self.get_data(f'/api/bills?{query_string}')
@@ -650,6 +663,10 @@ class LobbyView:
         >>> print(output)
         Clients:
           Microsoft Corporation (ID: 44563806-56d2-5e99-84a1-95d22a7a69b3)
+
+        >>> output = lobbyview.clients(max_naics="5112", page=2)
+        >>> print(output.page_info()['current_page'])
+        2
         """
         query_params = []
         if client_uuid:
@@ -661,9 +678,9 @@ class LobbyView:
         if max_naics:
             query_params.append(f'primary_naics=lte.{max_naics}')
         if naics_description:
-            query_params.append(f'naics_description=ilike.*{naics_description}*') #!? - is too slow to search
+            query_params.append(f'naics_description=ilike.*{naics_description}*') #!? - is too slow to search ## needs coverage ##
         if page != 1:
-            query_params.append(f'page={page}')
+            query_params.append(f'page={page}') ## needs coverage ##
 
         # query_string = '&'.join([urllib.parse.quote(query_param) for query_param in query_params])
         query_string = '&'.join(query_params)
@@ -725,6 +742,15 @@ class LobbyView:
         >>> print(output)
         Reports:
           4b799814-3e94-5ee1-8dd4-b32aead9aca6 (Year: 2020, Quarter: 2)
+
+        >>> output = lobbyview.reports(client_uuid="78043d66-6dc9-5d6c-b0ee-c3afaa33d8d7", report_year=2020, min_report_quarter_code=2, max_report_quarter_code=4, min_amount=150000)
+        >>> print(output)
+        Reports:
+          e2fb926a-2ac5-5c5c-9140-54b4c79d7e56 (Year: 2020, Quarter: 2)
+
+        >>> output = lobbyview.reports(report_year=2020, page=2)
+        >>> print(output.page_info()['current_page'])
+        2
         """
         query_params = []
         if report_uuid:
@@ -744,9 +770,9 @@ class LobbyView:
         if report_quarter_code:
             query_params.append(f'report_quarter_code=eq.{report_quarter_code}')
         if min_report_quarter_code and (report_quarter_code is None):
-            query_params.append(f'report_quarter_code=gte.{min_report_quarter_code}')
+            query_params.append(f'report_quarter_code=gte.{min_report_quarter_code}') ## needs coverage ##
         if max_report_quarter_code and (report_quarter_code is None):
-            query_params.append(f'report_quarter_code=lte.{max_report_quarter_code}')
+            query_params.append(f'report_quarter_code=lte.{max_report_quarter_code}') ## needs coverage ##
         if min_amount:
             query_params.append(f'amount=gte.{min_amount}')
         if max_amount:
@@ -758,7 +784,7 @@ class LobbyView:
         if is_amendment is not None:
             query_params.append(f'is_amendment=eq.{is_amendment}')
         if page != 1:
-            query_params.append(f'page={page}')
+            query_params.append(f'page={page}') ## needs coverage ##
 
         query_string = '&'.join(query_params)
         data = self.get_data(f'/api/reports?{query_string}')
@@ -799,6 +825,10 @@ class LobbyView:
           TRD (Report UUID: 00047fc7-2207-5f3b-951d-692b9f35825b, Issue Ordinal number (position) of the issue within the report: 1)
           TRD (Report UUID: 000759fa-dc93-5849-b1e5-7aa751e86433, Issue Ordinal number (position) of the issue within the report: 4)
         ...
+
+        >>> output = lobbyview.issues(issue_code="TRD", page=2)
+        >>> print(output.page_info()['current_page'])
+        2
         """
         query_params = []
         if report_uuid:
@@ -808,9 +838,9 @@ class LobbyView:
         if issue_code:
             query_params.append(f'issue_code=eq.{issue_code}')
         if gov_entity:
-            query_params.append(f'gov_entity=ilike.*{gov_entity}*') # !? - too slow to search
+            query_params.append(f'gov_entity=ilike.*{gov_entity}*') # !? - too slow to search ## needs coverage ##
         if page != 1:
-            query_params.append(f'page={page}')
+            query_params.append(f'page={page}') ## needs coverage ##
 
         query_string = '&'.join(query_params)
         data = self.get_data(f'/api/issues?{query_string}')
@@ -857,6 +887,10 @@ class LobbyView:
         >>> print(output)
         Networks:
           Client UUID: 44563806-56d2-5e99-84a1-95d22a7a69b3, Legislator ID: M000303, Year: 2017, Bills Sponsored: 1
+
+        >>> output = lobbyview.networks(min_bills_sponsored=50, page=2)
+        >>> print(output.page_info()['current_page'])
+        2
         """
         query_params = []
         if client_uuid:
@@ -868,11 +902,11 @@ class LobbyView:
         if max_report_year:
             query_params.append(f'report_year=lte.{max_report_year}')
         if min_bills_sponsored:
-            query_params.append(f'n_bills_sponsored=gte.{min_bills_sponsored}')
+            query_params.append(f'n_bills_sponsored=gte.{min_bills_sponsored}') ## needs coverage ##
         if max_bills_sponsored:
             query_params.append(f'n_bills_sponsored=lte.{max_bills_sponsored}')
         if page != 1:
-            query_params.append(f'page={page}')
+            query_params.append(f'page={page}') ## needs coverage ##
 
         query_string = '&'.join(query_params)
         data = self.get_data(f'/api/networks?{query_string}')
@@ -1004,6 +1038,10 @@ class LobbyView:
         Quarter-Level Networks:
           Client UUID: 44563806-56d2-5e99-84a1-95d22a7a69b3, Legislator ID: M000303, Year: 2006, Quarter: 34, Bills Sponsored: 1
           Client UUID: 44563806-56d2-5e99-84a1-95d22a7a69b3, Legislator ID: M000303, Year: 2017, Quarter: 4, Bills Sponsored: 1
+
+        >>> output = lobbyview.quarter_level_networks(min_bills_sponsored=20, page=2)
+        >>> print(output.page_info()['current_page'])
+        2
         """
         query_params = []
         if client_uuid:
@@ -1023,11 +1061,11 @@ class LobbyView:
         if max_report_quarter_code and (report_quarter_code is None):
             query_params.append(f'report_quarter_code=lte.{max_report_quarter_code}')
         if min_bills_sponsored:
-            query_params.append(f'n_bills_sponsored=gte.{min_bills_sponsored}')
+            query_params.append(f'n_bills_sponsored=gte.{min_bills_sponsored}') ## needs coverage ##
         if max_bills_sponsored:
             query_params.append(f'n_bills_sponsored=lte.{max_bills_sponsored}')
         if page != 1:
-            query_params.append(f'page={page}')
+            query_params.append(f'page={page}') ## needs coverage ##
 
         query_string = '&'.join(query_params)
         data = self.get_data(f'/api/quarter_level_networks?{query_string}')
@@ -1046,8 +1084,8 @@ class LobbyView:
         contact the LobbyView team at lobbydata@gmail.com.
 
         :param int congress_number: Session of Congress
-        :param str bill_id: The unique identifier of the bill in the format [bill_chamber][bill_resolution_type][bill_number] - [congress_number]
-            - examples: H.R.1174 - 114
+        :param str bill_id: The unique identifier of the bill in the format [bill_chamber].[bill_number]-[congress_number]
+            - examples: H.R.1174-114
         :param str bill_chamber: Chamber of the legislative branch (Component of the
             bill_id composite key)
         :param str bill_resolution_type: Bill type (Component of the bill_id composite key)
@@ -1090,23 +1128,28 @@ class LobbyView:
         Bill-Client Networks:
           Bill Number: 1174, Client UUID: 44563806-56d2-5e99-84a1-95d22a7a69b3, Issue Ordinal number (position) of the issue within the report: 2
           Bill Number: 512, Client UUID: 44563806-56d2-5e99-84a1-95d22a7a69b3, Issue Ordinal number (position) of the issue within the report: 2
+
+        >>> output = lobbyview.bill_client_networks(bill_chamber="H", bill_resolution_type='C', congress_number=116, page=2)
+        >>> print(output.page_info()['current_page'])
+        2
+        >>> output = lobbyview.bill_client_networks(bill_id="H.R.1174-114")
+        >>> print(output.page_info()['total_pages'])
+        3
         """
         query_params = []
         if congress_number:
             query_params.append(f'congress_number=eq.{congress_number}')
         if bill_id:
-            bill_parts = bill_id.split(" - ")
-            if len(bill_parts) == 2:
-                congress_number = bill_parts[1]
-                bill_parts = bill_parts[0]
-                bill_chamber = bill_parts[0]
-                bill_resolution_type = bill_parts[1:-1] or None
-                bill_number = bill_parts[-1]
+            bill_parts = bill_id.split("-") ## needs coverage ##
+            if len(bill_parts) == 2: # H.R.1174-114
+                congress_number = bill_parts[1].strip() # 114
+                bill_parts = bill_parts[0].strip()
+                bill_parts = bill_parts.split(".")
+                bill_chamber = bill_parts[0] # H
+                bill_number = bill_parts[-1] # 1174
 
                 query_params.append(f'congress_number=eq.{congress_number}')
                 query_params.append(f'bill_chamber=eq.{bill_chamber}')
-                if bill_resolution_type:
-                    query_params.append(f'bill_resolution_type=eq.{bill_resolution_type}')
                 query_params.append(f'bill_number=eq.{bill_number}')
         if bill_chamber:
             query_params.append(f'bill_chamber=eq.{bill_chamber}')
@@ -1121,7 +1164,7 @@ class LobbyView:
         if client_uuid:
             query_params.append(f'client_uuid=eq.{client_uuid}')
         if page != 1:
-            query_params.append(f'page={page}')
+            query_params.append(f'page={page}') ## needs coverage ##
 
         # query_string = '&'.join([urllib.parse.quote(query_param) for query_param in query_params])
         query_string = '&'.join(query_params)
