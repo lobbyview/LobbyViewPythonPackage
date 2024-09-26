@@ -45,6 +45,33 @@ jobs:
       run: |
         coverage run tests/doctests.py
         coverage report -m
+        coverage xml
+
+    - name: Upload coverage report
+      uses: actions/upload-artifact@v3
+      with:
+        name: coverage-report
+        path: coverage.xml
+
+    - name: Extract coverage percentage
+      id: coverage
+      run: |
+        COVERAGE=$(grep 'line-rate' coverage.xml | sed -E 's/.*line-rate="([0-9]+\.[0-9]+)".*/\1/')
+        echo "Coverage: $COVERAGE"
+        echo "::set-output name=coverage::$COVERAGE"
+
+    - name: Create Coverage Badge
+      run: |
+        curl -o coverage-badge.svg "https://img.shields.io/badge/coverage-${{ steps.coverage.outputs.coverage }}%25-brightgreen"
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        git fetch origin
+        git checkout main || git checkout -b main
+        git pull origin main
+        mv coverage-badge.svg coverage-badge.svg
+        git add coverage-badge.svg
+        git commit -m "Add coverage badge"
+        git push
 
     # - name: Pytest
     #   env:
