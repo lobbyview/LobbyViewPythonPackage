@@ -1,5 +1,7 @@
 # LobbyView Package Documentation
 
+![Tests](https://github.com/lobbyview/LobbyViewPythonPackage/actions/workflows/python-package.yml/badge.svg)
+
 This module provides a Python interface to the LobbyView REST API. It uses the same endpoints
 and parameter names as outlined in the LobbyView REST API Documentation
 (https://rest-api.lobbyview.org/).
