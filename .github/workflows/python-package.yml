@@ -80,9 +80,18 @@ jobs:
         curl -o coverage-badge.svg "https://img.shields.io/badge/coverage-${{ steps.coverage.outputs.coverage }}%25-brightgreen"
         
         # Create Download Count Badge
-        DOWNLOADS=$(curl -s https://api.pepy.tech/api/v2/projects/lobbyview | jq -r .total_downloads)
-        curl -o download-badge.svg "https://img.shields.io/badge/downloads-$DOWNLOADS-blue"
+        echo "Fetching download count..."
+        RESPONSE=$(curl -s https://api.pepy.tech/api/v2/projects/lobbyview)
+        echo "API Response: $RESPONSE"
+        DOWNLOADS=$(echo $RESPONSE | jq -r .total_downloads)
+        echo "Parsed downloads: $DOWNLOADS"
         
+        if [ "$DOWNLOADS" = "null" ] || [ -z "$DOWNLOADS" ]; then
+          echo "Error: Could not fetch download count. Using 0 as fallback."
+          DOWNLOADS=0
+        fi
+        
+        curl -o download-badge.svg "https://img.shields.io/badge/downloads-$DOWNLOADS-blue"
         # Git operations
         git config --global user.name "github-actions[bot]"
         git config --global user.email "github-actions[bot]@users.noreply.github.com"
