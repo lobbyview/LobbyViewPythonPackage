@@ -83,9 +83,11 @@ jobs:
         git fetch origin
         git checkout main || git checkout -b main
         git pull origin main
-        git add coverage-badge.svg
-        git commit -m "Add coverage badge"
-        git push origin main
+        git add -f coverage-badge.svg
+        git status
+        git diff --staged
+        git commit -m "Update coverage badge" || echo "No changes to commit"
+        git push origin main || echo "No changes to push"
 
     # - name: Pytest
     #   env:
