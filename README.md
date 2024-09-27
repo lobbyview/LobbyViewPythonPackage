@@ -1,8 +1,8 @@
 # LobbyView Package Documentation
 
 ![Tests](https://github.com/lobbyview/LobbyViewPythonPackage/actions/workflows/python-package.yml/badge.svg)
-![Coverage](./coverage-badge.svg)
-![PyPI Downloads](https://github.com/lobbyview/LobbyViewPythonPackage/blob/main/download-badge.svg)
+![Coverage](https://raw.githubusercontent.com/lobbyview/LobbyViewPythonPackage/main/coverage-badge.svg)
+![PyPI Downloads](https://raw.githubusercontent.com/lobbyview/LobbyViewPythonPackage/main/download-badge.svg)
 
 This module provides a Python interface to the LobbyView REST API. It uses the same endpoints
 and parameter names as outlined in the LobbyView REST API Documentation
