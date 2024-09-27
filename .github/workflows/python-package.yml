@@ -75,13 +75,15 @@ jobs:
       run: brew install jq
     - name: Create and Update Badges
       if: matrix.python-version == '3.11' && runner.os == 'macOS'
+      env:
+        PEPY_API_KEY: ${{ secrets.PEPY_API_KEY }}
       run: |
         # Create Coverage Badge
         curl -o coverage-badge.svg "https://img.shields.io/badge/coverage-${{ steps.coverage.outputs.coverage }}%25-brightgreen"
         
         # Create Download Count Badge
         echo "Fetching download count..."
-        RESPONSE=$(curl -s https://api.pepy.tech/api/v2/projects/lobbyview)
+        RESPONSE=$(curl -s -H "X-Api-Key: $PEPY_API_KEY" https://api.pepy.tech/api/v2/projects/lobbyview)
         echo "API Response: $RESPONSE"
         DOWNLOADS=$(echo $RESPONSE | jq -r .total_downloads)
         echo "Parsed downloads: $DOWNLOADS"
