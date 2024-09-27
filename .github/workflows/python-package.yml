@@ -60,9 +60,17 @@ jobs:
       if: matrix.python-version == '3.11' && runner.os == 'macOS'
       id: coverage
       run: |
-        COVERAGE=$(grep 'line-rate' coverage.xml | sed -E 's/.*line-rate="([0-9.]+)".*/\1/')
-        COVERAGE=$(echo "$COVERAGE * 100" | bc)
+        COVERAGE=$(grep -m 1 'line-rate=' coverage.xml | sed -E 's/.*line-rate="([0-9.]+)".*/\1/')
+        if [[ -z "$COVERAGE" ]]; then
+          echo "Error: Could not extract coverage value"
+          exit 1
+        fi
+        COVERAGE=$(echo "scale=4; $COVERAGE * 100" | bc)
         COVERAGE=$(printf "%.2f" "$COVERAGE")
+        if [[ ! "$COVERAGE" =~ ^[0-9]+\.[0-9]+$ ]]; then
+          echo "Error: Invalid coverage value: $COVERAGE"
+          exit 1
+        fi
         echo "coverage=$COVERAGE" >> $GITHUB_OUTPUT
         echo "Coverage: $COVERAGE%"
 
