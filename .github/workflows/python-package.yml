@@ -57,6 +57,7 @@ jobs:
         path: coverage.xml
 
     - name: Extract coverage percentage
+      if: matrix.python-version == '3.11' && runner.os == 'macOS'
       id: coverage
       run: |
         COVERAGE=$(grep 'line-rate' coverage.xml | sed -E 's/.*line-rate="([0-9]+\.[0-9]+)".*/\1/')
