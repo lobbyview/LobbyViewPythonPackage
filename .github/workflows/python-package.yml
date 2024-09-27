@@ -41,21 +41,18 @@ jobs:
         flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-    
     - name: Doctest
       env:
-          LOBBYVIEW_TOKEN: ${{ secrets.LOBBYVIEW_TOKEN }}
+        LOBBYVIEW_TOKEN: ${{ secrets.LOBBYVIEW_TOKEN }}
       run: |
         coverage run tests/doctests.py
         coverage report -m
         coverage xml
-
     - name: Upload coverage report
       uses: actions/upload-artifact@v3
       with:
         name: coverage-report
         path: coverage.xml
-
     - name: Extract coverage percentage
       if: matrix.python-version == '3.11' && runner.os == 'macOS'
       id: coverage
@@ -73,20 +70,29 @@ jobs:
         fi
         echo "coverage=$COVERAGE" >> $GITHUB_OUTPUT
         echo "Coverage: $COVERAGE%"
-
-    - name: Create Coverage Badge
+    - name: Install jq
+      if: matrix.python-version == '3.11' && runner.os == 'macOS'
+      run: brew install jq
+    - name: Create and Update Badges
       if: matrix.python-version == '3.11' && runner.os == 'macOS'
       run: |
+        # Create Coverage Badge
         curl -o coverage-badge.svg "https://img.shields.io/badge/coverage-${{ steps.coverage.outputs.coverage }}%25-brightgreen"
+        
+        # Create Download Count Badge
+        DOWNLOADS=$(curl -s https://api.pepy.tech/api/v2/projects/lobbyview | jq -r .total_downloads)
+        curl -o download-badge.svg "https://img.shields.io/badge/downloads-$DOWNLOADS-blue"
+        
+        # Git operations
         git config --global user.name "github-actions[bot]"
         git config --global user.email "github-actions[bot]@users.noreply.github.com"
         git fetch origin
         git checkout main || git checkout -b main
         git pull origin main
-        git add -f coverage-badge.svg
+        git add -f coverage-badge.svg download-badge.svg
         git status
         git diff --staged
-        git commit -m "Update coverage badge" || echo "No changes to commit"
+        git commit -m "Update badges" || echo "No changes to commit"
         git push origin main || echo "No changes to push"
 
     # - name: Pytest
