@@ -62,6 +62,9 @@ jobs:
       run: |
         COVERAGE=$(grep 'line-rate' coverage.xml | sed -E 's/.*line-rate="([0-9]+\.[0-9]+)".*/\1/')
         COVERAGE=$(echo "$COVERAGE * 100" | bc)
+        if [[ "$COVERAGE" == .* ]]; then
+          COVERAGE="0$COVERAGE"
+        fi
         COVERAGE=$(printf "%.2f" "$COVERAGE")
         echo "Coverage: $COVERAGE"
         echo "::set-output name=coverage::$COVERAGE"
