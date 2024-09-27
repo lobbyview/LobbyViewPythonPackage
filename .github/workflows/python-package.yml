@@ -60,10 +60,12 @@ jobs:
       id: coverage
       run: |
         COVERAGE=$(grep 'line-rate' coverage.xml | sed -E 's/.*line-rate="([0-9]+\.[0-9]+)".*/\1/')
+        COVERAGE=$(echo "$COVERAGE * 100" | bc)
         echo "Coverage: $COVERAGE"
         echo "::set-output name=coverage::$COVERAGE"
 
     - name: Create Coverage Badge
+      if: matrix.python-version == '3.11' && runner.os == 'macOS'
       run: |
         curl -o coverage-badge.svg "https://img.shields.io/badge/coverage-${{ steps.coverage.outputs.coverage }}%25-brightgreen"
         git config --global user.name "github-actions[bot]"
