@@ -6,10 +6,25 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
+import os
+import sys
+import toml
+
 project = 'LobbyView'
 copyright = '2024, LobbyView Team'
 author = 'LobbyView Team'
-release = '0.0.3'
+
+# Get the project root dir, which is the parent dir of this
+cwd = os.path.abspath(os.path.dirname(__file__))
+project_root = os.path.dirname(os.path.dirname(cwd))
+
+# Load the pyproject.toml file
+pyproject_path = os.path.join(project_root, 'pyproject.toml')
+pyproject_data = toml.load(pyproject_path)
+
+# Set the version
+version = pyproject_data['project']['version']
+release = version
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
