@@ -24,6 +24,13 @@ sphinx:
 #    - pdf
 #    - epub
 
+versions:
+  only:
+    - main
+    - stable
+  match: 
+    - "v*" # Match tags like "v1.0.0"
+
 # Optional but recommended, declare the Python requirements required
 # to build your documentation
 # See https://docs.readthedocs.io/en/stable/guides/reproducible-builds.html
