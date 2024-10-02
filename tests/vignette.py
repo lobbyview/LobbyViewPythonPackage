@@ -44,10 +44,10 @@ print(sponsor_info)
 
 # 3. Find clients who lobbied on this bill
 bill_client_networks = lobbyview.bill_client_networks(congress_number=111, bill_chamber="H", bill_number=4173)
+client_names = {lobbyview.clients(client_uuid=network['client_uuid']).data[0]['client_name'] for network in bill_client_networks}
 print("\nClients who lobbied on this bill:")
-for network in bill_client_networks:
-    client_info = lobbyview.clients(client_uuid=network['client_uuid'])
-    print(f"- {client_info.data[0]['client_name']}")
+for client_name in client_names:
+    print(f"- {client_name}")
 
 # 4. Get detailed information about one of the clients (let's use the first one)
 client_uuid = bill_client_networks.data[0]['client_uuid']
@@ -56,7 +56,7 @@ print("\nDetailed Client Information:")
 print(client_details)
 
 # 5. Get reports filed by this client
-client_reports = lobbyview.reports(client_uuid=client_uuid)
+client_reports = lobbyview.reports(client_uuid=client_uuid, max_report_quarter_code=4)
 print("\nReports filed by the client:")
 print(client_reports)
 
@@ -72,7 +72,7 @@ print("\nNetwork information for the client:")
 print(client_networks)
 
 # 8. Get quarter-level network information
-quarter_networks = lobbyview.quarter_level_networks(client_uuid=client_uuid)
+quarter_networks = lobbyview.quarter_level_networks(client_uuid=client_uuid, max_report_quarter_code=4)
 print("\nQuarter-level network information:")
 print(quarter_networks)
 
