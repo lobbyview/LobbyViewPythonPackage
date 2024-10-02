@@ -1,5 +1,5 @@
 # LobbyView Package Usage Vignette
-# Investigating a Bill Using All Endpoints
+# Investigating a Bill Using LobbyView
 
 import os
 from dotenv import load_dotenv
@@ -9,6 +9,7 @@ sys.path.append('./src/lobbyview/')
 sys.path.append('../src/lobbyview/')
 from LobbyView import LobbyView
 
+# Load environment variables and set up LobbyView
 env_paths = ["tests/.env", "../../tests/.env"]
 for env_path in env_paths:
     load_dotenv(env_path)
@@ -17,16 +18,10 @@ LOBBYVIEW_TOKEN = os.environ.get('LOBBYVIEW_TOKEN', "NO TOKEN FOUND")
 
 lobbyview = LobbyView(LOBBYVIEW_TOKEN)
 
-# LobbyView Package Usage Vignette
-# Investigating a Bill Using All Endpoints
-
 # Import necessary libraries
 import matplotlib.pyplot as plt
 from collections import Counter
 from matplotlib.gridspec import GridSpec
-import numpy as np
-
-# Initialize the LobbyView object with your API token
 
 # Let's investigate the Dodd-Frank Wall Street Reform and Consumer Protection Act
 # This bill was introduced in the 111th Congress as H.R. 4173
@@ -145,6 +140,3 @@ plt.savefig("lobbying_analysis.png")
 plt.close()
 
 print("\nA comprehensive analysis of lobbying activity has been saved as 'lobbying_analysis.png'")
-
-# This vignette demonstrates the use of all major endpoints in the LobbyView package
-# to investigate a specific bill and analyze related lobbying activity.

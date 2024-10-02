@@ -1,5 +1,5 @@
 # LobbyView Package Usage Vignette for Corporate Strategy
-# Analyzing Lobbying Landscape for a Tech Company
+# Analyzing Lobbying Landscape for Microsoft
 
 import os
 from dotenv import load_dotenv
@@ -139,6 +139,3 @@ if legislator_counter:
         legislator_name = legislator_info.data[0]['legislator_full_name']
         print(f"5. The legislator most frequently connected to {client_name}'s lobbying efforts is {legislator_name}, with {legislator_counter[top_legislator]} bills sponsored.")
 print(f"6. Since 2020, {len(recent_bills.data)} bills have been introduced that may be relevant to the company's interests.")
-
-# This vignette demonstrates how a corporation can use the LobbyView package to analyze their lobbying activities,
-# identify key legislators, and understand the broader legislative landscape.
