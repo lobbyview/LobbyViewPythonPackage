@@ -20,6 +20,12 @@ for env_path in env_paths:
 LOBBYVIEW_TOKEN = os.environ.get('LOBBYVIEW_TOKEN', "NO TOKEN FOUND")
 lobbyview = LobbyView(LOBBYVIEW_TOKEN)
 
+def get_legislator_name(legislator_id):
+    legislator_info = lobbyview.legislators(legislator_id=legislator_id)
+    if legislator_info.data:
+        return legislator_info.data[0]['legislator_full_name']
+    return legislator_id  # Return ID if name not found
+
 # 1. Start with a known client: Microsoft Corporation
 client_name = "Microsoft Corporation"
 client_info = lobbyview.clients(client_name=client_name)
@@ -60,10 +66,8 @@ for network in network_data.data:
 
 print("\nTop 5 legislators by bills sponsored:")
 for legislator_id, count in legislator_counter.most_common(5):
-    legislator_info = lobbyview.legislators(legislator_id=legislator_id)
-    if legislator_info.data:
-        legislator_name = legislator_info.data[0]['legislator_full_name']
-        print(f"  {legislator_name}: {count}")
+    legislator_name = get_legislator_name(legislator_id)
+    print(f"  {legislator_name}: {count}")
 
 # 5. Analyze recent bills
 recent_bills = lobbyview.bills(min_introduced_date="2020-01-01")
@@ -75,13 +79,11 @@ for bill in recent_bills.data:
 
 print("\nTop 5 bill sponsors since 2020:")
 for legislator_id, count in bill_sponsors.most_common(5):
-    legislator_info = lobbyview.legislators(legislator_id=legislator_id)
-    if legislator_info.data:
-        legislator_name = legislator_info.data[0]['legislator_full_name']
-        print(f"  {legislator_name}: {count}")
+    legislator_name = get_legislator_name(legislator_id)
+    print(f"  {legislator_name}: {count}")
 
 # Create visualization
-plt.figure(figsize=(15, 15))
+plt.figure(figsize=(20, 20))
 gs = GridSpec(2, 2, figure=plt.gcf())
 
 # 1. Reports by Year
@@ -103,18 +105,38 @@ ax2.set_ylabel("Number of Reports")
 # 3. Top Legislators by Bills Sponsored
 ax3 = plt.subplot(gs[1, 0])
 top_legislators = dict(legislator_counter.most_common(10))
-ax3.bar(top_legislators.keys(), top_legislators.values())
+legislator_names = []
+legislator_values = []
+for leg_id, value in top_legislators.items():
+    name = get_legislator_name(leg_id)
+    if name:
+        legislator_names.append(name)
+        legislator_values.append(value)
+    else:
+        print(f"Warning: No name found for legislator ID {leg_id}")
+
+ax3.bar(legislator_names, legislator_values)
 ax3.set_title(f"Top Legislators for {client_name} by Bills Sponsored")
-ax3.set_xlabel("Legislator ID")
+ax3.set_xlabel("Legislator Name")
 ax3.set_ylabel("Number of Bills Sponsored")
 plt.setp(ax3.xaxis.get_majorticklabels(), rotation=45, ha="right")
 
 # 4. Top Bill Sponsors (Recent Bills)
 ax4 = plt.subplot(gs[1, 1])
 top_sponsors = dict(bill_sponsors.most_common(10))
-ax4.bar(top_sponsors.keys(), top_sponsors.values())
+sponsor_names = []
+sponsor_values = []
+for leg_id, value in top_sponsors.items():
+    name = get_legislator_name(leg_id)
+    if name:
+        sponsor_names.append(name)
+        sponsor_values.append(value)
+    else:
+        print(f"Warning: No name found for legislator ID {leg_id}")
+
+ax4.bar(sponsor_names, sponsor_values)
 ax4.set_title("Top Bill Sponsors (Since 2020)")
-ax4.set_xlabel("Legislator ID")
+ax4.set_xlabel("Legislator Name")
 ax4.set_ylabel("Number of Bills Sponsored")
 plt.setp(ax4.xaxis.get_majorticklabels(), rotation=45, ha="right")
 
@@ -133,9 +155,7 @@ print(f"3. The most active year for lobbying was {most_active_year} with {report
 most_active_quarter = report_quarters.most_common(1)[0][0]
 print(f"4. The most active quarter for lobbying is Q{most_active_quarter} with {report_quarters[most_active_quarter]} reports.")
 if legislator_counter:
-    top_legislator = legislator_counter.most_common(1)[0][0]
-    legislator_info = lobbyview.legislators(legislator_id=top_legislator)
-    if legislator_info.data:
-        legislator_name = legislator_info.data[0]['legislator_full_name']
-        print(f"5. The legislator most frequently connected to {client_name}'s lobbying efforts is {legislator_name}, with {legislator_counter[top_legislator]} bills sponsored.")
+    top_legislator_id = legislator_counter.most_common(1)[0][0]
+    top_legislator_name = get_legislator_name(top_legislator_id)
+    print(f"5. The legislator most frequently connected to {client_name}'s lobbying efforts is {top_legislator_name}, with {legislator_counter[top_legislator_id]} bills sponsored.")
 print(f"6. Since 2020, {len(recent_bills.data)} bills have been introduced that may be relevant to the company's interests.")
