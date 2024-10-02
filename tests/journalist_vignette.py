@@ -1,5 +1,4 @@
 # Advanced LobbyView Package Usage Vignette for Investigative Journalism
-# Uncovering Lobbying Influence on the Dodd-Frank Act
 
 import os
 from dotenv import load_dotenv
@@ -139,6 +138,3 @@ print(f"4. Lobbying activity peaked in {max(lobbying_timeline, key=lobbying_time
 print(f"5. The most lobbied issue was '{top_issues[0][0]}', accounting for {top_issues[0][1]} activities.")
 print(f"6. The government entity most frequently lobbied was {top_entities[0][0]}, targeted {top_entities[0][1]} times.")
 print(f"7. For the top lobbying client, the legislator most frequently connected to sponsored bills was {legislator_names[top_legislators[0][0]]}, with {top_legislators[0][1]} bills.")
-
-# This vignette demonstrates how to use the LobbyView package for in-depth 
-# investigation of lobbying activities around a major piece of legislation.
