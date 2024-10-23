@@ -34,6 +34,8 @@ if not client_info.data:
     print(f"No data found for {client_name}")
     sys.exit(1)
 
+# The LobbyView API uses UUIDs (Universally Unique Identifiers) to uniquely identify entities.
+# We need to convert from the human-readable company name to its UUID for subsequent queries.
 client_uuid = client_info.data[0]['client_uuid']
 print(f"Analyzing lobbying activities for {client_name}")
 
@@ -70,14 +72,34 @@ for legislator_id, count in legislator_counter.most_common(5):
     print(f"  {legislator_name}: {count}")
 
 # 5. Analyze recent bills
-recent_bills = lobbyview.bills(min_introduced_date="2020-01-01")
-print(f"\nNumber of bills introduced since 2020: {len(recent_bills.data)}")
+# recent_bills = lobbyview.bills(min_introduced_date="2020-01-01")
+# print(f"\nNumber of bills introduced since 2020: {len(recent_bills.data)}")
+
+# bill_sponsors = Counter()
+# for bill in recent_bills.data:
+#     bill_sponsors[bill['legislator_id']] += 1
+
+# print("\nTop 5 bill sponsors since 2020:")
+# for legislator_id, count in bill_sponsors.most_common(5):
+#     legislator_name = get_legislator_name(legislator_id)
+#     print(f"  {legislator_name}: {count}")
+
+recent_ms_bills = []
+for network in network_data.data:
+    # Get bills sponsored by legislators connected to Microsoft since 2020
+    legislator_bills = lobbyview.bills(
+        legislator_id=network['legislator_id'],
+        min_introduced_date="2020-01-01"
+    )
+    recent_ms_bills.extend(legislator_bills.data)
+
+print(f"\nNumber of Microsoft-connected bills introduced since 2020: {len(recent_ms_bills)}")
 
 bill_sponsors = Counter()
-for bill in recent_bills.data:
+for bill in recent_ms_bills:
     bill_sponsors[bill['legislator_id']] += 1
 
-print("\nTop 5 bill sponsors since 2020:")
+print("\nTop 5 Microsoft-connected bill sponsors since 2020:")
 for legislator_id, count in bill_sponsors.most_common(5):
     legislator_name = get_legislator_name(legislator_id)
     print(f"  {legislator_name}: {count}")
@@ -135,7 +157,8 @@ for leg_id, value in top_sponsors.items():
         print(f"Warning: No name found for legislator ID {leg_id}")
 
 ax4.bar(sponsor_names, sponsor_values)
-ax4.set_title("Top Bill Sponsors (Since 2020)")
+# ax4.set_title("Top Bill Sponsors (Since 2020)")
+ax4.set_title("Top Microsoft-Connected Bill Sponsors (Since 2020)")
 ax4.set_xlabel("Legislator Name")
 ax4.set_ylabel("Number of Bills Sponsored")
 plt.setp(ax4.xaxis.get_majorticklabels(), rotation=45, ha="right")
@@ -158,4 +181,5 @@ if legislator_counter:
     top_legislator_id = legislator_counter.most_common(1)[0][0]
     top_legislator_name = get_legislator_name(top_legislator_id)
     print(f"5. The legislator most frequently connected to {client_name}'s lobbying efforts is {top_legislator_name}, with {legislator_counter[top_legislator_id]} bills sponsored.")
-print(f"6. Since 2020, {len(recent_bills.data)} bills have been introduced that may be relevant to the company's interests.")
+# print(f"6. Since 2020, {len(recent_bills.data)} bills have been introduced that may be relevant to the company's interests.")
+print(f"6. Since 2020, {len(recent_ms_bills)} bills have been introduced by legislators connected to {client_name}'s lobbying network.")
