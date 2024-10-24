@@ -465,7 +465,7 @@ class LobbyView:
     def legislators(self, legislator_id=None, legislator_govtrack_id=None,
                         legislator_first_name=None, legislator_last_name=None,
                         legislator_full_name=None, legislator_gender=None,
-                        exact_birthday=None, min_birthday=None, max_birthday=None, page=1):
+                        birthday=None, min_birthday=None, max_birthday=None, page=1):
         """
         Gets legislator information from the LobbyView API based on the provided
         parameters.
@@ -477,7 +477,7 @@ class LobbyView:
         :param str legislator_last_name: Last name of the legislator - using partial match with ilike operator (PostgreSQL)
         :param str legislator_full_name: Full name of the legislator (First Middle Last) - using partial match with ilike operator (PostgreSQL)
         :param str legislator_gender: Gender of the legislator
-        :param str exact_birthday: Exact birthday of the legislator (YYYY-MM-DD)
+        :param str birthday: Exact birthday of the legislator (YYYY-MM-DD)
         :param str min_birthday: Minimum birthday of the legislator (YYYY-MM-DD)
         :param str max_birthday: Maximum birthday of the legislator (YYYY-MM-DD)
         :param int page: Page number of the results, default is 1
@@ -491,7 +491,7 @@ class LobbyView:
         >>> output.data[0]['legislator_id']
         'M000303'
         
-        >>> output = lobbyview.legislators(legislator_id="M000303", exact_birthday="1936-08-29", min_birthday="1950-08-28")
+        >>> output = lobbyview.legislators(legislator_id="M000303", birthday="1936-08-29", min_birthday="1950-08-28")
         >>> output.data[0]['legislator_full_name']
         'John McCain'
         
@@ -522,11 +522,11 @@ class LobbyView:
             query_params.append(f'legislator_full_name=ilike.*{legislator_full_name}*')
         if legislator_gender:
             query_params.append(f'legislator_gender=eq.{legislator_gender}')
-        if exact_birthday:
-            query_params.append(f'legislator_birthday=eq.{exact_birthday}')
-        if min_birthday and (exact_birthday is None):
+        if birthday:
+            query_params.append(f'legislator_birthday=eq.{birthday}')
+        if min_birthday and (birthday is None):
             query_params.append(f'legislator_birthday=gte.{min_birthday}')
-        if max_birthday and (exact_birthday is None):
+        if max_birthday and (birthday is None):
             query_params.append(f'legislator_birthday=lte.{max_birthday}')
         if page != 1:
             query_params.append(f'page={page}')
@@ -853,14 +853,15 @@ class LobbyView:
         return IssueResponse(data)
 
     @url_quote
-    def networks(self, client_uuid=None, legislator_id=None, min_report_year=None,
-                 max_report_year=None, min_bills_sponsored=None, max_bills_sponsored=None,
-                 page=1):
+    def networks(self, client_uuid=None, legislator_id=None, report_year=None,
+                 min_report_year=None, max_report_year=None, min_bills_sponsored=None,
+                 max_bills_sponsored=None, page=1):
         """
         Gets network information from the LobbyView API based on the provided parameters.
 
         :param str client_uuid: Unique identifier of the client
         :param str legislator_id: Unique identifier of the legislator
+        :param int report_year: Year of the report
         :param int min_report_year: Minimum year of the report
         :param int max_report_year: Maximum year of the report
         :param int min_bills_sponsored: Minimum number of bills sponsored by the legislator
@@ -879,6 +880,10 @@ class LobbyView:
         2006
 
         >>> output = lobbyview.networks(client_uuid="44563806-56d2-5e99-84a1-95d22a7a69b3", legislator_id="M000303", min_report_year=2016, max_report_year=2018, min_bills_sponsored=0, max_bills_sponsored=2)
+        >>> output.data[0]['n_bills_sponsored']
+        1
+
+        >>> output = lobbyview.networks(client_uuid="44563806-56d2-5e99-84a1-95d22a7a69b3", legislator_id="M000303", report_year=2006)
         >>> output.data[0]['n_bills_sponsored']
         1
 
@@ -902,9 +907,11 @@ class LobbyView:
             query_params.append(f'client_uuid=eq.{client_uuid}')
         if legislator_id:
             query_params.append(f'legislator_id=eq.{legislator_id}')
-        if min_report_year:
+        if report_year:
+            query_params.append(f'report_year=eq.{report_year}')
+        if min_report_year and (report_year is None):
             query_params.append(f'report_year=gte.{min_report_year}')
-        if max_report_year:
+        if max_report_year and (report_year is None):
             query_params.append(f'report_year=lte.{max_report_year}')
         if min_bills_sponsored:
             query_params.append(f'n_bills_sponsored=gte.{min_bills_sponsored}')
