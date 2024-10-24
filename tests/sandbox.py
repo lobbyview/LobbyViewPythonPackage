@@ -25,10 +25,10 @@ LOBBYVIEW_TOKEN = os.environ.get('LOBBYVIEW_TOKEN', "NO TOKEN FOUND")
 #     assert output.data[0]['client_uuid'] == '44563806-56d2-5e99-84a1-95d22a7a69b3'
 #     output = lobbyview.clients(max_naics="5112", page=2)
 #     print(output.page_info()['current_page'])
-    # output = lobbyview.clients(client_uuid='44563806-56d2-5e99-84a1-95d22a7a69b3')
-    # print(output.page_info())
-    # output = lobbyview.clients(client_uuid='44563806-56d2-5e99-84a1-95d22a7a69b3', naics_description="Applications software") ### too slow example
-    # print(output.page_info())
+#     output = lobbyview.clients(client_uuid='44563806-56d2-5e99-84a1-95d22a7a69b3')
+#     print(output.page_info())
+#     output = lobbyview.clients(client_uuid='44563806-56d2-5e99-84a1-95d22a7a69b3', naics_description="Applications software") ### too slow example
+#     print(output.page_info())
 
 # def test_bills():
 #     output = lobbyview.bills(congress_number=116, bill_resolution_type="R", bill_number=400, legislator_id="R000595")
