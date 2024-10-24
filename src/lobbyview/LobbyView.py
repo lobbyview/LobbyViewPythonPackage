@@ -315,7 +315,7 @@ class LobbyView:
 
         if test_connection:
             try:
-                self.get_data('/api/legislators')
+                self.get_data('/api/v1/legislators')
             except Exception as exc: ## needs coverage ##
                 raise RequestError() from exc
 
@@ -333,12 +333,12 @@ class LobbyView:
         :raises UnexpectedStatusCodeError: If the API returns an unexpected status code
         :raises RequestError: If an error occurs during the request
 
-        >>> lobbyview.get_data('/api/invalid_endpoint')
+        >>> lobbyview.get_data('/api/v1/invalid_endpoint')
         Traceback (most recent call last):
         ...
         exceptions.UnexpectedStatusCodeError: Unexpected status code: 404
 
-        >>> lobbyview.get_data('/api/legislators?invalid_param=value')
+        >>> lobbyview.get_data('/api/v1/legislators?invalid_param=value')
         Traceback (most recent call last):
         ...
         exceptions.UnexpectedStatusCodeError: Unexpected status code: 504
@@ -349,7 +349,7 @@ class LobbyView:
         exceptions.UnauthorizedError: Unauthorized. Please check your API token and permissions.
 
         >>> lobbyview_invalid = LobbyView("invalid_token_alsd2kjfa44hsd3feawol", test_connection=False)
-        >>> lobbyview_invalid.get_data('/api/legislators')
+        >>> lobbyview_invalid.get_data('/api/v1/legislators')
         Traceback (most recent call last):
         ...
         exceptions.UnauthorizedError: Unauthorized, status code: 401. Please check your API token and permissions.
@@ -532,7 +532,7 @@ class LobbyView:
             query_params.append(f'page={page}')
 
         query_string = '&'.join(query_params)
-        data = self.get_data(f'/api/legislators?{query_string}')
+        data = self.get_data(f'/api/v1/legislators?{query_string}')
 
         return LegislatorResponse(data)
 
@@ -615,7 +615,7 @@ class LobbyView:
             query_params.append(f'page={page}')
 
         query_string = '&'.join(query_params)
-        data = self.get_data(f'/api/bills?{query_string}')
+        data = self.get_data(f'/api/v1/bills?{query_string}')
 
         return BillResponse(data)
 
@@ -681,13 +681,14 @@ class LobbyView:
         if max_naics:
             query_params.append(f'primary_naics=lte.{max_naics}')
         if naics_description:
-            query_params.append(f'naics_description=ilike.*{naics_description}*') #!? - is too slow to search ## needs coverage ##
+            query_params.append(f'naics_description=@>.["{naics_description}"]')
+            # query_params.append(f'naics_description=ilike.*{naics_description}*') #!? - is too slow to search ## needs coverage ##
         if page != 1:
             query_params.append(f'page={page}')
 
         # query_string = '&'.join([urllib.parse.quote(query_param) for query_param in query_params])
         query_string = '&'.join(query_params)
-        data = self.get_data(f'/api/clients?{query_string}')
+        data = self.get_data(f'/api/v1/clients?{query_string}')
 
         return ClientResponse(data)
 
@@ -790,7 +791,7 @@ class LobbyView:
             query_params.append(f'page={page}')
 
         query_string = '&'.join(query_params)
-        data = self.get_data(f'/api/reports?{query_string}')
+        data = self.get_data(f'/api/v1/reports?{query_string}')
 
         return ReportResponse(data)
 
@@ -841,12 +842,13 @@ class LobbyView:
         if issue_code:
             query_params.append(f'issue_code=eq.{issue_code}')
         if gov_entity:
-            query_params.append(f'gov_entity=ilike.*{gov_entity}*') # !? - too slow to search ## needs coverage ##
+            query_params.append(f'gov_entity=any.{gov_entity}')
+            # query_params.append(f'gov_entity=ilike.*{gov_entity}*') # !? - too slow to search ## needs coverage ##
         if page != 1:
             query_params.append(f'page={page}')
 
         query_string = '&'.join(query_params)
-        data = self.get_data(f'/api/issues?{query_string}')
+        data = self.get_data(f'/api/v1/issues?{query_string}')
 
         return IssueResponse(data)
 
@@ -912,7 +914,7 @@ class LobbyView:
             query_params.append(f'page={page}')
 
         query_string = '&'.join(query_params)
-        data = self.get_data(f'/api/networks?{query_string}')
+        data = self.get_data(f'/api/v1/networks?{query_string}')
 
         return NetworkResponse(data)
 
@@ -972,7 +974,7 @@ class LobbyView:
             query_params.append(f'page={page}')
 
         query_string = '&'.join(query_params)
-        data = self.get_data(f'/api/texts?{query_string}')
+        data = self.get_data(f'/api/v1/texts?{query_string}')
 
         return TextResponse(data)
 
@@ -1071,7 +1073,7 @@ class LobbyView:
             query_params.append(f'page={page}')
 
         query_string = '&'.join(query_params)
-        data = self.get_data(f'/api/quarter_level_networks?{query_string}')
+        data = self.get_data(f'/api/v1/quarter_level_networks?{query_string}')
 
         return QuarterLevelNetworkResponse(data)
 
@@ -1171,6 +1173,6 @@ class LobbyView:
 
         # query_string = '&'.join([urllib.parse.quote(query_param) for query_param in query_params])
         query_string = '&'.join(query_params)
-        data = self.get_data(f'/api/bill_client_networks?{query_string}')
+        data = self.get_data(f'/api/v1/bill_client_networks?{query_string}')
 
         return BillClientNetworkResponse(data)
