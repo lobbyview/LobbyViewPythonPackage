@@ -71,7 +71,7 @@ if __name__ == "__main__":
     # test_bill_client_networks()
     # test_quarter_level_networks()
     # test_networks()
-    # test_issues()
+    test_issues()
     # test_reports()
     # test_bills()
     # test_legislators()
