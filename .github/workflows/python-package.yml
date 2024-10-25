@@ -51,8 +51,9 @@ jobs:
     - name: Upload coverage report
       uses: actions/upload-artifact@v4
       with:
-        name: coverage-report
+        name: coverage-report-${{ matrix.os }}-py${{ matrix.python-version }}
         path: coverage.xml
+        overwrite: true
     - name: Extract coverage percentage
       if: matrix.python-version == '3.11' && runner.os == 'macOS'
       id: coverage
