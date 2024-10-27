@@ -14,6 +14,7 @@ Welcome to LobbyView's documentation
    installation
    usage
    api
+   examples
    registration
    troubleshooting
    detailed_parameter_values

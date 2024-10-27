@@ -29,12 +29,18 @@ release = version
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-extensions = []
+extensions = [
+    'sphinx.ext.autodoc',
+    'nbsphinx',  # Add support for Jupyter notebooks
+    'sphinx.ext.mathjax',  # For math rendering in notebooks
+]
+
+# NBSphinx settings
+nbsphinx_execute = 'never'  # Don't execute notebooks during build
+nbsphinx_allow_errors = True  # Continue building even if there are errors
 
 templates_path = ['_templates']
-exclude_patterns = []
-
-
+exclude_patterns = ['_build', '**.ipynb_checkpoints']
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
@@ -43,11 +49,4 @@ html_theme = 'sphinx_rtd_theme'
 html_static_path = ['_static']
 
 # Add the path to your Python package source code
-import os
-import sys
 sys.path.insert(0, os.path.abspath('../../src/lobbyview'))
-
-# Enable the autodoc extension
-extensions = [
-    'sphinx.ext.autodoc',
-]
