@@ -1,11 +1,21 @@
+# Ignore environment files 
 .env
+
+# Ignore Python virtual environments
 .venv/
+
+# Ignore Python cache directories and files
 __pycache__/
-thumbs.db
-.DS_Store
 **/__pycache__/
-.pyc
+*.pyc
+
+# Ignore code coverage reports
 .coverage
+
+# Ignore macOS system files
+.DS_Store
 .Trashes
-thumbs.db
 .Spotlight-V100
+
+# Ignore Windows system files
+thumbs.db
