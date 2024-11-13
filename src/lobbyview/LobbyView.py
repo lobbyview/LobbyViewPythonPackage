@@ -359,7 +359,7 @@ class LobbyView:
         # temporary connection to test API with unlimited token
         context = ssl._create_unverified_context()
         connection = http.client.HTTPSConnection(
-            "lobbyview-rest-api-test.eba-witbq7ed.us-east-1.elasticbeanstalk.com", 
+            "rest-api.lobbyview.org", 
             context=context
             )
 
@@ -639,7 +639,7 @@ class LobbyView:
         :param str client_name: Name of the client - using partial match with ilike operator (PostgreSQL)
         :param str min_naics: Minimum NAICS code to which the client belongs (e.g., '41' for industry-level filtering)
         :param str max_naics: Maximum NAICS code to which the client belongs (e.g., '42' for industry-level filtering)
-        :param str naics_description: Descriptions of the NAICS code - using partial match with ilike operator (PostgreSQL)
+        :param str naics_description: Descriptions of the NAICS code - using exact match with cs operator (PostgreSQL)
         :param int page: Page number of the results, default is 1
         :return: ClientResponse object containing the client data
 
@@ -670,6 +670,10 @@ class LobbyView:
         >>> output = lobbyview.clients(max_naics="5112", page=2)
         >>> print(output.page_info()['current_page'])
         2
+
+        >>> output = lobbyview.clients(client_uuid='44563806-56d2-5e99-84a1-95d22a7a69b3', naics_description='Applications software, computer, packaged')
+        >>> print(output.page_info()['current_page'])
+        1
         """
         query_params = []
         if client_uuid:
@@ -681,12 +685,22 @@ class LobbyView:
         if max_naics:
             query_params.append(f'primary_naics=lte.{max_naics}')
         if naics_description:
-            query_params.append(f'naics_description=@>.["{naics_description}"]')
-            # query_params.append(f'naics_description=ilike.*{naics_description}*') #!? - is too slow to search ## needs coverage ##
+            # escape special characters in the NAICS description
+            # to work with PostgreSQL
+            escaped_naics = (naics_description
+                .replace('%2C', '%5C%2C')     # Comma: , -> \,
+                .replace('%22', '%5C%22')     # Double quote: " -> \"
+                .replace('%27', '%5C%27')     # Single quote: ' -> \'
+                .replace('%28', '%5C%28')     # Left parenthesis: ( -> \(
+                .replace('%29', '%5C%29')     # Right parenthesis: ) -> \)
+                .replace('%5B', '%5C%5B')     # Left bracket: [ -> \[
+                .replace('%5D', '%5C%5D')     # Right bracket: ] -> \]
+                .replace('%7B', '%5C%7B')     # Left brace: { -> \{
+                .replace('%7D', '%5C%7D'))     # Right brace: } -> \}
+            query_params.append(f'naics_description=cs.{{{escaped_naics}}}')
         if page != 1:
             query_params.append(f'page={page}')
 
-        # query_string = '&'.join([urllib.parse.quote(query_param) for query_param in query_params])
         query_string = '&'.join(query_params)
         data = self.get_data(f'/api/v1/clients?{query_string}')
 
@@ -807,7 +821,8 @@ class LobbyView:
             the report. For example, if an issue has issue_ordi=2, it means it is the second
             issue mentioned in the report.
         :param str issue_code: General Issue Area Code (Section 15)
-        :param str gov_entity: House(s) of Congress and Federal agencies (Section 17) - using partial match with ilike operator (PostgreSQL)
+        :param str gov_entity: House(s) of Congress and Federal agencies (Section 17) - using
+            exact matching with cs operator (PostgreSQL)
         :param int page: Page number of the results, default is 1
         :return: IssueResponse object containing the issue data
 
@@ -833,6 +848,10 @@ class LobbyView:
         >>> output = lobbyview.issues(issue_code="TRD", page=2)
         >>> print(output.page_info()['current_page'])
         2
+
+        >>> output = lobbyview.issues(report_uuid='00016ab3-2246-5af8-a68d-05af40dfde68', gov_entity='SENATE')
+        >>> output.data
+        [{'report_uuid': '00016ab3-2246-5af8-a68d-05af40dfde68', 'issue_ordi': 1, 'issue_code': 'SMB', 'gov_entity': ['SENATE', 'SMALL BUSINESS ADMINISTRATION', 'HOUSE OF REPRESENTATIVES']}, {'report_uuid': '00016ab3-2246-5af8-a68d-05af40dfde68', 'issue_ordi': 2, 'issue_code': 'TRD', 'gov_entity': ['HOUSE OF REPRESENTATIVES', 'SENATE']}]
         """
         query_params = []
         if report_uuid:
@@ -842,8 +861,19 @@ class LobbyView:
         if issue_code:
             query_params.append(f'issue_code=eq.{issue_code}')
         if gov_entity:
-            query_params.append(f'gov_entity=any.{gov_entity}')
-            # query_params.append(f'gov_entity=ilike.*{gov_entity}*') # !? - too slow to search ## needs coverage ##
+            # escape special characters in the gov_entity
+            # to work with PostgreSQL
+            escaped_entity = (gov_entity
+                .replace('%2C', '%5C%2C')     # Comma: , -> \,
+                .replace('%22', '%5C%22')     # Double quote: " -> \"
+                .replace('%27', '%5C%27')     # Single quote: ' -> \'
+                .replace('%28', '%5C%28')     # Left parenthesis: ( -> \(
+                .replace('%29', '%5C%29')     # Right parenthesis: ) -> \)
+                .replace('%5B', '%5C%5B')     # Left bracket: [ -> \[
+                .replace('%5D', '%5C%5D')     # Right bracket: ] -> \]
+                .replace('%7B', '%5C%7B')     # Left brace: { -> \{
+                .replace('%7D', '%5C%7D'))     # Right brace: } -> \}
+            query_params.append(f'gov_entity=cs.{{{escaped_entity}}}')
         if page != 1:
             query_params.append(f'page={page}')
 
