@@ -13,8 +13,12 @@ Features
 - **Issue Data**: Retrieve data related to lobbying issues, including issue codes, descriptions, and associated reports.
 - **Network Data**: Explore the relationships between legislators and lobbying clients through network data.
 - **Text Data**: Access the text data associated with lobbying issues.
+- **Quarter Level Networks**: Access the network data at the quarter level.
+- **Bill Client Networks**: Access the network data at the bill-client level.
 
 The LobbyView package provides a high-level interface to interact with the LobbyView API endpoints. It handles the complexities of making API requests, pagination, and error handling, allowing you to focus on working with the data itself.
+
+Note: The `quarter_level_networks` and `bill_client_networks` API endpoints are private and require special permission to access, users do not have access by default. Thus, trying to use this method without proper permissions will cause an `UnauthorizedError` to occur. If you are interested in this API, please contact the LobbyView team at lobbydata@gmail.com.
 
 Getting Started
 ---------------
