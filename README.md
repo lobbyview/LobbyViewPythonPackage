@@ -5,6 +5,32 @@
 ![PyPI Downloads](https://raw.githubusercontent.com/lobbyview/LobbyViewPythonPackage/main/download-badge.svg)
 
 
+            This module provides a Python interface to the LobbyView REST API. It uses the same endpoints
+            and parameter names as outlined in the LobbyView REST API Documentation
+            (https://rest-api.lobbyview.org/).
+
+            The full documentation for the package is linked here: http://lobbyview.readthedocs.io/
+
+            The LobbyView API provides comprehensive data on lobbying activities in the United States.
+            This includes information on:
+
+            - Legislators: Details about the individuals involved in the legislative process.
+            - Bills: Information about proposed laws and their progress.
+            - Clients: Data on the entities that lobbyists represent.
+            - Reports: Detailed reports on lobbying activities.
+            - Issues: Government issues/areas that get lobbied on.
+            - Networks: Connections and relationships in lobbying.
+            - Texts: Written documents related to lobbying.
+            - Quarter-level networks: Lobbying networks on a quarterly basis.
+            - Bill-client networks: Connections between bills and the clients they affect.
+
+            This module also defines several custom exceptions to handle errors that may occur when
+            interacting with the LobbyView API.
+
+            Note: This repo is pre-release and our expected time table is December 2024 for a release that's ready for widespread public use.
+            
+
+
 The LobbyView Python package is a powerful and easy-to-use library for interacting with the LobbyView API. It provides a convenient way to access and retrieve data related to lobbying activities, legislators, bills, and more. With this package, you can easily integrate lobbying data into your Python projects and perform various analyses.
 
 ## Features
